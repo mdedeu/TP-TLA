@@ -21,6 +21,13 @@ whitespace		[ \f\n\r\t\v]
 
 %%
 
+main      {return MAIN;}
+int         { return INT_TYPE; }
+string     { return STRING_TYPE; }
+double     { return DOUBLE_TYPE; }
+print     { return PRINT; }
+read       { return READ; }
+
 "+"											{ return ADD; }
 "-"											{ return SUB; }
 "*"											{ return MUL; }
@@ -30,7 +37,6 @@ whitespace		[ \f\n\r\t\v]
 ")"											{ return CLOSE_PARENTHESIS; }
 
 {digit}+									{ return IntegerPatternAction(yytext); }
-
 {whitespace}								{ IgnoredPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }

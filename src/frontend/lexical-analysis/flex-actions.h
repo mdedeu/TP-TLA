@@ -24,6 +24,17 @@ typedef enum TokenID {
 	MUL,
 	DIV,
 
+	// Tipos
+
+	INT_TYPE,
+	STRING_TYPE,
+	DOUBLE_TYPE,
+
+	// Funciones
+	MAIN,
+	PRINT,
+	READ,
+
 	// Paréntesis.
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
