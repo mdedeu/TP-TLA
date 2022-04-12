@@ -22,11 +22,13 @@ whitespace		[ \f\n\r\t\v]
 %%
 
 main      {return MAIN;}
-int         { return INT_TYPE; }
-string     { return STRING_TYPE; }
-double     { return DOUBLE_TYPE; }
+int       { return INT_TYPE; }
+string    { return STRING_TYPE; }
 print     { return PRINT; }
-read       { return READ; }
+intTree   { return INT_TREE_TYPE; } 
+stringTree { return STRING_TREE_TYPE; } 
+intNode { return INT_NODE_TYPE; } 
+stringNode { return STRING_NODE_TYPE; }
 
 "+"											{ return ADD; }
 "-"											{ return SUB; }
