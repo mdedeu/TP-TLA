@@ -20,3 +20,8 @@ TokenID UnknownPatternAction(const char * lexeme) {
 	LogDebug("UnknownPatternAction: '%s'.", lexeme);
 	return YYUNDEF;
 }
+TokenID CharPatternAction(const char * lexeme) {
+	LogDebug("CharPatternAction: '%s'.", lexeme);
+	yyval = lexeme;
+	return CHAR;
+}

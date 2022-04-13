@@ -69,11 +69,14 @@ typedef enum TokenID {
 	CLOSE_BRACKETS,
 	OPEN_SQUARE_BRACKETS,
 	CLOSE_SQUARE_BRACKETS,
+	QUOTE,
 	END_LINE,
 
 
 	// Tipos de dato.
-	INTEGER
+	INTEGER,
+	STRING, 
+	CHAR
 } TokenID;
 
 /**

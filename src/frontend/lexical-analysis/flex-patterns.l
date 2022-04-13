@@ -18,6 +18,7 @@ crlf			\r\n
 digit			[0-9]
 endline			\n
 whitespace		[ \f\n\r\t\v]
+char [a-zA-Z]
 
 %%
 
@@ -63,11 +64,13 @@ node { return NODE_TYPE; }
 "}"											{ return CLOSE_BRACKETS ; }
 "["											{ return OPEN_SQUARE_BRACKETS ; }
 "]"											{ return CLOSE_SQUARE_BRACKETS ; }
+"'"                                         { return  QUOTE; }
 ";"											{ return END_LINE; }
 
 
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
+{char}+ { return CharPatternAction(yytext); } //solo se pueden declarar vars con letras
 
 .											{ return UnknownPatternAction(yytext); }
 
