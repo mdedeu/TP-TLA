@@ -43,6 +43,7 @@ typedef enum TokenID {
 	// Tipos
 	INT_TYPE,
 	STRING_TYPE,
+	
 	NON_BINARY_TREE_TYPE,
 	BINARY_TREE_TYPE,
 	AVL_TREE_TYPE,
