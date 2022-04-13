@@ -24,20 +24,53 @@ typedef enum TokenID {
 	MUL,
 	DIV,
 
-	// Tipos
+	//Operadores de comparacion
+	EQ,
+	LE,
+	GE,
+	NE,
+	LT,
+	GT,
 
+	//Operadores logicos
+	OR,
+	AND,
+	NOT
+
+	//Asignacion
+	ASSIGN,
+
+	// Tipos
 	INT_TYPE,
 	STRING_TYPE,
-	DOUBLE_TYPE,
+	NON_BINARY_TREE_TYPE,
+	BINARY_TREE_TYPE,
+	AVL_TREE_TYPE,
+	RED_BLACK_TREE_TYPE,
+	B_TREE_TYPE,
+	BST_TREE_TYPE,
+	NODE_TYPE,
+
 
 	// Funciones
 	MAIN,
 	PRINT,
-	READ,
+	
+	//Bloques de control
+	FOR,
+	WHILE,
+	IF,
+	ELSE,
 
 	// Paréntesis.
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
+	OPEN_BRACKETS,
+	CLOSE_BRACKETS,
+	OPEN_SQUARE_BRACKETS,
+	CLOSE_SQUARE_BRACKETS,
+	END_LINE,
+
 
 	// Tipos de dato.
 	INTEGER
