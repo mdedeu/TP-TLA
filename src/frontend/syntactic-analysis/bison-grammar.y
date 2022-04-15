@@ -23,6 +23,9 @@
 
 %token ASSIGN
 
+%token POINT
+%token COMMA
+
 %token INT_TYPE
 %token STRING_TYPE
 
@@ -36,6 +39,7 @@
 
 %token MAIN
 %token PRINT
+%token NEW_NODE
 
 %token FOR
 %token WHILE
@@ -54,15 +58,20 @@
 
 %token INTEGER
 %token STRING
-%token CHAR
+%token SYMBOL
 
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
 
+
 %%
 
-program: MAIN { expression }												{ $$ = ProgramGrammarAction($1); }
+mainProgram: MAIN OPEN_BRACKETS program CLOSE_BRACKETS { $$ = ProgramGrammarAction(); }
+	;
+
+program: instruction program	
+	| instruction											
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -70,6 +79,8 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
+	| STRING
+	| SYMBOL
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
@@ -79,21 +90,43 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-Type
-	: INT_TYPE
-	| STRING_TYPE
-	| NON_BINARY_TREE_TYPE
-	| BINARY_TREE_TYPE
-	| AVL_TREE_TYPE
-	| RED_BLACK_TREE_TYPE
-	| B_TREE_TYPE
-	| BST_TREE_TYPE
-	| NODE_TYPE
+instruction: declare  
+	|	declareAndAssign 
+	|	function
+	|   expression 
 	;
 
-SemiColons
-	: ';'
-        | SemiColons ';'
-        ;
 
+function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA STRING CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT PRINT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
+	;
+
+declareAndAssign:	type SYMBOL ASSIGN expression semiColons 
+	|	type SYMBOL ASSIGN function	/* en realidad solo la new node */ 
+	;
+
+
+declare: type SYMBOL semiColons 
+	| treeType type SYMBOL semiColons 
+	;
+
+type
+	: INT_TYPE
+	| STRING_TYPE 
+	;
+
+treeType 
+	: NON_BINARY_TREE_TYPE 
+	| BINARY_TREE_TYPE 
+	| AVL_TREE_TYPE
+	| RED_BLACK_TREE_TYPE 
+	| B_TREE_TYPE 
+	| BST_TREE_TYPE 
+	| NODE_TYPE 
+	;
+
+semiColons
+	: END_LINE
+    | semiColons END_LINE
+    ;
 %%

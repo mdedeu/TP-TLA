@@ -35,7 +35,7 @@ typedef enum TokenID {
 	//Operadores logicos
 	OR,
 	AND,
-	NOT
+	NOT,
 
 	//Asignacion
 	ASSIGN,
@@ -78,8 +78,6 @@ typedef enum TokenID {
 	QUOTE,
 	END_LINE,
 
-
-	
 	INTEGER,
 	STRING, 
 	SYMBOL
@@ -97,5 +95,9 @@ TokenID IntegerPatternAction(const char * lexeme);
 void IgnoredPatternAction(const char * lexeme);
 
 TokenID UnknownPatternAction(const char * lexeme);
+
+TokenID SymbolPatternAction(const char * lexeme);
+
+TokenID StringPatternAction(const char * lexeme);
 
 #endif

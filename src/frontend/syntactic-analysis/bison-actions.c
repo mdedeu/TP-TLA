@@ -19,11 +19,10 @@ void yyerror(const char * string) {
 	LogErrorRaw("\n\n");
 }
 
-int ProgramGrammarAction(const int value) {
-	LogDebug("ProgramGrammarAction(%d)", value);
+int ProgramGrammarAction() {
+	LogDebug("ProgramGrammarAction(0)");
 	state.succeed = true;
-	state.result = value;
-	return value;
+	return 0;
 }
 
 int AdditionExpressionGrammarAction(const int leftValue, const int rightValue) {

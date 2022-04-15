@@ -20,11 +20,15 @@ TokenID UnknownPatternAction(const char * lexeme) {
 	LogDebug("UnknownPatternAction: '%s'.", lexeme);
 	return YYUNDEF;
 }
-<<<<<<< Updated upstream
-TokenID CharPatternAction(const char * lexeme) {
-	LogDebug("CharPatternAction: '%s'.", lexeme);
-	yyval = lexeme;
-	return CHAR;
+
+TokenID SymbolPatternAction(const char * lexeme) {
+	LogDebug("SymbolPatternAction: '%s'.", lexeme);
+	yylval = lexeme;
+	return SYMBOL;
 }
-=======
->>>>>>> Stashed changes
+
+TokenID StringPatternAction(const char * lexeme) {
+	LogDebug("StringPatternAction: '%s'.", lexeme);
+	yylval = lexeme;
+	return STRING;
+}
