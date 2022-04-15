@@ -40,6 +40,10 @@ typedef enum TokenID {
 	//Asignacion
 	ASSIGN,
 
+	// Acceso
+	POINT,
+	COMMA,
+
 	// Tipos
 	INT_TYPE,
 	STRING_TYPE,
@@ -56,6 +60,7 @@ typedef enum TokenID {
 	// Funciones
 	MAIN,
 	PRINT,
+	NEW_NODE,
 	
 	//Bloques de control
 	FOR,
@@ -74,10 +79,10 @@ typedef enum TokenID {
 	END_LINE,
 
 
-	// Tipos de dato.
+	
 	INTEGER,
 	STRING, 
-	CHAR
+	SYMBOL
 } TokenID;
 
 /**

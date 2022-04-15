@@ -25,7 +25,6 @@ char [a-zA-Z]
 main      {return MAIN;}
 int       { return INT_TYPE; }
 string    { return STRING_TYPE; }
-print     { return PRINT; }
 tree     { return NON_BINARY_TREE_TYPE; }
 binary_tree     { return BINARY_TREE_TYPE; }
 avl_tree   { return AVL_TREE_TYPE; }
@@ -70,7 +69,6 @@ node { return NODE_TYPE; }
 
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
-{char}+ { return CharPatternAction(yytext); } //solo se pueden declarar vars con letras
 
 .											{ return UnknownPatternAction(yytext); }
 
