@@ -41,6 +41,7 @@
 %token PRINT
 %token NEW_NODE
 
+
 %token FOR
 %token WHILE
 %token IF
@@ -97,8 +98,9 @@ instruction: declare
 	;
 
 
-function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA STRING CLOSE_PARENTHESIS semiColons
-	| SYMBOL POINT PRINT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
+function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS semiColons 
+	| SYMBOL POINT NEW_NODE  OPEN_PARENTHESIS expression COMMA expression COMMA expression CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT PRINT OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
 	;
 
 declareAndAssign:	type SYMBOL ASSIGN expression semiColons 

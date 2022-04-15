@@ -1,3 +1,5 @@
-main {string santi = "hola" ;
-      int a = 3;
+main {
+      avlTree int miarbolito;
+      string hola = "meesi";
+      miarbolito.print();
 } 

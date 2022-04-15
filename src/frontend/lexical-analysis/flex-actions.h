@@ -62,6 +62,7 @@ typedef enum TokenID {
 	PRINT,
 	NEW_NODE,
 	
+	
 	//Bloques de control
 	FOR,
 	WHILE,

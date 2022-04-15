@@ -48,11 +48,11 @@ int       { return INT_TYPE; }
 string    { return STRING_TYPE; }
 
 tree     { return NON_BINARY_TREE_TYPE; }
-binary_tree     { return BINARY_TREE_TYPE; }
-avl_tree   { return AVL_TREE_TYPE; }
-rb_tree {return RED_BLACK_TREE_TYPE; }
-b_tree { return B_TREE_TYPE; }
-bst_tree { return BST_TREE_TYPE; }
+binaryTree     { return BINARY_TREE_TYPE; }
+avlTree   { return AVL_TREE_TYPE; }
+rbtree {return RED_BLACK_TREE_TYPE; }
+bTree { return B_TREE_TYPE; }
+bstTree { return BST_TREE_TYPE; }
 node { return NODE_TYPE; }
 
 main      {return MAIN;}
@@ -79,7 +79,8 @@ createNode { return NEW_NODE; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 {char}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
-\"{char}+\"                                 { return StringPatternAction(yytext); }
+[\"]{char}+[\"]                   { return StringPatternAction(yytext); }
+
 .											{ return UnknownPatternAction(yytext); }
 
 %%
