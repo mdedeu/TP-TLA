@@ -79,7 +79,7 @@ createNode { return NEW_NODE; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 {char}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
-[\"]{char}+[\"]                   { return StringPatternAction(yytext); }
+[\"]({char}*{whitespace}*)*[\"]                   { return StringPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 

@@ -108,6 +108,7 @@ instruction: declare
 	|   expression 
 	| 	if
 	|	while 
+	| 	vector
 	;
 
 
@@ -144,4 +145,8 @@ semiColons
 	: END_LINE
     | semiColons END_LINE
     ;
+
+vector:
+	type SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS semiColons
+	| type SYMBOL OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS semiColons
 %%
