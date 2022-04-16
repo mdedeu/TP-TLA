@@ -58,6 +58,7 @@ node { return NODE_TYPE; }
 main      {return MAIN;}
 print     { return PRINT; }
 createNode { return NEW_NODE; }
+"return" {return RETURN;}
 
 
 "for"		{return FOR;}

@@ -68,6 +68,7 @@ typedef enum TokenID {
 	WHILE,
 	IF,
 	ELSE,
+	RETURN,
 
 	// Paréntesis.
 	OPEN_PARENTHESIS,

@@ -41,7 +41,7 @@
 %token PRINT
 %token NEW_NODE
 
-
+%token RETURN
 %token FOR
 %token WHILE
 %token IF
@@ -80,11 +80,17 @@ block: instruction block
 	;
 
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close
+	;
 
 if_close: CLOSE_CURL_BRACKETS 
     | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+	;
 
 while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+	;
+
+return: RETURN expression semiColons
+	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
@@ -109,6 +115,7 @@ instruction: declare
 	| 	if
 	|	while 
 	| 	vector
+	|   return
 	;
 
 
