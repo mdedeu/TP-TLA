@@ -68,8 +68,8 @@ createNode { return NEW_NODE; }
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
-"{"											{ return OPEN_BRACKETS ; }
-"}"											{ return CLOSE_BRACKETS ; }
+"{"											{ return OPEN_CURL_BRACKETS ; }
+"}"											{ return CLOSE_CURL_BRACKETS ; }
 "["											{ return OPEN_SQUARE_BRACKETS ; }
 "]"											{ return CLOSE_SQUARE_BRACKETS ; }
 "'"                                         { return  QUOTE; }

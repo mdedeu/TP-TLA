@@ -2,4 +2,6 @@ main {
       avlTree int miarbolito;
       string hola = "meesi";
       miarbolito.print();
+      if(miarbolito - 3){miarbolito * miarbolito}else{miarbolito}
+      while(miarbolito + 9){miarbolito.print();}
 } 

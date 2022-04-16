@@ -50,8 +50,8 @@
 
 %token OPEN_PARENTHESIS
 %token CLOSE_PARENTHESIS
-%token  OPEN_BRACKETS
-%token  CLOSE_BRACKETS
+%token  OPEN_CURL_BRACKETS
+%token  CLOSE_CURL_BRACKETS
 %token  OPEN_SQUARE_BRACKETS
 %token  CLOSE_SQUARE_BRACKETS
 %token  QUOTE
@@ -68,12 +68,23 @@
 
 %%
 
-mainProgram: MAIN OPEN_BRACKETS program CLOSE_BRACKETS { $$ = ProgramGrammarAction(); }
+mainProgram: MAIN OPEN_CURL_BRACKETS program CLOSE_CURL_BRACKETS { $$ = ProgramGrammarAction(); }
 	;
 
 program: instruction program	
 	| instruction											
 	;
+
+block: instruction block 
+    | instruction
+	;
+
+if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close
+
+if_close: CLOSE_CURL_BRACKETS 
+    | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+
+while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
@@ -95,6 +106,8 @@ instruction: declare
 	|	declareAndAssign 
 	|	function
 	|   expression 
+	| 	if
+	|	while 
 	;
 
 
