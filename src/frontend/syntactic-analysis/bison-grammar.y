@@ -40,8 +40,11 @@
 %token MAIN
 %token PRINT
 %token NEW_NODE
+%token DELETE_NODE
+%token BALANCED
+%token LENGTH
+%token MODIFY_NODE
 
-%token RETURN
 %token FOR
 %token WHILE
 %token IF
@@ -89,8 +92,6 @@ if_close: CLOSE_CURL_BRACKETS
 while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
-return: RETURN expression semiColons
-	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
@@ -115,17 +116,20 @@ instruction: declare
 	| 	if
 	|	while 
 	| 	vector
-	|   return
 	;
 
 
 function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS semiColons 
 	| SYMBOL POINT NEW_NODE  OPEN_PARENTHESIS expression COMMA expression COMMA expression CLOSE_PARENTHESIS semiColons
 	| SYMBOL POINT PRINT OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT BALANCED OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT LENGTH OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT DELETE_NODE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT MODIFY_NODE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
 	;
 
 declareAndAssign:	type SYMBOL ASSIGN expression semiColons 
-	|	type SYMBOL ASSIGN function	/* en realidad solo la new node */ 
+	|	type SYMBOL ASSIGN function	
 	;
 
 

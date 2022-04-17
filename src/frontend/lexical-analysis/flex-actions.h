@@ -61,6 +61,11 @@ typedef enum TokenID {
 	MAIN,
 	PRINT,
 	NEW_NODE,
+	DELETE_NODE,
+	BALANCED,
+	LENGTH,
+	MODIFY_NODE,
+
 	
 	
 	//Bloques de control
@@ -68,8 +73,6 @@ typedef enum TokenID {
 	WHILE,
 	IF,
 	ELSE,
-	RETURN,
-
 	// Paréntesis.
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
