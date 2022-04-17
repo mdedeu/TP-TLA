@@ -97,6 +97,12 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
+	| expression GT expression
+	| expression GE expression
+	| expression LE expression
+	| expression LT expression
+	| expression NE expression
+	| expression EQ expression
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| STRING
 	| SYMBOL

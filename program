@@ -1,13 +1,18 @@
 main {
-
       avlTree int miarbolito;
       string hola = "meesi";
       miarbolito.print();
-      while(miarbolito+9){miarbolito*miarbolito}
-      if(miarbolito-3){miarbolito*miarbolito}
-      else{miarbolito+miarbolito}
-      int num=6;
-      int v[7];
+      miarbolito.length();
+      miarbolito.balanced();
+      miarbolito.modifyNode("messi");
+      miarbolit.deleteNode("boca no existis");
+      if(miarbolit){ 
+            int s;
+      } else {
+            int o;
+      }
+      while(messi > 2){int s;}
+      int num = 6;
+      int v[7] ;
       string s[];
-      return miarbolito;
 } 
