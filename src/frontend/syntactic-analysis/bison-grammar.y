@@ -69,7 +69,7 @@ assignation: SYMBOL ASSIGN expression
 	;
 
 function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS 
-	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression COMMA expression CLOSE_PARENTHESIS  
+	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  
 	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 
 	;
 	
