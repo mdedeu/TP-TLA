@@ -67,6 +67,7 @@ typedef enum TokenID {
 	SIZE,
 	MODIFY_NODE,
 	SEARCH,
+	FILTER,
 
 	
 	

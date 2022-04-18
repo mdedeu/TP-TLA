@@ -1,0 +1,10 @@
+main {
+    tree string arbol;
+
+    arbol.createNode("root", "Maginer");
+    arbol.createNode("firstSon", "NO");
+    arbol.createNode("secondSon", "NO");
+    arbol.createNode("thirdSon", "Maginer");
+
+    tree int newTree = arbol.filter("Maginer");
+}

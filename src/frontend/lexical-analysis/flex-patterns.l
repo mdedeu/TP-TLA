@@ -64,6 +64,7 @@ length { return LENGTH; }
 deleteNode { return DELETE_NODE; }
 modifyNode { return MODIFY_NODE; }
 search { return SEARCH; }
+filter { return FILTER; }
 
 
 
