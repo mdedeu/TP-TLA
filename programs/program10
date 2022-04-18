@@ -3,7 +3,7 @@ main {
     tree int arbol;
     string names[6] = {"a","b","c","d","e","f"};
 
-    for(nodeCount = 0;nodeCount < 6 ; nodeCount+=1){
+    for(nodeCount = 0;nodeCount < 6 ; nodeCount= nodeCount+1){
         arbol.createNode(names[nodeCount], nodeCount);
     }
 }

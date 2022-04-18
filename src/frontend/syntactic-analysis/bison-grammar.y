@@ -65,7 +65,6 @@ declare: type SYMBOL
 
 assignation: SYMBOL ASSIGN expression
 	| SYMBOL ASSIGN function
-	| SYMBOL ADD ASSIGN expression 
 	;
 
 function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS 

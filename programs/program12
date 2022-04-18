@@ -1,3 +1,5 @@
 main {
-    int var = 1 + hola;
+    string halo = "hola";
+    int otra = 2;
+    int var =  otra + holanda ;
 }
