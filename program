@@ -4,15 +4,18 @@ main {
       miarbolito.print();
       miarbolito.length();
       miarbolito.balanced();
-      miarbolito.modifyNode("messi");
+      miarbolito.createNode("root",1);
+      miarbolito.createNode("un hijo",2,"root");
+      miarbolito.modifyNode("root");
       miarbolit.deleteNode("boca no existis");
       if(miarbolit){ 
             int s;
       } else {
             int o;
       }
-      while(messi > 2){int s;}
+      while(messi > 2){}
       int num = 6;
       int v[7] ;
       string s[];
+
 } 

@@ -84,7 +84,7 @@ modifyNode { return MODIFY_NODE; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 {char}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
-[\"]({char}*{whitespace}*)*[\"]                   { return StringPatternAction(yytext); }
+[\"]({char}*{whitespace}*{digit}*)*[\"]                   { return StringPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 

@@ -75,11 +75,13 @@ mainProgram: MAIN OPEN_CURL_BRACKETS program CLOSE_CURL_BRACKETS { $$ = ProgramG
 	;
 
 program: instruction program	
-	| instruction											
+	| instruction	
+	|										
 	;
 
 block: instruction block 
     | instruction
+	| 
 	;
 
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close
@@ -118,7 +120,7 @@ constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 instruction: declare  
 	|	declareAndAssign 
 	|	function
-	|   expression 
+	|   expression semiColons
 	| 	if
 	|	while 
 	| 	vector

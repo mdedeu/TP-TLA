@@ -1,0 +1,3 @@
+main {
+    bstTree string miArbol;
+}
