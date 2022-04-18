@@ -64,6 +64,7 @@ typedef enum TokenID {
 	DELETE_NODE,
 	BALANCED,
 	LENGTH,
+	SIZE,
 	MODIFY_NODE,
 
 	

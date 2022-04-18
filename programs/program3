@@ -1,0 +1,7 @@
+main {
+    tree string arbol;
+    arbol.createNode("root","Santi");
+    arbol.createNode("h1","Dax","Santi");
+    arbol.createNode("h2","Fico","Santi");
+    arbol.deleteNode("root");
+}

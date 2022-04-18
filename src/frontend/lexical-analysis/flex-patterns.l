@@ -59,6 +59,7 @@ main      {return MAIN;}
 print     { return PRINT; }
 createNode { return NEW_NODE; }
 balanced { return BALANCED; }
+size { return SIZE; }
 length { return LENGTH; }
 deleteNode { return DELETE_NODE; }
 modifyNode { return MODIFY_NODE; }

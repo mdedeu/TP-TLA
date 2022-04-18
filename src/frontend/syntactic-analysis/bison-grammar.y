@@ -43,6 +43,7 @@
 %token DELETE_NODE
 %token BALANCED
 %token LENGTH
+%token SIZE
 %token MODIFY_NODE
 
 %token FOR
@@ -94,6 +95,8 @@ if_close: CLOSE_CURL_BRACKETS
 while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
+for: FOR OPEN_PARENTHESIS expression semiColons expression semiColons expression semiColons CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
@@ -131,6 +134,7 @@ function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLO
 	| SYMBOL POINT PRINT OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
 	| SYMBOL POINT BALANCED OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
 	| SYMBOL POINT LENGTH OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
+	| SYMBOL POINT SIZE OPEN_PARENTHESIS CLOSE_PARENTHESIS semiColons
 	| SYMBOL POINT DELETE_NODE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
 	| SYMBOL POINT MODIFY_NODE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS semiColons
 	;
