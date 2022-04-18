@@ -52,9 +52,9 @@ instruction: declareAndAssign semiColons
 	;
 
 
-declareAndAssign:	declare ASSIGN expression semiColons 
+declareAndAssign:	declare ASSIGN expression 
 	|	declare ASSIGN function
-	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS semiColons
+	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS
 	| 	declare
 	;
 
