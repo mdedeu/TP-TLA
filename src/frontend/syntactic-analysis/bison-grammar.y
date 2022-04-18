@@ -95,7 +95,7 @@ if_close: CLOSE_CURL_BRACKETS
 while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
-for: FOR OPEN_PARENTHESIS expression semiColons expression semiColons expression semiColons CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+for: FOR OPEN_PARENTHESIS declareAndAssign expression semiColons expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -105,12 +105,13 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression GT expression
 	| expression GE expression
 	| expression LE expression
-	| expression LT expression
+	| expression LT expression									
 	| expression NE expression
 	| expression EQ expression
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| STRING
 	| SYMBOL
+	| SYMBOL POINT SIZE OPEN_PARENTHESIS CLOSE_PARENTHESIS
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
@@ -126,6 +127,7 @@ instruction: declare
 	|   expression semiColons
 	| 	if
 	|	while 
+	|   for
 	;
 
 
@@ -141,7 +143,8 @@ function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLO
 
 declareAndAssign:	type SYMBOL ASSIGN expression semiColons 
 	|	type SYMBOL ASSIGN function
-	| 	nodeType type SYMBOL ASSIGN function	
+	| 	treeType type SYMBOL ASSIGN expression semiColons
+	|   nodeType type SYMBOL ASSIGN function	
 	|   type vector ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS semiColons
 	;
 

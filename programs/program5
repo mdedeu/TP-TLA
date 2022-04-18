@@ -4,8 +4,8 @@ main {
     arbol.createNode("h1",1,"root");
     arbol.createNode("h2",2,"root");
     arbol.createNode("h3",3,"root");
+    
+    tree int arbolito = arbol * 3;
 
-    for(int i = 0; i < arbol.length; i++) {
-        5;
-    }
+   
 }
