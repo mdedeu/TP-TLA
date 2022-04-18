@@ -123,7 +123,6 @@ instruction: declare
 	|   expression semiColons
 	| 	if
 	|	while 
-	| 	vector
 	;
 
 
@@ -138,11 +137,16 @@ function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLO
 
 declareAndAssign:	type SYMBOL ASSIGN expression semiColons 
 	|	type SYMBOL ASSIGN function	
+	|   type vector ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS semiColons
 	;
-
 
 declare: type SYMBOL semiColons 
 	| treeType type SYMBOL semiColons 
+	| type vector semiColons
+	;
+
+parameterList: expression 
+	| parameterList COMMA expression
 	;
 
 type
@@ -166,6 +170,6 @@ semiColons
     ;
 
 vector:
-	type SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS semiColons
-	| type SYMBOL OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS semiColons
+	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS
+	
 %%

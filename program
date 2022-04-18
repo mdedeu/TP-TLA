@@ -13,9 +13,10 @@ main {
       } else {
             int o;
       }
-      while(messi > 2){}
+      while(messi > 2){
+            esto; compila;
+      }
       int num = 6;
-      int v[7] ;
-      string s[];
+      int v[7] = {1+3,hola+3,3,4};
 
 } 
