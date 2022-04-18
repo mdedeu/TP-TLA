@@ -1,5 +1,3 @@
 main {
-    int numerito; 
-    string hola;
-    hola+numerito;
+    int var = 1 + hola;
 }

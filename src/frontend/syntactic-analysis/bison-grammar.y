@@ -44,14 +44,14 @@ block: instruction block
     | instruction
 	;
 
-instruction: declareAndAssign semiColons
-	|	assignation semiColons
-	|	function semiColons
+instruction: statements semiColons
 	| 	control_block
 	|
 	;
-
-
+statements: declareAndAssign
+	| assignation
+	| function
+	;
 declareAndAssign:	declare ASSIGN expression 
 	|	declare ASSIGN function
 	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS
@@ -104,9 +104,9 @@ if_close: CLOSE_CURL_BRACKETS
 while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
-for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons instruction CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
-	| FOR OPEN_PARENTHESIS assignation semiColons expression semiColons instruction CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
-	| FOR OPEN_PARENTHESIS semiColons expression semiColons instruction CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons statements CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+	| FOR OPEN_PARENTHESIS assignation semiColons expression semiColons statements CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+	| FOR OPEN_PARENTHESIS semiColons expression semiColons statements CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
