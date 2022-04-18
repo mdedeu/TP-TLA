@@ -1,0 +1,4 @@
+main {
+    tree string arbol;
+    arbol.deleteNode("inexistente");
+}

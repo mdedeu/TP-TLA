@@ -1,0 +1,5 @@
+main {
+    int numerito; 
+    string hola;
+    hola+numerito;
+}

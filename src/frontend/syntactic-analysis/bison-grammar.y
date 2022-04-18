@@ -136,7 +136,8 @@ function:	SYMBOL POINT NEW_NODE OPEN_PARENTHESIS expression COMMA expression CLO
 	;
 
 declareAndAssign:	type SYMBOL ASSIGN expression semiColons 
-	|	type SYMBOL ASSIGN function	
+	|	type SYMBOL ASSIGN function
+	| 	nodeType type SYMBOL ASSIGN function	
 	|   type vector ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS semiColons
 	;
 
@@ -160,8 +161,10 @@ treeType
 	| AVL_TREE_TYPE
 	| RED_BLACK_TREE_TYPE 
 	| B_TREE_TYPE 
-	| BST_TREE_TYPE 
-	| NODE_TYPE 
+	| BST_TREE_TYPE
+	| nodeType
+
+nodeType: NODE_TYPE 
 	;
 
 semiColons

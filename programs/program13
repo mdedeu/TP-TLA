@@ -1,0 +1,4 @@
+main {
+    string hola = "hola";
+    hola.print();
+}
