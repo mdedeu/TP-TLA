@@ -17,6 +17,8 @@ main {
             esto; compila;
       }
       int num = 6;
+
+      num = 4*7;
       int v[7] = {1+3,hola+3,3,4};
 
 } 
