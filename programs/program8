@@ -1,0 +1,20 @@
+main {
+    avlTree int miArbol;
+    miArbol.createNode("n1",1);
+    miArbol.createNode("n2",2);
+    miArbol.createNode("n3",3);
+    miArbol.createNode("n4",4);
+    miArbol.createNode("n5",5);
+    miArbol.createNode("n6",6);
+    miArbol.createNode("n7",7);
+    miArbol.createNode("n8",8);
+    miArbol.createNode("n9",9);
+    miArbol.createNode("n10",10);
+    miArbol.createNode("n11",11);
+    miArbol.createNode("n12",12);
+    miArbol.createNode("n13",13);
+    miArbol.createNode("n14",14);
+    miArbol.createNode("n15",15);
+
+    miArbol.print();
+}
