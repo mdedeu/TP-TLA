@@ -1,0 +1,5 @@
+main {
+    tree int arbol;
+    arbol.createNode("root",50);
+    arbol.print();
+}
