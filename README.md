@@ -47,5 +47,8 @@ Deberia obtener el resultado correcto de evaluar el programa anterior: `122318`.
 Para compilar todos los programas de la carpeta programs automaticamente:
 
 ```bash
-user@machine:./test.sh accept
+user@machine:./test.sh accepted  --> corre todos los programas que deberian aceptar exitosamente
+user@machine:./test.sh notaccepted  --> corre todos los programas que no deberian aceptar
+user@machine:./test.sh  --> corre todos los programas
+
 ```
