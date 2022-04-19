@@ -56,6 +56,8 @@ int NoParamFunctionGrammarAction();
 int OneParamFunctionGrammarAction();
 int MultiParamFunctionGrammarAction();
 int ExpressionFunctionGrammarAction();
+int ReadFunctionGrammarAction();
+int WriteFunctionGrammarAction();
 
 //Bloques de control
 int IfGrammarAction();

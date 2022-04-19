@@ -160,5 +160,16 @@ int VectorGrammarAction() {
 	return 1;
 }
 
+int ReadFunctionGrammarAction() {
+	LogDebug("ReadFunctionGrammarAction()");
+	return 1;
+}
+
+
+int WriteFunctionGrammarAction() {
+	LogDebug("WriteFunctionGrammarAction()");
+	return 1;
+}
+
 
 

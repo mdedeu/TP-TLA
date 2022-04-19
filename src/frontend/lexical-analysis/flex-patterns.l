@@ -57,6 +57,8 @@ node { return NODE_TYPE; }
 
 main      {return MAIN;}
 print     { return PRINT; }
+read      { return READ; }
+write     { return WRITE; }
 createNode { return NEW_NODE; }
 balanced { return BALANCED; }
 size { return SIZE; }

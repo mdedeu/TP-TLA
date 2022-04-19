@@ -60,6 +60,8 @@ typedef enum TokenID {
 	// Funciones
 	MAIN,
 	PRINT,
+	READ,
+	WRITE,
 	NEW_NODE,
 	DELETE_NODE,
 	BALANCED,
