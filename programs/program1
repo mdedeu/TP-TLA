@@ -1,4 +1,5 @@
 main {
+    //Crear un árbol binario de 15 nodos.
     binaryTree int miArbol;
     miArbol.createNode("n1",1);
     miArbol.createNode("n2",2);

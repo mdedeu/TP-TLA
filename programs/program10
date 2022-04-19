@@ -1,4 +1,5 @@
 main {
+    // Crear un árbol de N nodos utilizando un bucle o iterador.
     int nodeCount;
     tree int arbol;
     string names[6] = {"a","b","c","d","e","f"};

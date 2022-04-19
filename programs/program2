@@ -1,3 +1,4 @@
 main {
+    //Crear un árbol degenerado de 7 nodos como lista, y balancearlo.
     bstTree string miArbol;
 }

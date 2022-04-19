@@ -1,4 +1,5 @@
 main {
+    // Un programa que intente eliminar un nodo de un árbol vacío.
     tree string arbol;
     arbol.deleteNode("inexistente");
 }

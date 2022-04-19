@@ -86,6 +86,7 @@ filter { return FILTER; }
 
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
+\/\/.*                                      { IgnoredPatternAction(yytext); }
 {char}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
 [\"]({char}*{whitespace}*{digit}*)*[\"]                   { return StringPatternAction(yytext); }
 

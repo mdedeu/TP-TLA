@@ -1,4 +1,5 @@
 main {
+    //Crear un árbol cuyos nodos almacenan números enteros.
     tree int arbol;
     arbol.createNode("root",50);
     arbol.createNode("h1",1,"root");

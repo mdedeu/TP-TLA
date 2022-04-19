@@ -1,4 +1,5 @@
 main {
+    //Graficar un árbol perfectamente balanceado de 15 nodos
     avlTree int miArbol;
     miArbol.createNode("n1",1);
     miArbol.createNode("n2",2);

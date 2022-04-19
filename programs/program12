@@ -1,4 +1,5 @@
 main {
+    // Un programa que intente realizar una operación entre tipos incompatibles
     string halo = "hola";
     int otra = 2;
     int var =  otra + halo ;

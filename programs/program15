@@ -1,4 +1,5 @@
 main { 
+    //  La creación de un vector con variables de diferente tipo.
     tree int arbol;
     node int nodito = arbol.createNode("root","rootId");
 

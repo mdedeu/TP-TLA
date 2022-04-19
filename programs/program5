@@ -1,4 +1,5 @@
 main {
+    //Obtener un nuevo árbol multiplicando el número entero almacenado en sus nodos por 3
     tree int arbol;
     arbol.createNode("root",50);
     arbol.createNode("h1",1,"root");

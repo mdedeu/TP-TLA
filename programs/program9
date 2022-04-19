@@ -1,4 +1,5 @@
 main {
+    // Crear un árbol a partir de otro, que solo utilice los nodos cuyo nombre es “Maginer”
     tree string arbol;
 
     arbol.createNode("root", "Maginer");
