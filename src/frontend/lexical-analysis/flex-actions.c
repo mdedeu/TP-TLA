@@ -23,12 +23,10 @@ TokenID UnknownPatternAction(const char * lexeme) {
 
 TokenID SymbolPatternAction(const char * lexeme) {
 	LogDebug("SymbolPatternAction: '%s'.", lexeme);
-	yylval = lexeme;
 	return SYMBOL;
 }
 
 TokenID StringPatternAction(const char * lexeme) {
 	LogDebug("StringPatternAction: '%s'.", lexeme);
-	yylval = lexeme;
 	return STRING;
 }
