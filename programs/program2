@@ -1,4 +1,13 @@
 main {
     //Crear un árbol degenerado de 7 nodos como lista, y balancearlo.
-    bstTree string miArbol;
+    tree string miArbol;
+    miArbol.createNode("n1",1);
+    miArbol.createNode("n2",2,"n1");
+    miArbol.createNode("n3",3,"n2");
+    miArbol.createNode("n4",4,"n3");
+    miArbol.createNode("n5",5,"n4");
+    miArbol.createNode("n6",6,"n5");
+    miArbol.createNode("n7",7,"n6");
+
+    avlTree string nuevoArbol = miArbol.balanced();
 }
