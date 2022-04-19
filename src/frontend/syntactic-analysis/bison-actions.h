@@ -27,4 +27,43 @@ int ConstantFactorGrammarAction(const int value);
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
 
+//Comparaciones expresión
+int GreaterExpressionGrammarAction();
+int GreaterOrEqualExpressionGrammarAction();
+int LesserOrEqualExpressionGrammarAction();
+int LesserExpressionGrammarAction();
+int NotEqualExpressionGrammarAction();
+int EqualExpressionGrammarAction();
+
+//Bloque
+int BlockGrammarAction();
+
+//Instrucción
+int InstructionsGrammarAction();
+
+//Declaración (statement)
+int StatementsGrammarAction();
+
+//Declararción
+int DeclareAndAssignGrammarAction();
+int DeclareGrammarAction();
+
+//Asignación
+int AssignationGrammarAction();
+
+//Función
+int NoParamFunctionGrammarAction();
+int OneParamFunctionGrammarAction();
+int MultiParamFunctionGrammarAction();
+int ExpressionFunctionGrammarAction();
+
+//Bloques de control
+int IfGrammarAction();
+int ForGrammarAction();
+int WhileGrammarAction();
+
+//Vector
+int VectorGrammarAction();
+
+
 #endif

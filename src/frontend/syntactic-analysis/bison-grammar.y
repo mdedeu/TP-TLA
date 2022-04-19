@@ -40,40 +40,40 @@
 mainProgram: MAIN OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = ProgramGrammarAction(); }
 	;
 
-block: instruction block 
-    | instruction
+block: instruction block { $$ = BlockGrammarAction(); }
+    | instruction		 { $$ = BlockGrammarAction(); }									
 	;
 
-instruction: statements semiColons
-	| 	control_block
+instruction: statements semiColons 	{ $$ = InstructionsGrammarAction(); }
+	| 	control_block				{ $$ = InstructionsGrammarAction(); }
 	|
 	;
-statements: declareAndAssign
-	| assignation
-	| function
+statements: declareAndAssign 	{ $$ = StatementsGrammarAction(); }
+	| assignation				{ $$ = StatementsGrammarAction(); }
+	| function					{ $$ = StatementsGrammarAction(); }
 	;
-declareAndAssign:	declare ASSIGN expression 
-	|	declare ASSIGN function
-	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS
-	| 	declare
-	;
-
-declare: type SYMBOL 
-	| treeType type SYMBOL 
-	| type vector 
+declareAndAssign:	declare ASSIGN expression  { $$ = DeclareAndAssignGrammarAction(); }
+	|	declare ASSIGN function                { $$ = DeclareAndAssignGrammarAction(); }
+	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS	   { $$ = DeclareAndAssignGrammarAction(); }
+	| 	declare	{ $$ = DeclareAndAssignGrammarAction(); }
 	;
 
-assignation: SYMBOL ASSIGN expression
-	| SYMBOL ASSIGN function
+declare: type SYMBOL  { $$ = DeclareGrammarAction(); }
+	| treeType type SYMBOL  { $$ = DeclareGrammarAction(); }
+	| type vector  { $$ = DeclareGrammarAction(); }
 	;
 
-function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS 
-	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  
-	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 
-	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
+assignation: SYMBOL ASSIGN expression  { $$ = AssignationGrammarAction(); }
+	| SYMBOL ASSIGN function  { $$ = AssignationGrammarAction(); }
+	;
+
+function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  { $$ = NoParamFunctionGrammarAction(); }
+	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  { $$ = OneParamFunctionGrammarAction(); }
+	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS { $$ = MultiParamFunctionGrammarAction(); }
+	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS { $$ = ExpressionFunctionGrammarAction(); }
 	;
 	
-noParamFunctions: PRINT
+noParamFunctions: PRINT	
 	| LENGTH
 	| BALANCED
 	| SIZE
@@ -88,12 +88,12 @@ multiParamFunctions:
 	NEW_NODE
 	;	
 	
-control_block: if
-	| for
-	| while
+control_block: if { $$ = IfGrammarAction(); }
+	| for		  { $$ = ForGrammarAction(); }
+	| while		  { $$ = WhileGrammarAction(); }
 	;
 
-if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close
+if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 
 	;
 
 if_close: CLOSE_CURL_BRACKETS 
@@ -112,12 +112,12 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
-	| expression GT expression
-	| expression GE expression
-	| expression LE expression
-	| expression LT expression									
-	| expression NE expression
-	| expression EQ expression
+	| expression GT expression 									{ $$ = GreaterExpressionGrammarAction(); }
+	| expression GE expression									{ $$ = GreaterOrEqualExpressionGrammarAction(); }
+	| expression LE expression									{ $$ = LesserOrEqualExpressionGrammarAction(); }
+	| expression LT expression									{ $$ = LesserExpressionGrammarAction(); }
+	| expression NE expression									{ $$ = NotEqualExpressionGrammarAction(); }
+	| expression EQ expression									{ $$ = EqualExpressionGrammarAction(); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| STRING
 	| SYMBOL
@@ -133,9 +133,9 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-vector:
-	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS
-	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS
+vector: 
+	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS	 { $$ = VectorGrammarAction(); }
+	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS	 { $$ = VectorGrammarAction(); }
 	;
 
 parameterList: expression 

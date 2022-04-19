@@ -64,3 +64,101 @@ int IntegerConstantGrammarAction(const int value) {
 	LogDebug("IntegerConstantGrammarAction(%d)", value);
 	return value;
 }
+
+int GreaterExpressionGrammarAction() {
+	LogDebug("GreaterExpressionGrammarAction()");
+	return 1;
+}
+int GreaterOrEqualExpressionGrammarAction() {
+	LogDebug("GreaterOrEqualExpressionGrammarAction()");
+	return 1;
+}
+int LesserOrEqualExpressionGrammarAction() {
+	LogDebug("LesserOrEqualExpressionGrammarAction()");
+	return 1;
+}
+int LesserExpressionGrammarAction() {
+	LogDebug("LesserExpressionGrammarAction()");
+	return 1;
+}
+int NotEqualExpressionGrammarAction() {
+	LogDebug("NotEqualExpressionGrammarAction()");
+	return 1;
+}
+int EqualExpressionGrammarAction() {
+	LogDebug("EqualExpressionGrammarAction()");
+	return 1;
+}
+
+int BlockGrammarAction() {
+	LogDebug("BlockExpressionGrammarAction()");
+	return 1;
+}
+
+int InstructionsGrammarAction() {
+	LogDebug("InstructionsGrammarAction()");
+	return 1;
+}
+
+int StatementsGrammarAction() {
+	LogDebug("StatementsGrammarAction()");
+	return 1;
+}
+
+int DeclareAndAssignGrammarAction() {
+	LogDebug("DeclareAndAssignGrammarAction()");
+	return 1;
+}
+
+int DeclareGrammarAction() {
+	LogDebug("DeclareGrammarAction()");
+	return 1;
+}
+
+int AssignationGrammarAction() {
+	LogDebug("AssignationGrammarAction()");
+	return 1;
+}
+
+int NoParamFunctionGrammarAction() {
+	LogDebug("NoParamFunctionGrammarAction()");
+	return 1;
+}
+
+int OneParamFunctionGrammarAction() {
+	LogDebug("OneParamFunctionGrammarAction()");
+	return 1;
+}
+
+int MultiParamFunctionGrammarAction() {
+	LogDebug("MultiParamFunctionGrammarAction()");
+	return 1;
+}
+
+int ExpressionFunctionGrammarAction() {
+	LogDebug("ExpressionFunctionGrammarAction()");
+	return 1;
+}
+
+int IfGrammarAction() {
+	LogDebug("IfGrammarAction()");
+	return 1;
+}
+
+int ForGrammarAction() {
+	LogDebug("ForGrammarAction()");
+	return 1;
+}
+
+int WhileGrammarAction() {
+	LogDebug("WhileGrammarAction()");
+	return 1;
+}
+
+int VectorGrammarAction() {
+	LogDebug("VectorGrammarAction()");
+	return 1;
+}
+
+
+
