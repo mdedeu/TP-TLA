@@ -1,6 +1,7 @@
 #include "../../backend/support/logger.h"
 #include "flex-actions.h"
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Implementación de "flex-rules.h".
@@ -27,6 +28,7 @@ TokenID SymbolPatternAction(const char * lexeme) {
 }
 
 TokenID StringPatternAction(const char * lexeme) {
+	strcpy(yylval.string, lexeme);
 	LogDebug("StringPatternAction: '%s'.", lexeme);
 	return STRING;
 }

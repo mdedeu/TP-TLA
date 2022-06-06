@@ -18,7 +18,7 @@ crlf			\r\n
 digit			[0-9]
 endline			\n
 whitespace		[ \f\n\r\t\v]
-char [a-zA-Z]
+letter [a-zA-Z]
 
 %%
 
@@ -27,53 +27,53 @@ char [a-zA-Z]
 "-"											{ return SUB; }
 "*"											{ return MUL; }
 "/"											{ return DIV; }
-"=="		{ return EQ; }
-"<="		{ return LE; }
-">="		{ return GE; }
-"!="		{ return NE; }
-"<" { return LT; }
-">" { return GT; }
-"||"		{return OR; }
-"&&"		{return AND;}
-"!" { return NOT; }
+"=="		                                { return EQ; }
+"<="		                                { return LE; }
+">="		                                { return GE; }
+"!="		                                { return NE; }
+"<"                                         { return LT; }
+">"                                         { return GT; }
+"||"		                                { return OR; }
+"&&"		                                { return AND;}
+"!"                                         { return NOT; }
 
 
-"=" { return ASSIGN; }
+"="                                         { return ASSIGN; }
 
 
-"." {return POINT; }
-"," {return COMMA; }
+"."                                         { return POINT; }
+","                                         { return COMMA; }
 
-int       { return INT_TYPE; }
-string    { return STRING_TYPE; }
+int                                         { return INT_TYPE; }
+string                                      { return STRING_TYPE; }
 
-tree     { return NON_BINARY_TREE_TYPE; }
-binaryTree     { return BINARY_TREE_TYPE; }
-avlTree   { return AVL_TREE_TYPE; }
-rbtree {return RED_BLACK_TREE_TYPE; }
-bTree { return B_TREE_TYPE; }
-bstTree { return BST_TREE_TYPE; }
-node { return NODE_TYPE; }
+tree                                        { return NON_BINARY_TREE_TYPE; }
+binaryTree                                  { return BINARY_TREE_TYPE; }
+avlTree                                     { return AVL_TREE_TYPE; }
+rbtree                                      { return RED_BLACK_TREE_TYPE; }
+bTree                                       { return B_TREE_TYPE; }
+bstTree                                     { return BST_TREE_TYPE; }
+node                                        { return NODE_TYPE; }
 
-main      {return MAIN;}
-print     { return PRINT; }
-read      { return READ; }
-write     { return WRITE; }
-createNode { return NEW_NODE; }
-balanced { return BALANCED; }
-size { return SIZE; }
-length { return LENGTH; }
-deleteNode { return DELETE_NODE; }
-modifyNode { return MODIFY_NODE; }
-search { return SEARCH; }
-filter { return FILTER; }
+main                                        { return MAIN;}
+print                                       { return PRINT; }
+read                                        { return READ; }
+write                                       { return WRITE; }
+createNode                                  { return NEW_NODE; }
+balanced                                    { return BALANCED; }
+size                                        { return SIZE; }
+length                                      { return LENGTH; }
+deleteNode                                  { return DELETE_NODE; }
+modifyNode                                  { return MODIFY_NODE; }
+search                                      { return SEARCH; }
+filter                                      { return FILTER; }
 
 
 
-"for"		{return FOR;}
-"while" { return WHILE;}
-"if"    { return IF;}
-"else" { return ELSE;}
+"for"		                                { return FOR;}
+"while"                                     { return WHILE;}
+"if"                                        { return IF;}
+"else"                                      { return ELSE;}
 
 
 "("											{ return OPEN_PARENTHESIS; }
@@ -89,8 +89,8 @@ filter { return FILTER; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 \/\/.*                                      { IgnoredPatternAction(yytext); }
-{char}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
-[\"]({char}*{whitespace}*{digit}*)*[\"]                   { return StringPatternAction(yytext); }
+{letter}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
+\"[^\"]+\"                                  { return StringPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 
