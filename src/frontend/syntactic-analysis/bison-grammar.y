@@ -33,6 +33,7 @@
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
+%left EQ NE LT LE GT GE AND OR NOT
 
 
 %%
@@ -46,14 +47,14 @@ block: instruction block { $$ = BlockGrammarAction(); }
 
 instruction: statements semiColons 	{ $$ = InstructionsGrammarAction(); }
 	| 	control_block				{ $$ = InstructionsGrammarAction(); }
-	|
 	;
+	
 statements: declareAndAssign 	{ $$ = StatementsGrammarAction(); }
 	| assignation				{ $$ = StatementsGrammarAction(); }
 	| function					{ $$ = StatementsGrammarAction(); }
 	;
+
 declareAndAssign:	declare ASSIGN expression  { $$ = DeclareAndAssignGrammarAction(); }
-	|	declare ASSIGN function                { $$ = DeclareAndAssignGrammarAction(); }
 	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS	   { $$ = DeclareAndAssignGrammarAction(); }
 	| 	declare	{ $$ = DeclareAndAssignGrammarAction(); }
 	;
@@ -64,7 +65,6 @@ declare: type SYMBOL  { $$ = DeclareGrammarAction(); }
 	;
 
 assignation: SYMBOL ASSIGN expression  { $$ = AssignationGrammarAction(); }
-	| SYMBOL ASSIGN function  { $$ = AssignationGrammarAction(); }
 	;
 
 function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  { $$ = NoParamFunctionGrammarAction(); }
@@ -79,7 +79,6 @@ read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS
 	;
 
 write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
-	| WRITE OPEN_PARENTHESIS STRING CLOSE_PARENTHESIS
 	;
 
 noParamFunctions: PRINT	
@@ -127,16 +126,16 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression LT expression									{ $$ = LesserExpressionGrammarAction(); }
 	| expression NE expression									{ $$ = NotEqualExpressionGrammarAction(); }
 	| expression EQ expression									{ $$ = EqualExpressionGrammarAction(); }
+	| NOT expression
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
-	| STRING
-	| SYMBOL
 	| function
-	| assignation
 	| vector
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
 	| constant													{ $$ = ConstantFactorGrammarAction($1); }
+	| STRING
+	| SYMBOL
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
