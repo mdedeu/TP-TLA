@@ -4,6 +4,13 @@
 
 %}
 
+%union {
+    char string[1024];
+    int integer;
+    struct node_t * node;
+    struct node_t * list;
+}
+
 // IDs de los tokens generados desde Flex:
 %token ADD SUB MUL DIV 
 
@@ -22,13 +29,16 @@
 
 %token MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
 
-
 %token FOR WHILE IF ELSE
-
 
 %token OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE END_LINE
 
 %token INTEGER STRING SYMBOL
+
+%type <integer> type constant treeType semiColons
+%type <node> mainProgram block instruction statements declareAndAssign declare assignation function
+%type <node> read write noParamFunctions oneParamFunctions multiParamFunctions control_block if
+%type <node> if_close while for expression factor vector parameterList
 
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
@@ -41,8 +51,8 @@
 mainProgram: MAIN OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = ProgramGrammarAction(); }
 	;
 
-block: instruction block { $$ = BlockGrammarAction(); }
-    | instruction		 { $$ = BlockGrammarAction(); }									
+block: instruction block { $$ = add_element_to_list($2, $1); }
+    | instruction		 { $$ = $1; }									
 	;
 
 instruction: statements semiColons 	{ $$ = InstructionsGrammarAction(); }
@@ -64,7 +74,7 @@ declare: type SYMBOL  { $$ = DeclareGrammarAction(); }
 	| type vector  { $$ = DeclareGrammarAction(); }
 	;
 
-assignation: SYMBOL ASSIGN expression  { $$ = AssignationGrammarAction(); }
+assignation: SYMBOL ASSIGN expression  { $$ = assign_value_variable_node($1, $3); }
 	;
 
 function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  { $$ = NoParamFunctionGrammarAction(); }
@@ -75,10 +85,10 @@ function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  { $$
 	| write	{ $$ = WriteFunctionGrammarAction(); }
 	;
 	
-read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS
+read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS { $$ = add_read_node(add_variable_reference($3)); }
 	;
 
-write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS 
+write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS { $$ = add_write_node($3); }
 	;
 
 noParamFunctions: PRINT	
@@ -101,14 +111,14 @@ control_block: if { $$ = IfGrammarAction(); }
 	| while		  { $$ = WhileGrammarAction(); }
 	;
 
-if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 
+if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close {$$ = add_if_node($3, add_block_node($6), $7); };
 	;
 
-if_close: CLOSE_CURL_BRACKETS 
-    | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+if_close: CLOSE_CURL_BRACKETS { $$ = NULL; }
+    | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = add_block_node($4); };
 	;
 
-while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
+while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = add_while_node($3, add_block_node($6)); };
 	;
 
 for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons statements CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
@@ -116,17 +126,17 @@ for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons stat
 	| FOR OPEN_PARENTHESIS semiColons expression semiColons statements CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS
 	;
 
-expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
-	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
-	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
-	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
-	| expression GT expression 									{ $$ = GreaterExpressionGrammarAction(); }
-	| expression GE expression									{ $$ = GreaterOrEqualExpressionGrammarAction(); }
-	| expression LE expression									{ $$ = LesserOrEqualExpressionGrammarAction(); }
-	| expression LT expression									{ $$ = LesserExpressionGrammarAction(); }
-	| expression NE expression									{ $$ = NotEqualExpressionGrammarAction(); }
-	| expression EQ expression									{ $$ = EqualExpressionGrammarAction(); }
-	| NOT expression
+expression: expression ADD expression							{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression SUB expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression MUL expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression DIV expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression GT expression 									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression GE expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression LE expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression LT expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression NE expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| expression EQ expression									{ $$ = add_expression_node($1, add_operation_node($2), $3); }
+	| NOT expression											{ $$ = add_expression_node(add_operation_node($1), $2, NULL); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| function
 	| vector
@@ -150,13 +160,11 @@ parameterList: expression
 	| parameterList COMMA expression
 	;
 
-type
-	: INT_TYPE
+type: INT_TYPE
 	| STRING_TYPE 
 	;
 
-treeType 
-	: NON_BINARY_TREE_TYPE 
+treeType: NON_BINARY_TREE_TYPE 
 	| BINARY_TREE_TYPE 
 	| AVL_TREE_TYPE
 	| RED_BLACK_TREE_TYPE 
@@ -165,8 +173,7 @@ treeType
 	| NODE_TYPE
 	;
 
-semiColons
-	: END_LINE
+semiColons: END_LINE
     | semiColons END_LINE
     ;
 
