@@ -29,17 +29,15 @@ unsigned int addRoot(treeADT tree, elemType elem,char *node_name){
 //--------------------------------------------------------//
 //-------------------BINARY-------------------------------//
 //function that finds the node and print its values
+
 t_node binarySearchRec(t_node node,char *node_name,elemType elem){
     if(node==NULL){
         return NULL;
     }
     if(compare(node->elem,elem)<0){
-        printf("node name:%s\nnode value:%d\n",node->node_name,node->elem);
         return binarySearchRec(node->rightSon,node_name, elem);    
     }
     if(compare(node->elem,elem)>0){
-        printf("node name:%s\nnode value:%d\n",node->node_name,node->elem);
-
         return binarySearchRec(node->leftSon,node_name, elem);    
     }
         printf("node name:%s\nnode value:%d\n",node->node_name,node->elem);
@@ -129,5 +127,22 @@ void printRec(t_node list){
     printLeftChild(list->leftSon);
     printRec(list->rightSon);
     printRec(list->leftSon);   
+}
+void multiplyTreeRec(t_node node,int value){
+    if(node==NULL){
+        return;
+    }
+    multiplyTreeRec(node->rightSon,value);
+    multiplyTreeRec(node->leftSon,value);
+    
+    node->elem*=value;
+    
+}
+void multiplyTree(treeADT tree, int value){
+    if(tree==NULL){
+        return;
+    }
+    multiplyTreeRec(tree->first,value);
+        
 }
 

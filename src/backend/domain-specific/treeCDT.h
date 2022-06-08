@@ -25,3 +25,4 @@ t_node binarySearch(t_node root,char *node_name, elemType elem);
 void printLeftChild(t_node list) ;
 void printRightChild(t_node list) ;
 void printRec(t_node list);
+void multiplyTree(treeADT tree, int value);
