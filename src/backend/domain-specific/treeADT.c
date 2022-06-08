@@ -8,6 +8,10 @@ treeADT newTree()
 static int compare (elemType e1, elemType e2) {
     return e1-e2;
 }
+
+int getSize(treeADT tree){
+    return tree->size;
+}
 //-----------------------NORMAL TREE------------------------//
 unsigned int addRoot(treeADT tree, elemType elem,char *node_name){
     t_node aux=malloc(sizeof(struct node));
@@ -28,8 +32,9 @@ unsigned int addRoot(treeADT tree, elemType elem,char *node_name){
 
 //--------------------------------------------------------//
 //-------------------BINARY-------------------------------//
-//function that finds the node and print its values
+//TODO: HAY QUE VER COMO MANEJAR DISTINTOS ELEMTYPES
 
+//function that finds the node and print its values
 t_node binarySearchRec(t_node node,char *node_name,elemType elem){
     if(node==NULL){
         return NULL;
@@ -76,7 +81,7 @@ t_node addRecBinary(t_node node, elemType elem, size_t *size, size_t *count,char
         aux->rightSon=NULL;
         aux->leftSon=NULL;
         //aux->count=1;
-        //*count=1;
+        *count+=1;
         return aux;
     }
     //if it is a greater element it is a greater element, it is a right child
@@ -89,7 +94,7 @@ t_node addRecBinary(t_node node, elemType elem, size_t *size, size_t *count,char
     return node;
 }
 unsigned int addBinary(treeADT tree, elemType elem,char *node_name){
-    size_t count;
+    size_t count=tree->size;
     tree->first=addRecBinary(tree->first,elem,&tree->size,&count,node_name);
     return count;
 }
