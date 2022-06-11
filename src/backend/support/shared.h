@@ -134,11 +134,11 @@ typedef enum{
 struct  Declare{
 	int type;
 	Vector * vector;
-	Variable* variable;
+	char * variable;
 };
 
 struct Assignation {
-	Variable* variable;
+	char * variable;
 	Expression* Expression;
 };
 
@@ -153,7 +153,7 @@ typedef enum {
 
 struct Function {
 	FunctionType type;
-	Variable * variable;
+	char * variable;
 	int noParamFunctionToken;
 	int oneParamFunctionToken;
 	Expression * expression;
@@ -164,7 +164,7 @@ struct Function {
 };
 
 struct Read{
-	Variable* variable;
+	char * variable;
 };
 
 struct Write {
@@ -245,7 +245,7 @@ struct Factor {
 	FactorType type;
 	Constant * constant;
 	char * string;
-	Variable * variable;
+	char * variable;
 	Expression * expression;
 };
 
@@ -258,10 +258,11 @@ typedef enum {
 	SYMBOL_VECTOR
 } VectorType;
 
-struct Vector{
+struct Vector {
 	VectorType type;
-	Variable * variable;
+	char * variable;
 	Constant * constant;
+	char * variable2;
 };
 
 typedef enum {
@@ -275,10 +276,12 @@ struct ParameterList {
 	ParameterList * parameterList;
 };
 
+/*
 struct Variable{
 	char * name;
 	void * value;
 	int type;
 };
+*/
 
 #endif

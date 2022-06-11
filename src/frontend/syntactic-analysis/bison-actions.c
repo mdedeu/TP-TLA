@@ -20,154 +20,91 @@ void yyerror(const char * string) {
 	LogErrorRaw("\n\n");
 }
 
-int ProgramGrammarAction() {
-	LogDebug("ProgramGrammarAction(0)");
-	state.succeed = true;
-	return 0;
-}
 
-int AdditionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("AdditionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Add(leftValue, rightValue);
-}
+MainProgram * MainProgramGrammarAction(Block * block);
+Block * InstructionBlockGrammarAction(Instruction * instruction, Block * block);
+Block * BlockGrammarAction(Instruction * instruction);
+Instruction * StatementInstructionGrammarAction(Statement * statement);
+Instruction * IfInstructionGrammarAction(If * _if);
+Instruction * ForInstructionGrammarAction(For * _for);
+Instruction * WhileInstructionGrammarAction(While * _while);
+Statement * DeclareAndAssignStatementGrammarAction(DeclareAndAssign * declareAndAssign);
+Statement * AssignationStatementGrammarAction(Assignation * assignation);
+Statement * FunctionStatementGrammarAction(Function * function);
+DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression * expression);
+DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, ParameterList * parameterList);
+DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare);
+Declare * TypeSymbolDeclareGrammarAction(int t_type, char * variable);
+Declare * TreetypeTpyeSymbolDeclareGrammarAction(int t_tree_type, int t_type, char * variable);
+Declare * TypeVectorDeclareGrammarAction(int t_type, Vector * vector);
+Assignation * AssignationGrammarAction(char * variable, Expression * expression);
+Function * NoParamFunctionGrammarAction(char * variable, int t_noparamfunction);
+Function * OneParamFunctionGrammarAction(char * variable, int t_oneparamfunction, Expression * expression);
+Function * MultiParamFunctionGrammarAction(char * variable, int t_multiparamfunction, ParameterList * parameterList);
+Function * FilterFunctionGrammarAction(Expression * expression);
+Function * ReadFunctionGrammarAction(Read * read);
+Function * WriteFunctionGrammarAction(Write * write);
+Read * ReadGrammarAction(char * variable);
+Write * WriteGrammarAction(Expression * expression);
+int NoParamGrammarAction(int token);
+int OneParamGrammarAction(int token);
+int MultiParamGrammarAction(int token);
 
-int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("SubtractionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Subtract(leftValue, rightValue);
-}
-
-int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("MultiplicationExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Multiply(leftValue, rightValue);
-}
-
-int DivisionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("DivisionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Divide(leftValue, rightValue);
-}
-
-int FactorExpressionGrammarAction(const int value) {
-	LogDebug("FactorExpressionGrammarAction(%d)", value);
-	return value;
-}
-
-int ExpressionFactorGrammarAction(const int value) {
-	LogDebug("ExpressionFactorGrammarAction(%d)", value);
-	return value;
-}
-
-int ConstantFactorGrammarAction(const int value) {
-	LogDebug("ConstantFactorGrammarAction(%d)", value);
-	return value;
-}
-
-int IntegerConstantGrammarAction(const int value) {
-	LogDebug("IntegerConstantGrammarAction(%d)", value);
-	return value;
-}
-
-int GreaterExpressionGrammarAction() {
-	LogDebug("GreaterExpressionGrammarAction()");
-	return 1;
-}
-int GreaterOrEqualExpressionGrammarAction() {
-	LogDebug("GreaterOrEqualExpressionGrammarAction()");
-	return 1;
-}
-int LesserOrEqualExpressionGrammarAction() {
-	LogDebug("LesserOrEqualExpressionGrammarAction()");
-	return 1;
-}
-int LesserExpressionGrammarAction() {
-	LogDebug("LesserExpressionGrammarAction()");
-	return 1;
-}
-int NotEqualExpressionGrammarAction() {
-	LogDebug("NotEqualExpressionGrammarAction()");
-	return 1;
-}
-int EqualExpressionGrammarAction() {
-	LogDebug("EqualExpressionGrammarAction()");
-	return 1;
-}
-
-int BlockGrammarAction() {
-	LogDebug("BlockExpressionGrammarAction()");
-	return 1;
-}
-
-int InstructionsGrammarAction() {
-	LogDebug("InstructionsGrammarAction()");
-	return 1;
-}
-
-int StatementsGrammarAction() {
-	LogDebug("StatementsGrammarAction()");
-	return 1;
-}
-
-int DeclareAndAssignGrammarAction() {
-	LogDebug("DeclareAndAssignGrammarAction()");
-	return 1;
-}
-
-int DeclareGrammarAction() {
-	LogDebug("DeclareGrammarAction()");
-	return 1;
-}
-
-int AssignationGrammarAction() {
-	LogDebug("AssignationGrammarAction()");
-	return 1;
-}
-
-int NoParamFunctionGrammarAction() {
-	LogDebug("NoParamFunctionGrammarAction()");
-	return 1;
-}
-
-int OneParamFunctionGrammarAction() {
-	LogDebug("OneParamFunctionGrammarAction()");
-	return 1;
-}
-
-int MultiParamFunctionGrammarAction() {
-	LogDebug("MultiParamFunctionGrammarAction()");
-	return 1;
-}
-
-int ExpressionFunctionGrammarAction() {
-	LogDebug("ExpressionFunctionGrammarAction()");
-	return 1;
-}
-
-int IfGrammarAction() {
-	LogDebug("IfGrammarAction()");
-	return 1;
-}
-
-int ForGrammarAction() {
-	LogDebug("ForGrammarAction()");
-	return 1;
-}
-
-int WhileGrammarAction() {
-	LogDebug("WhileGrammarAction()");
-	return 1;
-}
-
-int VectorGrammarAction() {
-	LogDebug("VectorGrammarAction()");
-	return 1;
-}
-
-int ReadFunctionGrammarAction() {
-	LogDebug("ReadFunctionGrammarAction()");
-	return 1;
-}
+//
+If * IfGrammarAction(Expression * expression, Block * block);
+IfClose* IfCloseNormalGrammarAction();
+IfClose* IfCloseElseGrammarAction(Block* block);
 
 
-int WriteFunctionGrammarAction() {
-	LogDebug("WriteFunctionGrammarAction()");
-	return 1;
-}
+While* WhileGrammarAction(Expression* expression, Block* block);
+
+
+For* DeclareAndAssignForGrammarAction(DeclareAndAssign* declareAndAssign, Expression* expression, Statement* statement, Block* block);
+For* AssignationForGrammarAction(Assignation* assignation,  Expression* expression, Statement* statement, Block* block);
+For* IncompleteForGrammarAction( Expression* expression, Statement* statement, Block* block);
+
+
+
+
+//Expresiones
+Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* SubtractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* DivisionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+
+Expression* GreaterExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* GreaterOrEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* LesserOrEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* LesserExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* NotEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* EqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* NotExpressionGrammarAction(Expression* expression);
+Expression* FactorExpressionGrammarAction(Factor* factor);
+Expression* FunctionExpressionGrammarAction(Function* function);
+Expression* VectorExpressionGrammarAction(Vector* vector);
+
+
+
+//Factor 
+Factor* ExpressionFactorGrammarAction(const int value);
+Factor* ConstantFactorGrammarAction(const int value);
+Factor* SymbolFactorGrammarAction(const int value);
+Factor* StringFactorGrammarAction(const int value);
+
+
+//Constant
+Constant* IntegerConstantGrammarAction(const int value);
+
+
+//Vector
+Vector* VectorConstantGrammarAction(char * symbol, Constant* constant);
+Vector* VectorSymbolGrammarAction(char * symbol, char* symbol2);
+
+
+ParameterList * ParameterListCommaExpressionGrammarAction(ParameterList * parameterList, Expression * expression);
+ParameterList * ParameterListGrammarAction(Expression * expression);
+//Types
+int TypeGrammarAction(int token);
+int TreeTypeGrammarAction(int token);
+
+int SemiColonsGrammarAction(int token);

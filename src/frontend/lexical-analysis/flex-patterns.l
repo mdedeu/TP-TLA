@@ -80,8 +80,8 @@ filter                                      { return FILTER; }
 "}"											{ return CLOSE_CURL_BRACKETS ; }
 "["											{ return OPEN_SQUARE_BRACKETS ; }
 "]"											{ return CLOSE_SQUARE_BRACKETS ; }
-"'"                                         { return  QUOTE; }
-";"											{ return END_LINE; }
+"'"                                         { return QUOTE; }
+";"											{ return SEMI_COLON; }
 
 
 {digit}+									{ return IntegerPatternAction(yytext); }
