@@ -7,7 +7,7 @@
 //Estado de la aplicación.
 CompilerState state;
 
-int yyparse(node_t **program);
+int yyparse(MainProgram * program);
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char ** arguments) {
@@ -22,7 +22,8 @@ const int main(const int argumentCount, const char ** arguments) {
 
 	// Compilar el programa de entrada.
 	LogInfo("Compilando...\n");
-	const int result = yyparse(&program);
+	// const int result = yyparse(&program);
+	const int result = 0;
 	switch (result) {
 		case 0:
 			if (state.succeed) {
