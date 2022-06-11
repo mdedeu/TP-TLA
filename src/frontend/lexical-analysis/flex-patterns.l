@@ -14,9 +14,7 @@
 %option yylineno
 
 /* Patrones reutilizables. */
-crlf			\r\n
 digit			[0-9]
-endline			\n
 whitespace		[ \f\n\r\t\v]
 letter [a-zA-Z]
 
@@ -89,7 +87,7 @@ filter                                      { return FILTER; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 \/\/.*                                      { IgnoredPatternAction(yytext); }
-{letter}+                                     { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
+{letter}+                                   { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
