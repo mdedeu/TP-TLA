@@ -106,7 +106,14 @@ struct Instruction{
 	While * while_instruction;
 };
 
+typedef enum {
+	DECLARE_AND_ASSIGN,
+	ASSIGNATION,
+	FUNCTION
+} StatementType;
+
 struct Statement{
+	StatementType type;
 	DeclareAndAssign * declareAndAssign;
 	Assignation * assignation;
 	Function * function;
@@ -133,6 +140,8 @@ typedef enum{
 
 struct  Declare{
 	int type;
+	int type_token;
+	int treeType_token;
 	Vector * vector;
 	char * variable;
 };

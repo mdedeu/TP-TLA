@@ -47,7 +47,7 @@ int OneParamGrammarAction(int token);
 int MultiParamGrammarAction(int token);
 
 //
-If * IfGrammarAction(Expression * expression, Block * block);
+If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose);
 IfClose* IfCloseNormalGrammarAction();
 IfClose* IfCloseElseGrammarAction(Block* block);
 
@@ -82,10 +82,10 @@ Expression* VectorExpressionGrammarAction(Vector* vector);
 
 
 //Factor 
-Factor* ExpressionFactorGrammarAction(const int value);
-Factor* ConstantFactorGrammarAction(const int value);
-Factor* SymbolFactorGrammarAction(const int value);
-Factor* StringFactorGrammarAction(const int value);
+Factor* ExpressionFactorGrammarAction(Expression* expression);
+Factor* ConstantFactorGrammarAction(Constant* constant);
+Factor* SymbolFactorGrammarAction(char* symbol);
+Factor* StringFactorGrammarAction(char* string);
 
 
 //Constant

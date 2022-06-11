@@ -73,78 +73,77 @@
 
 %%
 
-mainProgram: MAIN OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS 																						{ $$ = MainProgramGrammarAction($3); }
+mainProgram: MAIN OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS 										{ $$ = MainProgramGrammarAction($3); }
 	;
 
-block: instruction block 																															{ $$ = InstructionBlockGrammarAction($1, $2); }
-    | instruction		 																															{ $$ = BlockGrammarAction($1); }									
+block: instruction block 																			{ $$ = InstructionBlockGrammarAction($1, $2); }
+    | instruction		 																			{ $$ = BlockGrammarAction($1); }									
 	;
 
-instruction: statement semiColons 																													{ $$ = StatementInstructionGrammarAction($1); }
-    | if 																																			{ $$ = IfInstructionGrammarAction($1); }
-	| for		  																																	{ $$ = ForInstructionGrammarAction($1); }
-	| while		  																																	{ $$ = WhileInstructionGrammarAction($1); }
+instruction: statement semiColons 																	{ $$ = StatementInstructionGrammarAction($1); }
+    | if 																							{ $$ = IfInstructionGrammarAction($1); }
+	| for		  																					{ $$ = ForInstructionGrammarAction($1); }
+	| while		  																					{ $$ = WhileInstructionGrammarAction($1); }
 	;
 	
-statement: declareAndAssign 																														{ $$ = DeclareAndAssignStatementGrammarAction($1); }
-	| assignation																																	{ $$ = AssignationStatementGrammarAction($1); }
-	| function																																		{ $$ = FunctionStatementGrammarAction($1); }
+statement: declareAndAssign 																		{ $$ = DeclareAndAssignStatementGrammarAction($1); }
+	| assignation																					{ $$ = AssignationStatementGrammarAction($1); }
+	| function																					    { $$ = FunctionStatementGrammarAction($1); }
+
+declareAndAssign:	declare ASSIGN expression  														{ $$ = DeclareAndAssignGrammarAction($1,$3); }
+	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS	    					{ $$ = DeclareParameterListGrammarAction($1,$4); }
+	| 	declare																						{ $$ = OnlyDeclareGrammarAction($1); }
 	;
 
-declareAndAssign:	declare ASSIGN expression  																										{ $$ = DeclareAndAssignGrammarAction($1,$3); }
-	|   declare ASSIGN OPEN_CURL_BRACKETS parameterList CLOSE_CURL_BRACKETS	    																	{ $$ = DeclareParameterListGrammarAction($1,$4); }
-	| 	declare																																		{ $$ = OnlyDeclareGrammarAction($1); }
+declare: type SYMBOL  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
+	| treeType type SYMBOL  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
+	| type vector  																					{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
 	;
 
-declare: type SYMBOL  																																{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
-	| treeType type SYMBOL  																														{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
-	| type vector  																																	{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
+assignation: SYMBOL ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }
 	;
 
-assignation: SYMBOL ASSIGN expression  { $$ = AssignationGrammarAction($1, $3); }
-	;
-
-function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  																		{ $$ = NoParamFunctionGrammarAction($1,$3); }
-	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  																{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 															{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS																				{ $$ = FilterFunctionGrammarAction($5); }
-	| read																																			{ $$ = ReadFunctionGrammarAction($1); }
-	| write																																			{ $$ = WriteFunctionGrammarAction($2); }
+function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
+	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
+	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
+	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
+	| read																							{ $$ = ReadFunctionGrammarAction($1); }
+	| write																							{ $$ = WriteFunctionGrammarAction($2); }
 	;
 	
-read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS		 																						{ $$ = ReadGrammarAction($3); }
+read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
 	;
 
-write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS   																						{ $$ = WriteGrammarAction($3); }
+write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS   										{ $$ = WriteGrammarAction($3); }
 	;
 
-noParamFunctions: PRINT										 																						{ $$ = NoParamGrammarAction($1); }
-	| LENGTH												 																						{ $$ = NoParamGrammarAction($1); }
-	| BALANCED											   	 																						{ $$ = NoParamGrammarAction($1); }
-	| SIZE													 																						{ $$ = NoParamGrammarAction($1); }
+noParamFunctions: PRINT										 										{ $$ = NoParamGrammarAction($1); }
+	| LENGTH												 										{ $$ = NoParamGrammarAction($1); }
+	| BALANCED											   	 										{ $$ = NoParamGrammarAction($1); }
+	| SIZE													 										{ $$ = NoParamGrammarAction($1); }
 	;
 	
-oneParamFunctions: DELETE_NODE																														{ $$ = OneParamGrammarAction($1); }
-	| MODIFY_NODE											{ $$ = OneParamGrammarAction($1); }
-	| SEARCH												{ $$ = OneParamGrammarAction($1); }
+oneParamFunctions: DELETE_NODE																		{ $$ = OneParamGrammarAction($1); }
+	| MODIFY_NODE																					{ $$ = OneParamGrammarAction($1); }
+	| SEARCH																						{ $$ = OneParamGrammarAction($1); }
 	;
 	
-multiParamFunctions: NEW_NODE								{ $$ = MultiParamGrammarAction($1); }
+multiParamFunctions: NEW_NODE																		{ $$ = MultiParamGrammarAction($1); }
 	;	
 	
-if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close {$$ = IfGrammarAction($3, $6);};
+if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 				{$$ = IfGrammarAction($3, $6, $7);};
 	;
 
-if_close: CLOSE_CURL_BRACKETS { $$ = IfCloseNormalGrammarAction(); }
-    | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = IfCloseElseGrammarAction($4); };
+if_close: CLOSE_CURL_BRACKETS 																		{ $$ = IfCloseNormalGrammarAction(); }
+    | CLOSE_CURL_BRACKETS ELSE OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS 						{ $$ = IfCloseElseGrammarAction($4); };
 	;
 
-while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = WhileGrammarAction($3, $6); };
+while: WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS 	{ $$ = WhileGrammarAction($3, $6); };
 	;
 
-for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = DeclareAndAssignForGrammarAction($3, $5, $7, $10); }
-	| FOR OPEN_PARENTHESIS assignation semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS { $$ = AssignationForGrammarAction($3, $5, $7, $10); }
-	| FOR OPEN_PARENTHESIS semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS	{ $$ = IncompleteForGrammarAction($4, $6, $9); }
+for: FOR OPEN_PARENTHESIS declareAndAssign semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS{ $$ = DeclareAndAssignForGrammarAction($3, $5, $7, $10); }
+	| FOR OPEN_PARENTHESIS assignation semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS    { $$ = AssignationForGrammarAction($3, $5, $7, $10); }
+	| FOR OPEN_PARENTHESIS semiColons expression semiColons statement CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block CLOSE_CURL_BRACKETS	            { $$ = IncompleteForGrammarAction($4, $6, $9); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -165,8 +164,9 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
 	| constant													{ $$ = ConstantFactorGrammarAction($1); }
-	| STRING													{ $$ = SymbolFactorGrammarAction($1); }
-	| SYMBOL													{ $$ = StringFactorGrammarAction($1); }
+	| STRING													{ $$ = StringFactorGrammarAction($1); }
+	| SYMBOL													{ $$ = SymbolFactorGrammarAction($1); }
+	
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
