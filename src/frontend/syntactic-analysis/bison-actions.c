@@ -24,6 +24,9 @@ void yyerror(const char * string) {
 MainProgram * MainProgramGrammarAction(Block * block) {
 	MainProgram * toReturn = malloc(sizeof(MainProgram));
 	toReturn->block = block;
+	
+	state.succeed = TRUE;
+	state.mainProgram = toReturn;
 	return toReturn;
 }
 
@@ -45,7 +48,7 @@ Block * BlockGrammarAction(Instruction * instruction) {
 
 Instruction * StatementInstructionGrammarAction(Statement * statement) {
 	Instruction * toReturn = malloc(sizeof(Instruction));
-	toReturn->type = STATEMENT;
+	toReturn->type = STATEMENT_INSTRUCTION;
 	toReturn->statement = statement;
 	toReturn->for_instruction = NULL;
 	toReturn->if_instruction = NULL;
@@ -55,7 +58,7 @@ Instruction * StatementInstructionGrammarAction(Statement * statement) {
 
 Instruction * IfInstructionGrammarAction(If * _if) {
 	Instruction * toReturn = malloc(sizeof(Instruction));
-	toReturn->type = IF;
+	toReturn->type = IF_INSTRUCTION;
 	toReturn->statement = NULL;
 	toReturn->for_instruction = NULL;
 	toReturn->if_instruction = _if;
@@ -65,7 +68,7 @@ Instruction * IfInstructionGrammarAction(If * _if) {
 
 Instruction * ForInstructionGrammarAction(For * _for) {
 	Instruction * toReturn = malloc(sizeof(Instruction));
-	toReturn->type = FOR;
+	toReturn->type = FOR_INSTRUCTION;
 	toReturn->statement = NULL;
 	toReturn->for_instruction = _for;
 	toReturn->if_instruction = NULL;
@@ -75,7 +78,7 @@ Instruction * ForInstructionGrammarAction(For * _for) {
 
 Instruction * WhileInstructionGrammarAction(While * _while) {
 	Instruction * toReturn = malloc(sizeof(Instruction));
-	toReturn->type = WHILE;
+	toReturn->type = WHILE_INSTRUCTION;
 	toReturn->statement = NULL;
 	toReturn->for_instruction = NULL;
 	toReturn->if_instruction = NULL;

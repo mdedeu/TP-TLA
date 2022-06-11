@@ -7,13 +7,14 @@
 //Estado de la aplicación.
 CompilerState state;
 
-int yyparse(MainProgram * program);
+int yyparse();
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char ** arguments) {
 	// Inicializar estado de la aplicación.
 	state.result = 0;
 	state.succeed = false;
+	state.mainProgram = NULL;
 
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {
@@ -22,8 +23,7 @@ const int main(const int argumentCount, const char ** arguments) {
 
 	// Compilar el programa de entrada.
 	LogInfo("Compilando...\n");
-	// const int result = yyparse(&program);
-	const int result = 0;
+	const int result = yyparse();
 	switch (result) {
 		case 0:
 			if (state.succeed) {

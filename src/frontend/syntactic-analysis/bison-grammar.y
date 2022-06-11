@@ -58,7 +58,7 @@
 %type <write> write;
 %type <read> read;
 %type <function> function;
-%type <assignation assignation;
+%type <assignation> assignation;
 %type <declare> declare;
 %type <declareAndAssign> declareAndAssign;
 %type <statement> statement;
@@ -70,6 +70,8 @@
 %left ADD SUB
 %left MUL DIV
 %left EQ NE LT LE GT GE AND OR NOT
+
+%start mainProgram
 
 %%
 
@@ -108,7 +110,7 @@ function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  				
 	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
 	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
 	| read																							{ $$ = ReadFunctionGrammarAction($1); }
-	| write																							{ $$ = WriteFunctionGrammarAction($2); }
+	| write																							{ $$ = WriteFunctionGrammarAction($1); }
 	;
 	
 read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
@@ -182,7 +184,7 @@ parameterList: expression 										{ $$ = ParameterListGrammarAction($1); }
 	;
 
 type: INT_TYPE													{  $$ = TypeGrammarAction($1);  }
-	| STRING_TYPE 												{  $$ = TypeGrammarAction($2);  }
+	| STRING_TYPE 												{  $$ = TypeGrammarAction($1);  }
 	;
 
 treeType: NON_BINARY_TREE_TYPE 									{  $$ = TreeTypeGrammarAction($1);  }

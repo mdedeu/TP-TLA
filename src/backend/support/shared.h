@@ -24,7 +24,7 @@ extern void yyerror(const char * string);
 extern int yylex(void);
 
 // Función global del analizador sintáctico Bison.
-extern int yyparse(MainProgram program);
+extern int yyparse();
 
 //Tipos de nodos
 typedef struct Variable Variable;
@@ -66,8 +66,9 @@ typedef struct {
 	// Indica el resultado de la compilación:
 	int result;
 
+	// nodo raiz del AST
+	MainProgram * mainProgram;
 	// Agregar una pila para almacenar tokens/nodos.
-	// Agregar un nodo hacia la raíz del árbol de sintaxis abstracta.
 	// Agregar una tabla de símbolos.
 	// ...
 
@@ -92,10 +93,10 @@ struct Block{
 };
 
 typedef enum {
-	STATEMENT,
-	IF,
-	FOR,
-	WHILE
+	STATEMENT_INSTRUCTION,
+	IF_INSTRUCTION,
+	FOR_INSTRUCTION,
+	WHILE_INSTRUCTION
 } InstructionType;
 
 struct Instruction{
@@ -226,7 +227,6 @@ typedef enum {
 	GE_EXPRESSION,
 	LE_EXPRESSION,
 	LT_EXPRESSION,
-	NE_EXPRESSION,
 	NE_EXPRESSION,
 	EQ_EXPRESSION,
 	NOT_EXPRESSION,
