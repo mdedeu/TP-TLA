@@ -108,7 +108,8 @@ void GeneratorDeclare(Declare* declare){
 			//aca hay q hacer cosas raras
 			break;
 		case TYPE_VECTOR:
-			//me mataste con este
+			write(declare->type_token);
+			GeneratorVector(declare->vector);
 			break;
 		default:
 			LogInfo("Declare Type not found");
@@ -350,9 +351,8 @@ void GeneratorParameterList(ParameterList* parameterList){
 		case PARAM_COMMA_EXPRESSION:
 			GeneratorExpression(parameterList->expression);
 			write(" , ");
-			GeneratorParameterList(parameterList->parameterList)
+			GeneratorParameterList(parameterList->parameterList);
 			break;
-
 		default:
 			LogInfo("ParameterList Type not found");
 			break;
