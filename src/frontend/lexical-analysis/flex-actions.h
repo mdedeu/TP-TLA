@@ -2,10 +2,12 @@
 #define FLEX_ACTIONS_HEADER
 
 #include "../../backend/support/shared.h"
+#include "../syntactic-analysis/bison-parser.h"
 
 /**
  * Se definen los diferentes IDs de cada token disponible para el scanner Flex.
  */
+/*
 typedef enum TokenID {
 
 	// Por defecto, el valor "0" hace fallar el analizador sintáctico.
@@ -92,7 +94,7 @@ typedef enum TokenID {
 	STRING, 
 	SYMBOL
 } TokenID;
-
+*/
 /**
  * Se definen las acciones a ejecutar sobre cada patrón hallado mediante el
  * analizador léxico Flex. Este analizador solo puede identificar
@@ -100,14 +102,14 @@ typedef enum TokenID {
  * (a.k.a. DFA), como mecanismo de escaneo y reconocimiento.
  */
 
-TokenID IntegerPatternAction(const char * lexeme);
+yytoken_kind_t IntegerPatternAction(const char * lexeme);
 
 void IgnoredPatternAction(const char * lexeme);
 
-TokenID UnknownPatternAction(const char * lexeme);
+yytoken_kind_t UnknownPatternAction(const char * lexeme);
 
-TokenID SymbolPatternAction(const char * lexeme);
+yytoken_kind_t SymbolPatternAction(const char * lexeme);
 
-TokenID StringPatternAction(const char * lexeme);
+yytoken_kind_t StringPatternAction(const char * lexeme);
 
 #endif

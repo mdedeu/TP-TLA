@@ -145,7 +145,7 @@ Declare * TypeSymbolDeclareGrammarAction(int t_type, char * variable) {
 	toReturn->type = TYPE_SYMBOL;
 	toReturn->type_token = t_type;
 	toReturn->variable = variable;
-	toReturn->treeType_token = NULL;
+	toReturn->treeType_token = -1;
 	toReturn->vector = NULL;
 	return toReturn;
 }
@@ -165,7 +165,7 @@ Declare * TypeVectorDeclareGrammarAction(int t_type, Vector * vector) {
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
 	toReturn->variable = NULL;
-	toReturn->treeType_token = NULL;
+	toReturn->treeType_token = -1;
 	toReturn->vector = vector;
 	return toReturn;
 }
@@ -182,8 +182,8 @@ Function * NoParamFunctionGrammarAction(char * variable, int t_noparamfunction) 
 	toReturn->type = NO_PARAM_FUNCTIONS;
 	strcpy(toReturn->variable,variable);
 	toReturn->noParamFunctionToken = t_noparamfunction;
-	toReturn->multiParamFunctionToken = NULL;
-	toReturn->oneParamFunctionToken = NULL;
+	toReturn->multiParamFunctionToken = -1;
+	toReturn->oneParamFunctionToken = -1;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -195,8 +195,8 @@ Function * OneParamFunctionGrammarAction(char * variable, int t_oneparamfunction
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = ONE_PARAM_FUNCTIONS;
 	strcpy(toReturn->variable,variable);
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
+	toReturn->noParamFunctionToken = -1;
+	toReturn->multiParamFunctionToken = -1;
 	toReturn->oneParamFunctionToken = t_oneparamfunction;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
@@ -209,9 +209,9 @@ Function * MultiParamFunctionGrammarAction(char * variable, int t_multiparamfunc
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = MULTI_PARAM_FUNCTIONS;
 	strcpy(toReturn->variable,variable);
-	toReturn->noParamFunctionToken = NULL;
+	toReturn->noParamFunctionToken = -1;
 	toReturn->multiParamFunctionToken = t_multiparamfunction;
-	toReturn->oneParamFunctionToken = NULL;
+	toReturn->oneParamFunctionToken = -1;
 	toReturn->expression = NULL;
 	toReturn->parameterList = parameterList;
 	toReturn->read = NULL;
@@ -223,9 +223,9 @@ Function * FilterFunctionGrammarAction(Expression * expression) {
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = FILTER_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
-	toReturn->oneParamFunctionToken = NULL;
+	toReturn->noParamFunctionToken = -1;
+	toReturn->multiParamFunctionToken = -1;
+	toReturn->oneParamFunctionToken = -1;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -237,9 +237,9 @@ Function * ReadFunctionGrammarAction(Read * read) {
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = READ_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
-	toReturn->oneParamFunctionToken = NULL;
+	toReturn->noParamFunctionToken = -1;
+	toReturn->multiParamFunctionToken = -1;
+	toReturn->oneParamFunctionToken = -1;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = read;
@@ -251,9 +251,9 @@ Function * WriteFunctionGrammarAction(Write * write) {
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = WRITE_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
-	toReturn->oneParamFunctionToken = NULL;
+	toReturn->noParamFunctionToken = -1;
+	toReturn->multiParamFunctionToken = -1;
+	toReturn->oneParamFunctionToken = -1;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -263,7 +263,7 @@ Function * WriteFunctionGrammarAction(Write * write) {
 
 Read * ReadGrammarAction(char * variable) {
 	Read * toReturn = malloc(sizeof(Read));
-	strcopy(toReturn->variable, variable);
+	strcpy(toReturn->variable, variable);
 	return toReturn;
 }
 
@@ -363,7 +363,7 @@ Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* r
 	return toReturn;
 }
 
-Expression* SubtractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = SUB_EXPRESSION;
 	toReturn->left = leftValue;

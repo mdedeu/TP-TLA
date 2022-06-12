@@ -64,7 +64,7 @@ For* IncompleteForGrammarAction( Expression* expression, Statement* statement, B
 
 //Expresiones
 Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
-Expression* SubtractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
+Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
 Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
 Expression* DivisionExpressionGrammarAction(Expression* leftValue, Expression* rightValue);
 

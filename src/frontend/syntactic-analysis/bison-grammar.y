@@ -14,10 +14,10 @@
 	Constant* constant;
 	Factor* factor;
 	Expression* expression;
-	For* for;
-	While* while;
+	For* _for;
+	While* _while;
 	IfClose * ifClose;
-	If * if;
+	If * _if;
 	Write * write;
 	Read * read;
 	Function * function;
@@ -41,7 +41,8 @@
 %token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
 %token <token> FOR WHILE IF ELSE
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE SEMI_COLON
-%token <token> INTEGER STRING SYMBOL
+%token <integer> INTEGER
+%token <string> STRING SYMBOL
 
 // No terminales
 %type <token> type treeType semiColons
@@ -50,10 +51,10 @@
 %type <constant> constant;
 %type <factor> factor;
 %type <expression> expression;
-%type <for> for;
-%type <while> while;
+%type <_for> for;
+%type <_while> while;
 %type <ifClose> if_close;
-%type <if> if;
+%type <_if> if;
 %type <token> multiParamFunctions oneParamFunctions noParamFunctions
 %type <write> write;
 %type <read> read;
@@ -175,8 +176,8 @@ constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
 vector: 
-	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS	 { $$ = VectorConstantGrammarAction($1, $2); }
-	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS	 { $$ = VectorSymbolGrammarAction($1, $2); }
+	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS	 { $$ = VectorConstantGrammarAction($1, $3); }
+	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS	 { $$ = VectorSymbolGrammarAction($1, $3); }
 	;
 
 parameterList: expression 										{ $$ = ParameterListGrammarAction($1); }
