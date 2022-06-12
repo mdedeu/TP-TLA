@@ -22,7 +22,7 @@ void GeneratorFactor(Factor* factor);
 void GeneratorConstant(Constant* constant);
 void GeneratorVector(Vector* vector);
 void GeneratorParameterList(ParameterList* parameterList);
-void GeneratorVariable(Variable* Variable);
+void GeneratorVariable(char* Variable);
 
 
 
