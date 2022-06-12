@@ -32,7 +32,7 @@ MainProgram * MainProgramGrammarAction(Block * block) {
 
 Block * InstructionBlockGrammarAction(Instruction * instruction, Block * block) {
 	Block * toReturn = malloc(sizeof(Block));
-	toReturn->BlockType = INSTRUCTION_BLOCK;
+	toReturn->type = INSTRUCTION_BLOCK;
 	toReturn->block = block;
 	toReturn->instruction = instruction;
 	return toReturn;
@@ -40,7 +40,7 @@ Block * InstructionBlockGrammarAction(Instruction * instruction, Block * block) 
 
 Block * BlockGrammarAction(Instruction * instruction) {
 	Block * toReturn = malloc(sizeof(Block));
-	toReturn->BlockType = INSTRUCTION;
+	toReturn->type = INSTRUCTION;
 	toReturn->block = NULL;
 	toReturn->instruction = instruction;
 	return toReturn;
@@ -294,14 +294,14 @@ If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) 
 
 IfClose* IfCloseNormalGrammarAction() {
 	IfClose * toReturn = malloc(sizeof(IfClose));
-	toReturn->ifCloseType = IF_CLOSE_NORMAL;
+	toReturn->type = IF_CLOSE_NORMAL;
 	toReturn->block = NULL;
 	return toReturn;
 }
 
 IfClose* IfCloseElseGrammarAction(Block* block) {
 	IfClose * toReturn = malloc(sizeof(IfClose));
-	toReturn->ifCloseType = IF_ELSE;
+	toReturn->type = IF_ELSE;
 	toReturn->block = block;
 	return toReturn;
 }

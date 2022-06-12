@@ -87,7 +87,7 @@ typedef enum{
 } BlockType;
 
 struct Block{
-	BlockType BlockType;	
+	BlockType type;	
 	Instruction* instruction;
 	Block * block;
 };
@@ -188,7 +188,7 @@ typedef enum {
 
 struct  IfClose{
 	Block* block;
-	IfCloseType ifCloseType;
+	IfCloseType type;
 };
 
 struct If {
