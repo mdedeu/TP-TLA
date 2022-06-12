@@ -102,14 +102,14 @@ typedef enum TokenID {
  * (a.k.a. DFA), como mecanismo de escaneo y reconocimiento.
  */
 
-yytoken_kind_t IntegerPatternAction(const char * lexeme);
+yytoken_kind_t IntegerPatternAction(char * lexeme);
 
-void IgnoredPatternAction(const char * lexeme);
+void IgnoredPatternAction(char * lexeme);
 
-yytoken_kind_t UnknownPatternAction(const char * lexeme);
+yytoken_kind_t UnknownPatternAction(char * lexeme);
 
-yytoken_kind_t SymbolPatternAction(const char * lexeme);
+yytoken_kind_t SymbolPatternAction(char * lexeme);
 
-yytoken_kind_t StringPatternAction(const char * lexeme);
+yytoken_kind_t StringPatternAction(char * lexeme);
 
 #endif

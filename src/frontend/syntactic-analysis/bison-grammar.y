@@ -169,7 +169,6 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 	| constant													{ $$ = ConstantFactorGrammarAction($1); }
 	| STRING													{ $$ = StringFactorGrammarAction($1); }
 	| SYMBOL													{ $$ = SymbolFactorGrammarAction($1); }
-	
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }

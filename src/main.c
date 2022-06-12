@@ -2,6 +2,7 @@
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
+#include "frontend/syntactic-analysis/bison-actions.h"
 #include <stdio.h>
 
 //Estado de la aplicación.

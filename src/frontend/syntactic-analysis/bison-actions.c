@@ -144,7 +144,7 @@ Declare * TypeSymbolDeclareGrammarAction(int t_type, char * variable) {
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TYPE_SYMBOL;
 	toReturn->type_token = t_type;
-	toReturn->variable = variable;
+	strcpy(toReturn->variable,variable);
 	toReturn->treeType_token = -1;
 	toReturn->vector = NULL;
 	return toReturn;
@@ -530,12 +530,12 @@ Factor* ConstantFactorGrammarAction(Constant* constant){
 	return toReturn;
 }
 
-Factor* SymbolFactorGrammarAction(char* symbol){
+Factor* SymbolFactorGrammarAction(char* symbol) {
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = SYMBOL_FACTOR;
 	toReturn->string = NULL;
 	toReturn->constant = NULL;
-	toReturn->variable = symbol;
+	strcpy(toReturn->variable,symbol);
 	toReturn->expression = NULL;
 	return toReturn;
 }
@@ -543,7 +543,7 @@ Factor* SymbolFactorGrammarAction(char* symbol){
 Factor* StringFactorGrammarAction(char* string){
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = STRING_FACTOR;
-	toReturn->string = string;
+	strcpy(toReturn->string,string);
 	toReturn->constant = NULL;
 	toReturn->variable = NULL;
 	toReturn->expression = NULL;
@@ -563,7 +563,7 @@ Constant* IntegerConstantGrammarAction(const int value){
 Vector* VectorConstantGrammarAction(char * symbol, Constant* constant){
 	Vector* toReturn =  malloc(sizeof(Vector));
 	toReturn->type = CONSTANT_VECTOR;
-	toReturn->variable = symbol;
+	strcpy(toReturn->variable,symbol);
 	toReturn->variable2 = NULL;
 	toReturn->constant = constant;
 	return toReturn;
@@ -572,8 +572,8 @@ Vector* VectorConstantGrammarAction(char * symbol, Constant* constant){
 Vector* VectorSymbolGrammarAction(char * symbol, char* symbol2){
 	Vector* toReturn =  malloc(sizeof(Vector));
 	toReturn->type = SYMBOL_VECTOR;
-	toReturn->variable = symbol;
-	toReturn->variable2 = symbol2;
+	strcpy(toReturn->variable,symbol);
+	strcpy(toReturn->variable2,symbol2);
 	toReturn->constant = NULL;
 	return toReturn;
 }
@@ -598,13 +598,16 @@ ParameterList * ParameterListGrammarAction(Expression * expression){
 //Types
 
 int TypeGrammarAction(int token){
+	LogDebug("TypeGrammarAction %d",token);
 	return token;
 }
 
 int TreeTypeGrammarAction(int token){
+	LogDebug("TreeTypeGrammarAction %d",token);
 	return token;
 }
 
 int SemiColonsGrammarAction(int token){
+	LogDebug("SemiColonsGrammarAction %d",token);
 	return token;
 }
