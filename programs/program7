@@ -1,6 +1,6 @@
 main {
     // Graficar un árbol de un solo nodo
-    tree int arbol;
-    arbol.createNode("root",50);
+    avlTree string arbol;
+    arbol.createNode("hola");
     arbol.print();
 }

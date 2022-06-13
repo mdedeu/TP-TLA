@@ -18,6 +18,8 @@ bison-parser.h
 flex-scanner.c
 src/backend/code-generation/generator.c
 
-
+#IntelliJ
+.idea
+*.iml
 # Generated output
 Test.java

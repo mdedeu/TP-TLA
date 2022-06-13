@@ -1,10 +1,10 @@
 main {
     // Graficar un árbol degenerado como lista.
     tree int arbol;
-    arbol.createNode("root",50);
-    arbol.createNode("h1",1,"root");
-    arbol.createNode("h2",2,"h1");
-    arbol.createNode("h3",3,"h2");
+    arbol.createNode(1);
+    arbol.createNode(2);
+    arbol.createNode(3);
+    arbol.createNode(4);
 
     arbol.print();
 

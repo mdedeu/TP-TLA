@@ -1,8 +1,8 @@
 main {
     //Crear un árbol cuyos nodos almacenan números enteros.
-    tree int arbol;
-    arbol.createNode("root",50);
-    arbol.createNode("h1",1,"root");
-    arbol.createNode("h2",2,"root");
-    arbol.createNode("h3",3,"root");
+    bstTree int arbol;
+    arbol.createNode(50);
+    arbol.createNode(1);
+    arbol.createNode(2);
+    arbol.createNode(3);
 }

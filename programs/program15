@@ -1,7 +1,7 @@
 main { 
     //  La creación de un vector con variables de diferente tipo.
-    tree int arbol;
-    node int nodito = arbol.createNode("root","rootId");
+    avlTree int arbol;
+    string a = "hola";
 
-    int vector[5] = {"hola", 3, "messi", nodito};
+    int vector[5] = {"hola", 3, "messi", a};
 }

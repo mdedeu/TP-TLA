@@ -36,7 +36,6 @@ Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector);
 Assignation * AssignationGrammarAction(char * variable, Expression * expression);
 Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfunction);
 Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunction, Expression * expression);
-Function * MultiParamFunctionGrammarAction(char * variable, Token * t_multiparamfunction, ParameterList * parameterList);
 Function * FilterFunctionGrammarAction(Expression * expression);
 Function * ReadFunctionGrammarAction(Read * read);
 Function * WriteFunctionGrammarAction(Write * write);
@@ -44,7 +43,6 @@ Read * ReadGrammarAction(char * variable);
 Write * WriteGrammarAction(Expression * expression);
 Token *  NoParamGrammarAction(int token);
 Token *  OneParamGrammarAction(int token);
-Token *  MultiParamGrammarAction(int token);
 
 //
 If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose);
