@@ -195,7 +195,7 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 }
 
 Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfunction) {
-	LogDebug("NoParamFunctionGrammarAction %s", variable);
+	LogDebug("NoParamFunctionGrammarAction %s ", variable);
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = NO_PARAM_FUNCTIONS;
 	toReturn->variable = variable;
@@ -594,7 +594,6 @@ Factor* SymbolFactorGrammarAction(char* symbol) {
 	toReturn->string = NULL;
 	toReturn->constant = NULL;
 	toReturn->variable = symbol;
-	LogDebug("Mira simbol: %s", toReturn->variable);
 	toReturn->expression = NULL;
 	return toReturn;
 }
@@ -622,7 +621,7 @@ Constant* IntegerConstantGrammarAction(const int value){
 
 //Vector
 Vector* VectorGrammarAction(char * var, Factor* factor){
-	LogDebug("VectorGrammarAction %s %d", var, factor->constant->value);
+	LogDebug("VectorGrammarAction %s", var);
 	Vector* toReturn =  malloc(sizeof(Vector));
 	toReturn->variable = var;
 	toReturn->factor = factor;
@@ -672,12 +671,14 @@ Token * SemiColonsGrammarAction(int token){
 }
 
 char * SymbolGrammarAction(char * varName) {
+	LogDebug("SymbolGrammarAction %s", varName);
 	char * toReturn = malloc(strlen(varName)+1);
 	strcpy(toReturn, varName);
 	return toReturn;
 }
 
 char * StringGrammarAction(char * string) {
+	LogDebug("StringGrammarAction %s", string);
 	char * toReturn = malloc(strlen(string)+1);
 	strcpy(toReturn, string);
 	return toReturn;

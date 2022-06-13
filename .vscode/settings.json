@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "shared.h": "c",
-        "logger.h": "c"
+        "logger.h": "c",
+        "bison-parser.h": "c"
     }
 }
