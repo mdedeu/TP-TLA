@@ -17,3 +17,5 @@ bison-parser.c
 bison-parser.h
 flex-scanner.c
 src/backend/code-generation/generator.c
+.idea/
+cmake-build-debug/
