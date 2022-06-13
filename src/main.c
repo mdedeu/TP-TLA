@@ -7,7 +7,7 @@
 
 //Estado de la aplicación.
 CompilerState state;
-
+FILE * out;
 int yyparse();
 
 // Punto de entrada principal del compilador.
@@ -29,7 +29,15 @@ const int main(const int argumentCount, const char ** arguments) {
 		case 0:
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
-				//Generator(state.result);
+				out = fopen("Test.java", "w+");
+				if (out == NULL)
+				{
+					perror("Error creating auxiliary file");
+					exit(EXIT_FAILURE);
+				}
+				fprintf(out, "public class Test { \n	public static void main(String[] args) { \n");
+				GeneratorProgram(state.mainProgram, out);
+
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");

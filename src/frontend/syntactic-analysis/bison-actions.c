@@ -128,7 +128,7 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_EXPRESSION;
 	toReturn->expression = expression;
-	toReturn->declare = NULL;
+	toReturn->declare = declare;
 	toReturn->parameterList = NULL;
 	return toReturn;
 }
@@ -138,7 +138,7 @@ DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, Paramete
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_PARAM_LIST;
 	toReturn->expression = NULL;
-	toReturn->declare = NULL;
+	toReturn->declare = declare;
 	toReturn->parameterList = parameterList;
 	return toReturn;
 }
@@ -146,7 +146,7 @@ DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, Paramete
 DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
 	LogDebug("OnlyDeclareGrammarAction ");
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
-	toReturn->type = DECLARE;
+	toReturn->type = ONLY_DECLARE;
 	toReturn->expression = NULL;
 	toReturn->declare = declare;
 	toReturn->parameterList = NULL;

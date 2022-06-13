@@ -124,7 +124,7 @@ struct Statement{
 typedef enum {
 	DECLARE_ASSIGN_EXPRESSION,
 	DECLARE_ASSIGN_PARAM_LIST,
-	DECLARE
+	ONLY_DECLARE
 } DeclareAndAssignType;
 
 struct DeclareAndAssign {

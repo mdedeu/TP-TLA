@@ -1,51 +1,55 @@
 #include "../support/logger.h"
 #include "generator.h"
 
+
 /**
  * Implementación de "generator.h".
  */
 
-void Generator(MainProgram* program) {
-	write("int main { \n");
-	GeneratorBlock(program->block);
-	write(" }");
-	//LogInfo("El resultado de la expresion computada es: '%d'.", result);
+
+
+void GeneratorProgram(MainProgram* program, FILE * out) {
+	GeneratorBlock(program->block, out);
+	fprintf(out,"	}\n");
+	fprintf(out,"}");
 }
 
-void GeneratorBlock(Block* block){
+void GeneratorBlock(Block* block, FILE * output){
+	LogDebug("Generating block..");
 	switch (block->type)
 	{
 		case INSTRUCTION_BLOCK:
-			GeneratorInstruction(block->instruction);
-			write(" ");
-			Generator(block->block);
+			GeneratorInstruction(block->instruction, output);
+			GeneratorBlock(block->block, output);
 			break;
 		case INSTRUCTION:
-			GeneratorInstruction(block->instruction);
+			GeneratorInstruction(block->instruction, output);
 			break;
 
 		default:
 			LogInfo("Block Type not found");
 			break;
 	}
-
+	
 }
 
-void GeneratorInstruction(Instruction* instruction){
+void GeneratorInstruction(Instruction* instruction, FILE * output){
+	LogDebug("Generating instruction...");
 	switch (instruction->type)
 	{
 		case STATEMENT_INSTRUCTION:
-			GeneratorStatement(instruction->statement);
-			write(" ;");
+			fprintf(output,"		");
+			GeneratorStatement(instruction->statement, output);
+			fprintf(output,";\n");
 			break; 
 		case IF_INSTRUCTION:
-			GeneratorIf(instruction->if_instruction);
+			GeneratorIf(instruction->if_instruction, output);
 			break;
 		case FOR_INSTRUCTION:
-			GeneratorFor(instruction->for_instruction);
+			GeneratorFor(instruction->for_instruction, output);
 			break;
 		case WHILE_INSTRUCTION:
-			GeneratorWhile(instruction->while_instruction);
+			GeneratorWhile(instruction->while_instruction, output);
 			break;
 		default:
 			LogInfo("Instruction Type not found");
@@ -53,41 +57,43 @@ void GeneratorInstruction(Instruction* instruction){
 	}
 }
 
-void GeneratorStatement(Statement* statement){
+void GeneratorStatement(Statement* statement, FILE * output){
+	LogDebug("Generating statement...");
 	switch (statement->type)
 	{
 		case DECLARE_AND_ASSIGN:
-			GeneratorDeclareAndAssign(statement->declareAndAssign);
+			GeneratorDeclareAndAssign(statement->declareAndAssign, output);
 			break;
 		case ASSIGNATION:
-			GeneratorAssignation(statement->assignation);
+			GeneratorAssignation(statement->assignation, output);
 			break;
 		case FUNCTION:
-			GeneratorFunction(statement->function);
+			GeneratorFunction(statement->function, output);
 			break;
-
 		default:
 			LogInfo("Statement Type not found");
 			break;
 	}
 }
 
-void GeneratorDeclareAndAssign(DeclareAndAssign* declareAndAssign){
-	GeneratorDeclare(declareAndAssign->declare);
+void GeneratorDeclareAndAssign(DeclareAndAssign* declareAndAssign, FILE * output){
+	GeneratorDeclare(declareAndAssign->declare, output);
+	LogDebug("Generating DeclareAndAssign...");
 	switch (declareAndAssign->type)
 	{
 		case DECLARE_ASSIGN_EXPRESSION:
-			
-			write(" = ");
-			GeneratorExpression(declareAndAssign->expression);
+			LogDebug("DeclareAndAssign -> expression");
+			fprintf(output," = ");
+			GeneratorExpression(declareAndAssign->expression, output);
 			break;
 		case DECLARE_ASSIGN_PARAM_LIST:
-			write(" = ( ");
-			GeneratorParameterList(declareAndAssign->parameterList);
-			write(" ) ");
+			LogDebug("DeclareAndAssign -> paramList");
+			fprintf(output," = {");
+			GeneratorParameterList(declareAndAssign->parameterList, output);
+			fprintf(output," }");
 			break;
-		case DECLARE:
-			write(" ");
+		case ONLY_DECLARE:
+			LogDebug("DeclareAndAssign -> onlyDeclare");
 			break;
 		default:
 			LogInfo("DeclareAndASsign Type not found");
@@ -96,20 +102,53 @@ void GeneratorDeclareAndAssign(DeclareAndAssign* declareAndAssign){
 }
 
 
-void GeneratorDeclare(Declare* declare){
+void GeneratorDeclare(Declare* declare, FILE * output){
+	LogDebug("Generating declare...");
 	switch (declare->type)
 	{
 		case TYPE_SYMBOL:
-			write(declare->type_token);
-			write(" "); 
-			GeneratorVariable(declare->variable);
+			LogDebug("Declare type symbol");
+			if(declare->type_token->value == INT_TYPE) {
+				LogDebug("Declare type symbol -> int");
+				fprintf(output,"%s", "int");
+			}
+			else if(declare->type_token->value == STRING_TYPE)
+				fprintf(output,"%s", "String");
+			fprintf(output," %s",declare->variable);
 			break;
 		case TREE_TYPE_SYMBOL:
-			//aca hay q hacer cosas raras
+			LogDebug("Declare tree type symbol");
+			// TODO: terminar los tipos de arboles
+			switch (declare->treeType_token->value)
+			{
+				case NON_BINARY_TREE_TYPE:
+					fprintf(output,"%s", "tree ");
+					break;
+				default:
+				fprintf(output,"%s", "otro_tree ");
+					break;
+			}
+			if(declare->type_token->value == INT_TYPE) {
+				LogDebug("Declare tree type symbol -> int");
+				fprintf(output,"%s", "int");
+			}
+			else if(declare->type_token->value == STRING_TYPE)
+				LogDebug("Declare tree type symbol -> string");
+				fprintf(output,"%s", "String");
+			fprintf(output," %s",declare->variable);
 			break;
 		case TYPE_VECTOR:
-			write(declare->type_token);
-			GeneratorVector(declare->vector);
+			LogDebug("Declare type vector");
+			if(declare->type_token->value == INT_TYPE) {
+				LogDebug("Declare type vector -> int");
+				fprintf(output,"%s", "int");
+			}
+			else if(declare->type_token->value == STRING_TYPE) {
+				LogDebug("Declare type vector -> string");
+				fprintf(output,"%s", "String");
+			}	
+			fprintf(output," %s",declare->variable);
+			GeneratorVector(declare->vector, output);
 			break;
 		default:
 			LogInfo("Declare Type not found");
@@ -118,20 +157,18 @@ void GeneratorDeclare(Declare* declare){
 	
 }
 
-void GeneratorAssignation(Assignation* assignation){
-	write(" ");
-	GeneratorVariable(assignation->variable);
-	write(" = ");
-	GeneratorExpression(assignation->Expression);
-	write(" ; ");
+void GeneratorAssignation(Assignation* assignation, FILE * output){
+	LogDebug("Generating assignation...");
+	fprintf(output, "%s", assignation->variable);
+	fprintf(output, " = ");
+	GeneratorExpression(assignation->Expression, output);
 }
 
-void GeneratorFunction(Function* function){
-	//aca hay que hacer otro switch para diferenciar a las funciones por token
+void GeneratorFunction(Function* function, FILE * output){
+	// TODO: Function generator
 	switch (function->type)
 	{
 		case NO_PARAM_FUNCTIONS:
-			
 			break;
 		case ONE_PARAM_FUNCTIONS:
 			break;
@@ -149,25 +186,26 @@ void GeneratorFunction(Function* function){
 	}
 }
 
-void GeneratorRead(Read* read){
-	//no entiendo que hace esta
+// TODO: functions
+void GeneratorRead(Read* read, FILE * output){
 
 }
 
-void GeneratorWrite(Write* write){
-	//no entiendo que hace esta
+void GeneratorWrite(Write* write, FILE * output){
+	
 }
 
-void GeneratorIfClose(IfClose* ifClose){
+void GeneratorIfClose(IfClose* ifClose, FILE * output){
+	LogDebug("Generating if close...");
 	switch (ifClose->type)
 	{
 		case IF_CLOSE_NORMAL:
-			write(" } ");
+			fprintf(output," } ");
 			break;
 		case IF_ELSE:
-			write("} else{ ");
-			GeneratorBlock(ifClose->block);
-			write(" }");
+			fprintf(output,"} else { ");
+			GeneratorBlock(ifClose->block, output);
+			fprintf(output," }");
 			break;
 		default:
 			LogInfo("IfClose Type not found");
@@ -175,118 +213,131 @@ void GeneratorIfClose(IfClose* ifClose){
 	}
 }
 
-void GeneratorIf(If* ifInstruction){
-	write(" if( ");
-	GeneratorExpression(ifInstruction->expression);
-	write(" ){ ");
-	GeneratorBlock(ifInstruction->block);
-	GeneratorIfClose(ifInstruction->ifClose);
-	
+void GeneratorIf(If* ifInstruction, FILE * output){
+	LogDebug("Generating if...");
+	fprintf(output," if( ");
+	GeneratorExpression(ifInstruction->expression, output);
+	fprintf(output," ){ ");
+	GeneratorBlock(ifInstruction->block, output);
+	GeneratorIfClose(ifInstruction->ifClose, output);
 }
 
-void GeneratorWhile(While* whileInstruction){
-	write(" while(");
-	GeneratorExpression(whileInstruction->expression);
-	write(" ){ ");
-	GeneratorBlock(whileInstruction->block);
-	write(" } ");
+void GeneratorWhile(While* whileInstruction, FILE * output){
+	LogDebug("Generating while...");
+	fprintf(output," while(");
+	GeneratorExpression(whileInstruction->expression, output);
+	fprintf(output," ){ ");
+	GeneratorBlock(whileInstruction->block, output);
+	fprintf(output," } ");
 }
 
-void GeneratorFor(For* forInstruction){
-	write("for( ");
+void GeneratorFor(For* forInstruction, FILE * output){
+	LogDebug("Generating for...");
+	fprintf(output,"for(");
 	switch (forInstruction->type)
 	{
 		case DECLARE_ASSIGN_FOR:
-			GeneratorDeclareAndAssign(forInstruction->declareAndAssign);
-			write(" ; ");
-			GeneratorExpression(forInstruction->expression);
+			GeneratorDeclareAndAssign(forInstruction->declareAndAssign, output);
 			break;
 		case ASSIGNATION_FOR:
-			GeneratorAssignation(forInstruction->assignation);
-			write(" ; ");
-			GeneratorExpression(forInstruction->expression);
-	
+			GeneratorAssignation(forInstruction->assignation, output);
 			break;
 		case INCOMPLETE_FOR:
-			write(" ; ");
-			GeneratorExpression(forInstruction->expression);
 			break;
 		default:
 			LogInfo("For Type not found");
 			break;
 	}
-	write(" ; ");
-	GeneratorStatement(forInstruction->statement);
-	write(" ){ ");
-	GeneratorBlock(forInstruction->block);
-	write(" }");
+	fprintf(output," ; ");
+	GeneratorExpression(forInstruction->expression, output);
+	fprintf(output," ; ");
+	GeneratorStatement(forInstruction->statement, output);
+	fprintf(output," ){ ");
+	GeneratorBlock(forInstruction->block, output);
+	fprintf(output," }");
 }
 
-void GeneratorExpression(Expression* expression){
+void GeneratorExpression(Expression* expression, FILE * output){
+	LogDebug("Generating expression...");
 	switch (expression->type)
 	{
 		case ADD_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" + ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> ADD");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," + ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case SUB_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" - ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> ADD");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," - ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case MUL_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" * ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> MUL");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," * ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case DIV_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" / ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> DIV");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," / ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case FACTOR_EXPRESSION:
-			GeneratorFactor(expression->factor);
+			LogDebug("Expression -> FACTOR");
+			GeneratorFactor(expression->factor, output);
+			break;
 		case GT_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" > ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> GT");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," > ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case GE_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" >= ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> GE");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," >= ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case LE_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" <= ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> LE");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," <= ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case LT_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" < ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> LT");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," < ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case NE_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" != ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> NE");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," != ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case EQ_EXPRESSION:
-			GeneratorExpression(expression->left);
-			write(" == ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> EQ");
+			GeneratorExpression(expression->left, output);
+			fprintf(output," == ");
+			GeneratorExpression(expression->right, output);
 			break;
 		case NOT_EXPRESSION:
-			write(" ! ");
-			GeneratorExpression(expression->right);
+			LogDebug("Expression -> NOT");
+			fprintf(output," ! ");
+			GeneratorExpression(expression->right, output);
 			break;
 			break;	
 		case FUNCTION_EXPRESSION:
-			GeneratorFunction(expression->function);
+			LogDebug("Expression -> FUNCTION");
+			GeneratorFunction(expression->function, output);
 			break;	
 		case VECTOR_EXPRESSION:
-			GeneratorVector(expression->vector);
+			LogDebug("Expression -> VECTOR");
+			GeneratorVector(expression->vector, output);
 			break;
 		default:
 			LogInfo("Expression Type not found");
@@ -296,20 +347,25 @@ void GeneratorExpression(Expression* expression){
 }
 
 
-void GeneratorFactor(Factor* factor){
+void GeneratorFactor(Factor* factor, FILE * output){
+	LogDebug("Generating factor...");
 	switch (factor->type)
 	{
 		case CONSTANT_FACTOR:
-			GeneratorConstant(factor->constant);
+			LogDebug("Factor -> CONSTANT");
+			GeneratorConstant(factor->constant, output);
 			break;
 		case STRING_FACTOR:
-			write(factor->string);
+			LogDebug("Factor -> STRING");
+			fprintf(output,"%s",factor->string);
 			break;
 		case SYMBOL_FACTOR:
-			GeneratorVariable(factor->variable);
+			LogDebug("Factor -> SYMBOL");
+			fprintf(output,"%s",factor->variable);
 			break;
 		case EXPRESSION_FACTOR:
-			GeneratorExpression(factor->expression);
+			LogDebug("Factor -> EXPRESSION");
+			GeneratorExpression(factor->expression, output);
 			break;
 		default:
 			LogInfo("Factor Type not found");
@@ -317,29 +373,29 @@ void GeneratorFactor(Factor* factor){
 	}
 }
 
-void GeneratorConstant(Constant* constant){
-	//char*?
-	write(constant->value);
-
+void GeneratorConstant(Constant* constant, FILE * output){
+	LogDebug("Generating constant...");
+	fprintf(output,"%d",constant->value);
 }
 
-void GeneratorVector(Vector* vector){
-	GeneratorVariable(vector->variable);
-	write("[");
-	GeneratorFactor(vector->factor);
-	write("]");
+void GeneratorVector(Vector* vector, FILE * output){
+	LogDebug("Generating vector...");
+	fprintf(output,"[");
+	GeneratorFactor(vector->factor, output);
+	fprintf(output,"]");
 }
 
-void GeneratorParameterList(ParameterList* parameterList){
+void GeneratorParameterList(ParameterList* parameterList, FILE * output){
+	LogDebug("Generating parameterList...");
 	switch (parameterList->type)
 	{
 		case EXPRESSION:
-			GeneratorExpression(parameterList->expression);
+			GeneratorExpression(parameterList->expression, output);
 			break;
 		case PARAM_COMMA_EXPRESSION:
-			GeneratorExpression(parameterList->expression);
-			write(" , ");
-			GeneratorParameterList(parameterList->parameterList);
+			GeneratorParameterList(parameterList->parameterList, output);
+			fprintf(output," , ");
+			GeneratorExpression(parameterList->expression, output);
 			break;
 		default:
 			LogInfo("ParameterList Type not found");
@@ -347,6 +403,3 @@ void GeneratorParameterList(ParameterList* parameterList){
 	}
 }
 
-void GeneratorVariable(char* variable){
-	write(variable);
-}
