@@ -22,6 +22,7 @@ void yyerror(const char * string) {
 
 
 MainProgram * MainProgramGrammarAction(Block * block) {
+	LogDebug("MainProgramGrammarAction ");
 	MainProgram * toReturn = malloc(sizeof(MainProgram));
 	toReturn->block = block;
 	
@@ -31,6 +32,7 @@ MainProgram * MainProgramGrammarAction(Block * block) {
 }
 
 Block * InstructionBlockGrammarAction(Instruction * instruction, Block * block) {
+	LogDebug("InstructionBlockGrammarAction ");
 	Block * toReturn = malloc(sizeof(Block));
 	toReturn->type = INSTRUCTION_BLOCK;
 	toReturn->block = block;
@@ -39,6 +41,7 @@ Block * InstructionBlockGrammarAction(Instruction * instruction, Block * block) 
 }
 
 Block * BlockGrammarAction(Instruction * instruction) {
+	LogDebug("BlockGrammarAction ");
 	Block * toReturn = malloc(sizeof(Block));
 	toReturn->type = INSTRUCTION;
 	toReturn->block = NULL;
@@ -47,6 +50,7 @@ Block * BlockGrammarAction(Instruction * instruction) {
 }
 
 Instruction * StatementInstructionGrammarAction(Statement * statement) {
+	LogDebug("StatementInstructionGrammarAction ");
 	Instruction * toReturn = malloc(sizeof(Instruction));
 	toReturn->type = STATEMENT_INSTRUCTION;
 	toReturn->statement = statement;
@@ -57,6 +61,7 @@ Instruction * StatementInstructionGrammarAction(Statement * statement) {
 }
 
 Instruction * IfInstructionGrammarAction(If * _if) {
+	LogDebug("IfInstructionGrammarAction ");
 	Instruction * toReturn = malloc(sizeof(Instruction));
 	toReturn->type = IF_INSTRUCTION;
 	toReturn->statement = NULL;
@@ -67,6 +72,7 @@ Instruction * IfInstructionGrammarAction(If * _if) {
 }
 
 Instruction * ForInstructionGrammarAction(For * _for) {
+	LogDebug("ForInstructionGrammarAction ");
 	Instruction * toReturn = malloc(sizeof(Instruction));
 	toReturn->type = FOR_INSTRUCTION;
 	toReturn->statement = NULL;
@@ -77,6 +83,7 @@ Instruction * ForInstructionGrammarAction(For * _for) {
 }
 
 Instruction * WhileInstructionGrammarAction(While * _while) {
+	LogDebug("WhileInstructionGrammarAction ");
 	Instruction * toReturn = malloc(sizeof(Instruction));
 	toReturn->type = WHILE_INSTRUCTION;
 	toReturn->statement = NULL;
@@ -87,6 +94,7 @@ Instruction * WhileInstructionGrammarAction(While * _while) {
 }
 
 Statement * DeclareAndAssignStatementGrammarAction(DeclareAndAssign * declareAndAssign) {
+	LogDebug("DeclareAndAssignStatementGrammarAction ");
 	Statement * toReturn = malloc(sizeof(Statement));
 	toReturn->type = DECLARE_AND_ASSIGN;
 	toReturn->declareAndAssign = declareAndAssign;
@@ -96,6 +104,7 @@ Statement * DeclareAndAssignStatementGrammarAction(DeclareAndAssign * declareAnd
 }
 
 Statement * AssignationStatementGrammarAction(Assignation * assignation) {
+	LogDebug("AssignationStatementGrammarAction ");
 	Statement * toReturn = malloc(sizeof(Statement));
 	toReturn->type = ASSIGNATION;
 	toReturn->declareAndAssign = NULL;
@@ -105,6 +114,7 @@ Statement * AssignationStatementGrammarAction(Assignation * assignation) {
 }
 
 Statement * FunctionStatementGrammarAction(Function * function) {
+	LogDebug("FunctionStatementGrammarAction ");
 	Statement * toReturn = malloc(sizeof(Statement));
 	toReturn->type = FUNCTION;
 	toReturn->declareAndAssign = NULL;
@@ -114,6 +124,7 @@ Statement * FunctionStatementGrammarAction(Function * function) {
 }
 
 DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression * expression) {
+	LogDebug("DeclareAndAssignGrammarAction ");
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_EXPRESSION;
 	toReturn->expression = expression;
@@ -123,6 +134,7 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 }
 
 DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, ParameterList * parameterList) {
+	LogDebug("DeclareParameterListGrammarAction ");
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_PARAM_LIST;
 	toReturn->expression = NULL;
@@ -132,6 +144,7 @@ DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, Paramete
 }
 
 DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
+	LogDebug("OnlyDeclareGrammarAction ");
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE;
 	toReturn->expression = NULL;
@@ -140,17 +153,19 @@ DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
 	return toReturn;
 }
 
-Declare * TypeSymbolDeclareGrammarAction(int t_type, char * variable) {
+Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
+	LogDebug("TypeSymbolDeclareGrammarAction %s ", variable);
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TYPE_SYMBOL;
 	toReturn->type_token = t_type;
-	strcpy(toReturn->variable,variable);
-	toReturn->treeType_token = -1;
+	toReturn->variable = variable;
+	toReturn->treeType_token = NULL;
 	toReturn->vector = NULL;
 	return toReturn;
 }
 
-Declare * TreetypeTpyeSymbolDeclareGrammarAction(int t_tree_type, int t_type, char * variable) {
+Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_type, char * variable) {
+	LogDebug("TreetypeTpyeSymbolDeclareGrammarAction %s" , variable);
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
@@ -160,30 +175,33 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(int t_tree_type, int t_type, ch
 	return toReturn;
 }
 
-Declare * TypeVectorDeclareGrammarAction(int t_type, Vector * vector) {
+Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
+	LogDebug("TypeVectorDeclareGrammarAction ");
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
 	toReturn->variable = NULL;
-	toReturn->treeType_token = -1;
+	toReturn->treeType_token = NULL;
 	toReturn->vector = vector;
 	return toReturn;
 }
 
 Assignation * AssignationGrammarAction(char * variable, Expression * expression) {
+	LogDebug("AssignationGrammarAction ");
 	Assignation * toReturn = malloc(sizeof(Assignation));
 	toReturn->Expression = expression;
-	strcpy(toReturn->variable,variable);
+	toReturn->variable = variable;
 	return toReturn;
 }
 
-Function * NoParamFunctionGrammarAction(char * variable, int t_noparamfunction) {
+Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfunction) {
+	LogDebug("NoParamFunctionGrammarAction %s", variable);
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = NO_PARAM_FUNCTIONS;
-	strcpy(toReturn->variable,variable);
+	toReturn->variable = variable;
 	toReturn->noParamFunctionToken = t_noparamfunction;
-	toReturn->multiParamFunctionToken = -1;
-	toReturn->oneParamFunctionToken = -1;
+	toReturn->multiParamFunctionToken = NULL;
+	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -191,12 +209,13 @@ Function * NoParamFunctionGrammarAction(char * variable, int t_noparamfunction) 
 	return toReturn;
 }
 
-Function * OneParamFunctionGrammarAction(char * variable, int t_oneparamfunction, Expression * expression) {
+Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunction, Expression * expression) {
+	LogDebug("OneParamFunctionGrammarAction ");
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = ONE_PARAM_FUNCTIONS;
-	strcpy(toReturn->variable,variable);
-	toReturn->noParamFunctionToken = -1;
-	toReturn->multiParamFunctionToken = -1;
+	toReturn->variable = variable;
+	toReturn->noParamFunctionToken = NULL;
+	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = t_oneparamfunction;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
@@ -205,13 +224,14 @@ Function * OneParamFunctionGrammarAction(char * variable, int t_oneparamfunction
 	return toReturn;
 }
 
-Function * MultiParamFunctionGrammarAction(char * variable, int t_multiparamfunction, ParameterList * parameterList) {
+Function * MultiParamFunctionGrammarAction(char * variable, Token * t_multiparamfunction, ParameterList * parameterList) {
+	LogDebug("MultiParamFunctionGrammarAction %s ", variable);
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = MULTI_PARAM_FUNCTIONS;
-	strcpy(toReturn->variable,variable);
-	toReturn->noParamFunctionToken = -1;
+	toReturn->variable = variable;
+	toReturn->noParamFunctionToken = NULL;
 	toReturn->multiParamFunctionToken = t_multiparamfunction;
-	toReturn->oneParamFunctionToken = -1;
+	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = parameterList;
 	toReturn->read = NULL;
@@ -220,12 +240,13 @@ Function * MultiParamFunctionGrammarAction(char * variable, int t_multiparamfunc
 }
 
 Function * FilterFunctionGrammarAction(Expression * expression) {
+	LogDebug("FilterFunctionGrammarAction ");
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = FILTER_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = -1;
-	toReturn->multiParamFunctionToken = -1;
-	toReturn->oneParamFunctionToken = -1;
+	toReturn->noParamFunctionToken = NULL;
+	toReturn->multiParamFunctionToken = NULL;
+	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -234,12 +255,13 @@ Function * FilterFunctionGrammarAction(Expression * expression) {
 }
 
 Function * ReadFunctionGrammarAction(Read * read) {
+	LogDebug("ReadFunctionGrammarAction ");
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = READ_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = -1;
-	toReturn->multiParamFunctionToken = -1;
-	toReturn->oneParamFunctionToken = -1;
+	toReturn->noParamFunctionToken = NULL;
+	toReturn->multiParamFunctionToken = NULL;
+	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = read;
@@ -248,12 +270,13 @@ Function * ReadFunctionGrammarAction(Read * read) {
 }
 
 Function * WriteFunctionGrammarAction(Write * write) {
+	LogDebug("WriteFunctionGrammarAction ");
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = WRITE_FUNCTION;
 	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = -1;
-	toReturn->multiParamFunctionToken = -1;
-	toReturn->oneParamFunctionToken = -1;
+	toReturn->noParamFunctionToken = NULL;
+	toReturn->multiParamFunctionToken = NULL;
+	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
 	toReturn->read = NULL;
@@ -262,29 +285,41 @@ Function * WriteFunctionGrammarAction(Write * write) {
 }
 
 Read * ReadGrammarAction(char * variable) {
+	LogDebug("ReadGrammarAction %s ", variable);
 	Read * toReturn = malloc(sizeof(Read));
-	strcpy(toReturn->variable, variable);
+	toReturn->variable = variable;
 	return toReturn;
 }
 
 Write * WriteGrammarAction(Expression * expression) {
+	LogDebug("WriteGrammarAction ");
 	Write * toReturn = malloc(sizeof(Write));
 	toReturn->expression = expression;
 	return toReturn;
 }
 
-int NoParamGrammarAction(int token) {
-	return token;
+Token * NoParamGrammarAction(int token) {
+	LogDebug("NoParamGrammarAction %d",token);
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
 }
-int OneParamGrammarAction(int token) {
-	return token;
+Token * OneParamGrammarAction(int token) {
+	LogDebug("OneParamGrammarAction %d",token);
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
 }
-int MultiParamGrammarAction(int token) {
-	return token;
+Token * MultiParamGrammarAction(int token) {
+	LogDebug("MultiParamGrammarAction %d",token);
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
 }
 
 //
 If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) {
+	LogDebug("IfGrammarAction");
 	If * toReturn = malloc(sizeof(If));
 	toReturn->block = block;
 	toReturn->expression = expression;
@@ -293,6 +328,7 @@ If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) 
 }
 
 IfClose* IfCloseNormalGrammarAction() {
+	LogDebug("IfCloseNormalGrammarAction");
 	IfClose * toReturn = malloc(sizeof(IfClose));
 	toReturn->type = IF_CLOSE_NORMAL;
 	toReturn->block = NULL;
@@ -300,6 +336,7 @@ IfClose* IfCloseNormalGrammarAction() {
 }
 
 IfClose* IfCloseElseGrammarAction(Block* block) {
+	LogDebug("IfCloseElseGrammarAction");
 	IfClose * toReturn = malloc(sizeof(IfClose));
 	toReturn->type = IF_ELSE;
 	toReturn->block = block;
@@ -307,6 +344,7 @@ IfClose* IfCloseElseGrammarAction(Block* block) {
 }
 
 While* WhileGrammarAction(Expression* expression, Block* block){
+	LogDebug("WhileGrammarAction");
 	While* toReturn =  malloc(sizeof(While));
 	toReturn->expression =  expression;
 	toReturn->block = block;
@@ -315,6 +353,7 @@ While* WhileGrammarAction(Expression* expression, Block* block){
 
 
 For* DeclareAndAssignForGrammarAction(DeclareAndAssign* declareAndAssign, Expression* expression, Statement* statement, Block* block){
+	LogDebug("DeclareAndAssignForGrammarAction");
 	For* toReturn =  malloc(sizeof(For));
 	toReturn->type = DECLARE_ASSIGN_FOR;
 	toReturn->declareAndAssign = declareAndAssign;
@@ -327,6 +366,7 @@ For* DeclareAndAssignForGrammarAction(DeclareAndAssign* declareAndAssign, Expres
 	
 	
 For* AssignationForGrammarAction(Assignation* assignation,  Expression* expression, Statement* statement, Block* block){
+	LogDebug("AssignationForGrammarAction");
 	For* toReturn =  malloc(sizeof(For));
 	toReturn->type = ASSIGNATION_FOR;
 	toReturn->declareAndAssign = NULL;
@@ -338,6 +378,7 @@ For* AssignationForGrammarAction(Assignation* assignation,  Expression* expressi
 }
 
 For* IncompleteForGrammarAction( Expression* expression, Statement* statement, Block* block){
+	LogDebug("IncompleteForGrammarAction");
 	For* toReturn =  malloc(sizeof(For));
 	toReturn->type = INCOMPLETE_FOR;
 	toReturn->declareAndAssign = NULL;
@@ -353,6 +394,7 @@ For* IncompleteForGrammarAction( Expression* expression, Statement* statement, B
 
 //Expresiones
 Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("AdditionExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = ADD_EXPRESSION;
 	toReturn->left = leftValue;
@@ -364,6 +406,7 @@ Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* r
 }
 
 Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("SubstractionExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = SUB_EXPRESSION;
 	toReturn->left = leftValue;
@@ -375,6 +418,7 @@ Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expressio
 }
 
 Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("MultiplicationExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = MUL_EXPRESSION;
 	toReturn->left = leftValue;
@@ -386,6 +430,7 @@ Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Express
 }
 	
 Expression* DivisionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("DivisionExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = DIV_EXPRESSION;
 	toReturn->left = leftValue;
@@ -397,6 +442,7 @@ Expression* DivisionExpressionGrammarAction(Expression* leftValue, Expression* r
 }
 
 Expression* GreaterExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("GreaterExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = GT_EXPRESSION;
 	toReturn->left = leftValue;
@@ -408,6 +454,7 @@ Expression* GreaterExpressionGrammarAction(Expression* leftValue, Expression* ri
 }
 
 Expression* GreaterOrEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("GreaterOrEqualExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = GE_EXPRESSION;
 	toReturn->left = leftValue;
@@ -419,6 +466,7 @@ Expression* GreaterOrEqualExpressionGrammarAction(Expression* leftValue, Express
 }
 
 Expression* LesserOrEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("LesserOrEqualExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = LE_EXPRESSION;
 	toReturn->left = leftValue;
@@ -430,6 +478,7 @@ Expression* LesserOrEqualExpressionGrammarAction(Expression* leftValue, Expressi
 }
 
 Expression* LesserExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("LesserExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = LT_EXPRESSION;
 	toReturn->left = leftValue;
@@ -441,6 +490,7 @@ Expression* LesserExpressionGrammarAction(Expression* leftValue, Expression* rig
 }
 
 Expression* NotEqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("NotEqualExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = NE_EXPRESSION;
 	toReturn->left = leftValue;
@@ -452,6 +502,7 @@ Expression* NotEqualExpressionGrammarAction(Expression* leftValue, Expression* r
 }
 
 Expression* EqualExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
+	LogDebug("EqualExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = EQ_EXPRESSION;
 	toReturn->left = leftValue;
@@ -464,6 +515,7 @@ Expression* EqualExpressionGrammarAction(Expression* leftValue, Expression* righ
 }
 
 Expression* NotExpressionGrammarAction(Expression* expression){
+	LogDebug("NotExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = NOT_EXPRESSION;
 	toReturn->left = NULL;
@@ -474,6 +526,7 @@ Expression* NotExpressionGrammarAction(Expression* expression){
 	return toReturn;
 }
 Expression* FactorExpressionGrammarAction(Factor* factor){
+	LogDebug("FactorExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = FACTOR_EXPRESSION;
 	toReturn->left = NULL;
@@ -486,6 +539,7 @@ Expression* FactorExpressionGrammarAction(Factor* factor){
 }
 
 Expression* FunctionExpressionGrammarAction(Function* function){
+	LogDebug("FunctionExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = FUNCTION_EXPRESSION;
 	toReturn->left = NULL;
@@ -497,6 +551,7 @@ Expression* FunctionExpressionGrammarAction(Function* function){
 }
 
 Expression* VectorExpressionGrammarAction(Vector* vector){
+	LogDebug("VectorExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = ADD_EXPRESSION;
 	toReturn->left = NULL;
@@ -511,6 +566,7 @@ Expression* VectorExpressionGrammarAction(Vector* vector){
 
 //Factor 
 Factor* ExpressionFactorGrammarAction(Expression* expression){
+	LogDebug("ExpressionFactorGrammarAction");
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = EXPRESSION_FACTOR;
 	toReturn->string = NULL;
@@ -521,6 +577,7 @@ Factor* ExpressionFactorGrammarAction(Expression* expression){
 }
 
 Factor* ConstantFactorGrammarAction(Constant* constant){
+	LogDebug("ConstantFactorGrammarAction");
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = CONSTANT_FACTOR;
 	toReturn->string = NULL;
@@ -531,19 +588,22 @@ Factor* ConstantFactorGrammarAction(Constant* constant){
 }
 
 Factor* SymbolFactorGrammarAction(char* symbol) {
+	LogDebug("SymbolFactorGrammarAction %s", symbol);
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = SYMBOL_FACTOR;
 	toReturn->string = NULL;
 	toReturn->constant = NULL;
-	strcpy(toReturn->variable,symbol);
+	toReturn->variable = symbol;
+	LogDebug("Mira simbol: %s", toReturn->variable);
 	toReturn->expression = NULL;
 	return toReturn;
 }
 
 Factor* StringFactorGrammarAction(char* string){
+	LogDebug("StringFactorGrammarAction: %s .",string);
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = STRING_FACTOR;
-	strcpy(toReturn->string,string);
+	toReturn->string = string;
 	toReturn->constant = NULL;
 	toReturn->variable = NULL;
 	toReturn->expression = NULL;
@@ -553,6 +613,7 @@ Factor* StringFactorGrammarAction(char* string){
 
 //Constant
 Constant* IntegerConstantGrammarAction(const int value){
+	LogDebug("IntegerConstantGrammarAction %d", value);
 	Constant* toReturn =  malloc(sizeof(Constant));
 	toReturn->value = value;
 	return toReturn;
@@ -560,26 +621,17 @@ Constant* IntegerConstantGrammarAction(const int value){
 
 
 //Vector
-Vector* VectorConstantGrammarAction(char * symbol, Constant* constant){
+Vector* VectorGrammarAction(char * var, Factor* factor){
+	LogDebug("VectorGrammarAction %s %d", var, factor->constant->value);
 	Vector* toReturn =  malloc(sizeof(Vector));
-	toReturn->type = CONSTANT_VECTOR;
-	strcpy(toReturn->variable,symbol);
-	toReturn->variable2 = NULL;
-	toReturn->constant = constant;
-	return toReturn;
-}
-
-Vector* VectorSymbolGrammarAction(char * symbol, char* symbol2){
-	Vector* toReturn =  malloc(sizeof(Vector));
-	toReturn->type = SYMBOL_VECTOR;
-	strcpy(toReturn->variable,symbol);
-	strcpy(toReturn->variable2,symbol2);
-	toReturn->constant = NULL;
+	toReturn->variable = var;
+	toReturn->factor = factor;
 	return toReturn;
 }
 
 
 ParameterList * ParameterListCommaExpressionGrammarAction(ParameterList * parameterList, Expression * expression){
+	LogDebug("ParameterListCommaExpressionGrammarAction");
 	ParameterList* toReturn = malloc(sizeof(ParameterList));
 	toReturn->type = PARAM_COMMA_EXPRESSION;
 	toReturn->expression = expression;
@@ -588,6 +640,7 @@ ParameterList * ParameterListCommaExpressionGrammarAction(ParameterList * parame
 }
 
 ParameterList * ParameterListGrammarAction(Expression * expression){
+	LogDebug("ParameterListGrammarAction");
 	ParameterList* toReturn = malloc(sizeof(ParameterList));
 	toReturn->type = EXPRESSION;
 	toReturn->expression = expression;
@@ -597,17 +650,35 @@ ParameterList * ParameterListGrammarAction(Expression * expression){
 
 //Types
 
-int TypeGrammarAction(int token){
-	LogDebug("TypeGrammarAction %d",token);
-	return token;
+Token * TypeGrammarAction(int token){
+	LogDebug("TypeGrammarAction %i",token);
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
 }
 
-int TreeTypeGrammarAction(int token){
+Token * TreeTypeGrammarAction(int token){
 	LogDebug("TreeTypeGrammarAction %d",token);
-	return token;
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
 }
 
-int SemiColonsGrammarAction(int token){
+Token * SemiColonsGrammarAction(int token){
 	LogDebug("SemiColonsGrammarAction %d",token);
-	return token;
+	Token * toReturn = malloc(sizeof(Token));
+	toReturn->value = token;
+	return toReturn;
+}
+
+char * SymbolGrammarAction(char * varName) {
+	char * toReturn = malloc(strlen(varName)+1);
+	strcpy(toReturn, varName);
+	return toReturn;
+}
+
+char * StringGrammarAction(char * string) {
+	char * toReturn = malloc(strlen(string)+1);
+	strcpy(toReturn, string);
+	return toReturn;
 }

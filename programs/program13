@@ -1,5 +1,5 @@
 main {
     //  Un programa que intente graficar algo que no es un árbol.
-    string hola = 1;
+    string hola = "un string";
     hola.print();
 }

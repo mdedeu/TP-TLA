@@ -8,6 +8,7 @@
     char * string;
     int integer;
 	int token;
+	Token * tokenNode;
 	Variable* variable;
     ParameterList * parameterList;
 	Vector* vector;
@@ -45,7 +46,9 @@
 %token <string> STRING SYMBOL
 
 // No terminales
-%type <token> type treeType semiColons
+%type <string> symbol;
+%type <string> string;
+%type <tokenNode> type treeType semiColons;
 %type <parameterList> parameterList;
 %type <vector> vector;
 %type <constant> constant;
@@ -55,7 +58,7 @@
 %type <_while> while;
 %type <ifClose> if_close;
 %type <_if> if;
-%type <token> multiParamFunctions oneParamFunctions noParamFunctions
+%type <tokenNode> multiParamFunctions oneParamFunctions noParamFunctions
 %type <write> write;
 %type <read> read;
 %type <function> function;
@@ -98,23 +101,23 @@ declareAndAssign:	declare ASSIGN expression  														{ $$ = DeclareAndAssi
 	| 	declare																						{ $$ = OnlyDeclareGrammarAction($1); }
 	;
 
-declare: type SYMBOL  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
-	| treeType type SYMBOL  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
+declare: type symbol  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
+	| treeType type symbol  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
 	| type vector  																					{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
 	;
 
-assignation: SYMBOL ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }
+assignation: symbol ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }
 	;
 
-function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
-	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
+function:	symbol POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
+	| symbol POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
+	| symbol POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
+	| symbol POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
 	| read																							{ $$ = ReadFunctionGrammarAction($1); }
 	| write																							{ $$ = WriteFunctionGrammarAction($1); }
 	;
 	
-read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
+read: READ OPEN_PARENTHESIS symbol CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
 	;
 
 write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS   										{ $$ = WriteGrammarAction($3); }
@@ -167,16 +170,14 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
 	| constant													{ $$ = ConstantFactorGrammarAction($1); }
-	| STRING													{ $$ = StringFactorGrammarAction($1); }
-	| SYMBOL													{ $$ = SymbolFactorGrammarAction($1); }
+	| string													{ $$ = StringFactorGrammarAction($1); }
+	| symbol													{ $$ = SymbolFactorGrammarAction($1); }
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-vector: 
-	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS	 { $$ = VectorConstantGrammarAction($1, $3); }
-	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS	 { $$ = VectorSymbolGrammarAction($1, $3); }
+vector: symbol OPEN_SQUARE_BRACKETS factor CLOSE_SQUARE_BRACKETS	 { $$ = VectorGrammarAction($1, $3); }
 	;
 
 parameterList: expression 										{ $$ = ParameterListGrammarAction($1); }
@@ -200,5 +201,9 @@ semiColons: SEMI_COLON											{  $$ = SemiColonsGrammarAction($1);  }
     | semiColons SEMI_COLON										{  $$ = SemiColonsGrammarAction($2);  }
     ;
 
+symbol: SYMBOL													{  $$ = SymbolGrammarAction($1);	  }
+	;
 
+string: STRING													{  $$ = StringGrammarAction($1);	  }
+	;		
 %%

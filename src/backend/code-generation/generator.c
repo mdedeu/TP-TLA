@@ -326,19 +326,7 @@ void GeneratorConstant(Constant* constant){
 void GeneratorVector(Vector* vector){
 	GeneratorVariable(vector->variable);
 	write("[");
-	switch (vector->type)
-	{
-		case CONSTANT_VECTOR:
-
-			GeneratorConstant(vector->constant);
-			break;
-		case SYMBOL_VECTOR:
-			GeneratorVariable(vector->variable2);
-			break;
-		default:
-			LogInfo("Vector Type not found");
-			break;
-	}
+	GeneratorFactor(vector->factor);
 	write("]");
 }
 

@@ -2,8 +2,9 @@ main {
     // Crear un árbol de N nodos utilizando un bucle o iterador.
     int nodeCount;
     tree int arbol;
+    arbol.print();
     string names[6] = {"a","b","c","d","e","f"};
-
+    
     for(nodeCount = 0;nodeCount < 6 ; nodeCount= nodeCount+1){
         arbol.createNode(names[nodeCount], nodeCount);
     }

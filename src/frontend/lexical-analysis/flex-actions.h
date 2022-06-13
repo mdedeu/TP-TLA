@@ -3,7 +3,6 @@
 
 #include "../../backend/support/shared.h"
 #include "../syntactic-analysis/bison-parser.h"
-
 /**
  * Se definen los diferentes IDs de cada token disponible para el scanner Flex.
  */

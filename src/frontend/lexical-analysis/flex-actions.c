@@ -10,7 +10,6 @@
 yytoken_kind_t IntegerPatternAction(char * lexeme) {
 	LogDebug("IntegerPatternAction: '%s'.", lexeme);
 	yylval.integer = atoi(lexeme);
-	yylval.token = INTEGER;
 	return INTEGER;
 }
 
@@ -26,14 +25,13 @@ yytoken_kind_t UnknownPatternAction(char * lexeme) {
 
 yytoken_kind_t SymbolPatternAction(char * lexeme) {
 	LogDebug("SymbolPatternAction: '%s'.", lexeme);
-	strcpy(yylval.string, lexeme);
-	yylval.token = SYMBOL;
+	yylval.string = lexeme;
+	LogDebug("asi queda yylval %s" , yylval.string);
 	return SYMBOL;
 }
 
 yytoken_kind_t StringPatternAction(char * lexeme) {
-	strcpy(yylval.string, lexeme);
-	yylval.token = STRING;
 	LogDebug("StringPatternAction: '%s'.", lexeme);
+	yylval.string = lexeme;
 	return STRING;
 }

@@ -1,7 +1,10 @@
 main {
     //Crear un árbol binario de 15 nodos. Siempre se crea primero el hijo izq y luego el derecho.
     binaryTree int miArbol;
-    miArbol.createNode("n1",1);
+    binaryTree int miArbolito;
+    miArbol.print();
+    string mystring = "hola";
+    miArbol.createNode("n1","n2");
     miArbol.createNode("n2",2,"n1");
     miArbol.createNode("n3",3,"n1");
     miArbol.createNode("n4",4,"n2");
