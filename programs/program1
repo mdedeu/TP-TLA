@@ -1,6 +1,6 @@
 main {
     //Crear un árbol binario de 15 nodos. Siempre se crea primero el hijo izq y luego el derecho.
-    binaryTree int miArbol;
+    bstTree int miArbol;
     miArbol.createNode(1);
     miArbol.createNode(2);
     miArbol.createNode(3);

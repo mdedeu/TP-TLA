@@ -1,12 +1,12 @@
 main {
     //Obtener un nuevo árbol multiplicando el número entero almacenado en sus nodos por 3
-    tree int arbol;
+    binaryTree int arbol;
     arbol.createNode(1);
     arbol.createNode(2);
     arbol.createNode(3);
     arbol.createNode(4);
     
-    tree int arbolito = arbol * 3;
+    binaryTree int arbolito = arbol * 3;
     arbolito.print();
    
 }

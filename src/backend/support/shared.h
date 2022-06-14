@@ -156,7 +156,6 @@ struct Assignation {
 typedef enum {
 	NO_PARAM_FUNCTIONS,
 	ONE_PARAM_FUNCTIONS,
-	MULTI_PARAM_FUNCTIONS,
 	FILTER_FUNCTION,
 	READ_FUNCTION,
 	WRITE_FUNCTION
@@ -168,7 +167,6 @@ struct Function {
 	Token * noParamFunctionToken;
 	Token * oneParamFunctionToken;
 	Expression * expression;
-	Token * multiParamFunctionToken;
 	ParameterList * parameterList;
 	Read * read;
 	Write * write;

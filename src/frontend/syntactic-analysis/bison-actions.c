@@ -1,4 +1,4 @@
-#include "../../backend/domain-specific/calculator.h"
+
 #include "../../backend/support/logger.h"
 #include "bison-actions.h"
 #include <stdio.h>
@@ -200,7 +200,6 @@ Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfuncti
 	toReturn->type = NO_PARAM_FUNCTIONS;
 	toReturn->variable = variable;
 	toReturn->noParamFunctionToken = t_noparamfunction;
-	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
@@ -215,25 +214,9 @@ Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunc
 	toReturn->type = ONE_PARAM_FUNCTIONS;
 	toReturn->variable = variable;
 	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = t_oneparamfunction;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
-	toReturn->read = NULL;
-	toReturn->write = NULL;
-	return toReturn;
-}
-
-Function * MultiParamFunctionGrammarAction(char * variable, Token * t_multiparamfunction, ParameterList * parameterList) {
-	LogDebug("MultiParamFunctionGrammarAction %s ", variable);
-	Function * toReturn = malloc(sizeof(Function));
-	toReturn->type = MULTI_PARAM_FUNCTIONS;
-	toReturn->variable = variable;
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = t_multiparamfunction;
-	toReturn->oneParamFunctionToken = NULL;
-	toReturn->expression = NULL;
-	toReturn->parameterList = parameterList;
 	toReturn->read = NULL;
 	toReturn->write = NULL;
 	return toReturn;
@@ -245,7 +228,6 @@ Function * FilterFunctionGrammarAction(Expression * expression) {
 	toReturn->type = FILTER_FUNCTION;
 	toReturn->variable = NULL;
 	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = expression;
 	toReturn->parameterList = NULL;
@@ -260,7 +242,6 @@ Function * ReadFunctionGrammarAction(Read * read) {
 	toReturn->type = READ_FUNCTION;
 	toReturn->variable = NULL;
 	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;
@@ -275,7 +256,6 @@ Function * WriteFunctionGrammarAction(Write * write) {
 	toReturn->type = WRITE_FUNCTION;
 	toReturn->variable = NULL;
 	toReturn->noParamFunctionToken = NULL;
-	toReturn->multiParamFunctionToken = NULL;
 	toReturn->oneParamFunctionToken = NULL;
 	toReturn->expression = NULL;
 	toReturn->parameterList = NULL;

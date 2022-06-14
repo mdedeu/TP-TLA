@@ -45,13 +45,9 @@ letter [a-zA-Z]
 int                                         { yylval.token = INT_TYPE; return INT_TYPE; }
 string                                      { yylval.token = STRING_TYPE; return STRING_TYPE; }
 
-tree                                        { yylval.token = NON_BINARY_TREE_TYPE; return NON_BINARY_TREE_TYPE; }
-binaryTree                                  { yylval.token = BINARY_TREE_TYPE; return BINARY_TREE_TYPE; }
 avlTree                                     { yylval.token = AVL_TREE_TYPE; return AVL_TREE_TYPE; }
 rbtree                                      { yylval.token = RED_BLACK_TREE_TYPE; return RED_BLACK_TREE_TYPE; }
-bTree                                       { yylval.token = B_TREE_TYPE; return B_TREE_TYPE; }
 bstTree                                     { yylval.token = BST_TREE_TYPE; return BST_TREE_TYPE; }
-node                                        { yylval.token = NODE_TYPE; return NODE_TYPE; }
 
 main                                        { return MAIN;}
 print                                       { yylval.token = PRINT; return PRINT; }

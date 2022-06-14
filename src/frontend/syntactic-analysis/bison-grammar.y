@@ -38,7 +38,7 @@
 %token <token> ASSIGN
 %token <token> POINT COMMA
 %token <token> INT_TYPE STRING_TYPE
-%token <token> NON_BINARY_TREE_TYPE BINARY_TREE_TYPE AVL_TREE_TYPE RED_BLACK_TREE_TYPE B_TREE_TYPE BST_TREE_TYPE NODE_TYPE
+%token <token> AVL_TREE_TYPE RED_BLACK_TREE_TYPE BST_TREE_TYPE
 %token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
 %token <token> FOR WHILE IF ELSE
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE SEMI_COLON
@@ -185,13 +185,9 @@ type: INT_TYPE													{  $$ = TypeGrammarAction($1);  }
 	| STRING_TYPE 												{  $$ = TypeGrammarAction($1);  }
 	;
 
-treeType: NON_BINARY_TREE_TYPE 									{  $$ = TreeTypeGrammarAction($1);  }
-	| BINARY_TREE_TYPE 											{  $$ = TreeTypeGrammarAction($1);  }
+treeType: BST_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
 	| AVL_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
 	| RED_BLACK_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
-	| B_TREE_TYPE 												{  $$ = TreeTypeGrammarAction($1);  }
-	| BST_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
-	| NODE_TYPE													{  $$ = TreeTypeGrammarAction($1);  }
 	;
 
 semiColons: SEMI_COLON											{  $$ = SemiColonsGrammarAction($1);  }

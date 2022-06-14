@@ -1,6 +1,6 @@
 main {
     // Graficar un árbol degenerado como lista.
-    tree int arbol;
+    avlTree int arbol;
     arbol.createNode(1);
     arbol.createNode(2);
     arbol.createNode(3);

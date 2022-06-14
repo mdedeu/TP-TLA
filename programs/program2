@@ -9,6 +9,7 @@ main {
     miArbol.createNode("6");
     miArbol.createNode("7");
     miArbol.print();
-    miArbol.balanced();
-    miArbol.print();
+    avlTree string balanceado; 
+    balanceado = miArbol.balanced();
+    balanceado.print();
 }

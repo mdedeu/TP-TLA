@@ -1,11 +1,11 @@
 main {
     // Crear un árbol a partir de otro, que solo utilice los nodos cuyo nombre es “Maginer”
-    tree string arbol;
+    binaryTree string arbol;
 
     arbol.createNode("Maginer");
     arbol.createNode("NO");
     arbol.createNode("NO");
     arbol.createNode("Maginer");
 
-    tree string newTree = arbol.filter("Maginer");
+    binaryTree string newTree = arbol.filter("Maginer");
 }
