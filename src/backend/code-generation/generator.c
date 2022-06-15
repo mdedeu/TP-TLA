@@ -112,30 +112,48 @@ void GeneratorDeclare(Declare* declare, FILE * output){
 				LogDebug("Declare type symbol -> int");
 				fprintf(output,"%s", "int");
 			}
-			else if(declare->type_token->value == STRING_TYPE)
+			else if(declare->type_token->value == STRING_TYPE) {
+				LogDebug("Declare type symbol -> String");
 				fprintf(output,"%s", "String");
+			}
 			fprintf(output," %s",declare->variable);
 			break;
 		case TREE_TYPE_SYMBOL:
 			LogDebug("Declare tree type symbol");
-			// TODO: terminar los tipos de arboles
 			switch (declare->treeType_token->value)
 			{
-				case NON_BINARY_TREE_TYPE:
-					fprintf(output,"%s", "tree ");
+				case AVL_TREE_TYPE:
+					fprintf(output,"%s", "AVLTree<");
 					break;
-				default:
-				fprintf(output,"%s", "otro_tree ");
+				case RED_BLACK_TREE_TYPE:
+					fprintf(output,"%s", "RedBlackTree<");
+					break;
+				case BST_TREE_TYPE:
+					fprintf(output,"%s", "BSTree<");
 					break;
 			}
+
 			if(declare->type_token->value == INT_TYPE) {
 				LogDebug("Declare tree type symbol -> int");
-				fprintf(output,"%s", "int");
+				fprintf(output,"Integer>");
 			}
-			else if(declare->type_token->value == STRING_TYPE)
+			else if(declare->type_token->value == STRING_TYPE) {
 				LogDebug("Declare tree type symbol -> string");
-				fprintf(output,"%s", "String");
-			fprintf(output," %s",declare->variable);
+				fprintf(output,"String>");
+			}
+			fprintf(output," %s = new ",declare->variable);
+			switch (declare->treeType_token->value)
+			{
+				case AVL_TREE_TYPE:
+					fprintf(output,"%s", "AVLTree<>()");
+					break;
+				case RED_BLACK_TREE_TYPE:
+					fprintf(output,"%s", "RedBlackTree<>()");
+					break;
+				case BST_TREE_TYPE:
+					fprintf(output,"%s", "BSTree<>()");
+					break;
+			}
 			break;
 		case TYPE_VECTOR:
 			LogDebug("Declare type vector");
@@ -169,10 +187,31 @@ void GeneratorFunction(Function* function, FILE * output){
 	switch (function->type)
 	{
 		case NO_PARAM_FUNCTIONS:
+			switch(function->noParamFunctionToken->value) {
+					case PRINT:
+						fprintf(output,"%s.print()",function->variable);
+						break;
+					case LENGTH:
+						fprintf(output,"%s.size()",function->variable);
+						break;
+					case BALANCED:
+						fprintf(output,"%s.balanced()",function->variable);
+						break;
+			}
 			break;
 		case ONE_PARAM_FUNCTIONS:
-			break;
-		case MULTI_PARAM_FUNCTIONS:
+			switch(function->oneParamFunctionToken->value) {
+				case NEW_NODE:
+					fprintf(output,"%s.addNode(",function->variable);
+					GeneratorExpression(function->expression, output);
+					fprintf(output,")");
+					break;
+				case DELETE_NODE:
+					fprintf(output,"%s.deleteNode(",function->variable);
+					GeneratorExpression(function->expression, output);
+					fprintf(output,")");
+					break;
+			}
 			break;
 		case FILTER_FUNCTION:
 			break;

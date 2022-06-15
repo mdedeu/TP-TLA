@@ -1,8 +1,8 @@
 main {
     //Crear un árbol y eliminar su raíz
     avlTree string arbol;
-    arbol.createNode("root","Santi");
-    arbol.createNode("h1","Dax","root");
-    arbol.createNode("h2","Fico","root");
+    arbol.createNode("root");
+    arbol.createNode("Dax);
+    arbol.createNode("Fico");
     arbol.deleteNode("root");
 }

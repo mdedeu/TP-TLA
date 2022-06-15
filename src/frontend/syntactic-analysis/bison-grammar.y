@@ -38,7 +38,7 @@
 %token <token> ASSIGN
 %token <token> POINT COMMA
 %token <token> INT_TYPE STRING_TYPE
-%token <token> NON_BINARY_TREE_TYPE BINARY_TREE_TYPE AVL_TREE_TYPE RED_BLACK_TREE_TYPE B_TREE_TYPE BST_TREE_TYPE NODE_TYPE
+%token <token> AVL_TREE_TYPE RED_BLACK_TREE_TYPE BST_TREE_TYPE
 %token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
 %token <token> FOR WHILE IF ELSE
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE SEMI_COLON
@@ -58,7 +58,7 @@
 %type <_while> while;
 %type <ifClose> if_close;
 %type <_if> if;
-%type <tokenNode> multiParamFunctions oneParamFunctions noParamFunctions
+%type <tokenNode> oneParamFunctions noParamFunctions
 %type <write> write;
 %type <read> read;
 %type <function> function;
@@ -111,7 +111,6 @@ assignation: symbol ASSIGN expression  																{ $$ = AssignationGrammar
 
 function:	symbol POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
 	| symbol POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
-	| symbol POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
 	| symbol POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
 	| read																							{ $$ = ReadFunctionGrammarAction($1); }
 	| write																							{ $$ = WriteFunctionGrammarAction($1); }
@@ -132,10 +131,8 @@ noParamFunctions: PRINT										 										{ $$ = NoParamGrammarAction($1); }
 oneParamFunctions: DELETE_NODE																		{ $$ = OneParamGrammarAction($1); }
 	| MODIFY_NODE																					{ $$ = OneParamGrammarAction($1); }
 	| SEARCH																						{ $$ = OneParamGrammarAction($1); }
+	| NEW_NODE																						{ $$ = OneParamGrammarAction($1); }
 	;
-	
-multiParamFunctions: NEW_NODE																		{ $$ = MultiParamGrammarAction($1); }
-	;	
 	
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 				{$$ = IfGrammarAction($3, $6, $7);};
 	;
@@ -188,13 +185,9 @@ type: INT_TYPE													{  $$ = TypeGrammarAction($1);  }
 	| STRING_TYPE 												{  $$ = TypeGrammarAction($1);  }
 	;
 
-treeType: NON_BINARY_TREE_TYPE 									{  $$ = TreeTypeGrammarAction($1);  }
-	| BINARY_TREE_TYPE 											{  $$ = TreeTypeGrammarAction($1);  }
+treeType: BST_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
 	| AVL_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
 	| RED_BLACK_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
-	| B_TREE_TYPE 												{  $$ = TreeTypeGrammarAction($1);  }
-	| BST_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
-	| NODE_TYPE													{  $$ = TreeTypeGrammarAction($1);  }
 	;
 
 semiColons: SEMI_COLON											{  $$ = SemiColonsGrammarAction($1);  }
