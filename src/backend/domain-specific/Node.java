@@ -1,13 +1,24 @@
 public class Node<E extends Comparable<? super E>> {
 
-    private E data;
-    private Node<E> left;
-    private Node<E> right;
-    private int h;
+    E data;
+    Node<E> left;
+    Node<E> right;
+    int h;
+    Node<E> parent; // for RB
+    int color; // for RB
+
 
     public Node(E data) {
         this.data = data;
         h = 0;
+    }
+
+    public Node() {
+        this.data = null;
+        this.h = 0;
+        this.color = 0;
+        this.left = null;
+        this.right = null;
     }
 
     public int getH() {

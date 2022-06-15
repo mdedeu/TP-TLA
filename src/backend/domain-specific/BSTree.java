@@ -1,10 +1,20 @@
 public class BSTree<E extends Comparable<? super E>> {
 
-    // TODO: HACER SIZE Y PRINT
     private Node<E> root;
 
     public BSTree(Node<E> root) {
         this.root = root;
+    }
+
+    public int size(){
+        return size(root);
+    }
+
+    private int size(Node<E> root){
+
+        if(root==null || root.getData() == null)
+            return 0;
+        return 1 + size(root.left) + size(root.right);
     }
 
     public BSTree() {
@@ -20,10 +30,12 @@ public class BSTree<E extends Comparable<? super E>> {
             node = new Node<E>(data);
             return node;
         }
-        if(data.compareTo(root.getData()) < 0) {
-            node.setLeft(recursiveAddNode(node,data));
-        } else if(data.compareTo(root.getData()) > 0){
-            node.setRight(recursiveAddNode(node,data));
+        if(data.compareTo(node.getData()) < 0) {
+            node.setLeft(recursiveAddNode(node.getLeft(),data));
+        } else if(data.compareTo(node.getData()) > 0){
+            node.setRight(recursiveAddNode(node.getRight(),data));
+        } else {
+            return node;
         }
         return node;
     }
@@ -57,6 +69,10 @@ public class BSTree<E extends Comparable<? super E>> {
             root = root.getLeft();
         }
         return minval;
+    }
+
+    public void print() {
+        BTreePrinter.printNode(root);
     }
 
 }

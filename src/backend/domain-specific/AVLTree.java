@@ -1,8 +1,6 @@
 /**
  * AVL-Tree
- *
- * @author Shinobu
- * @since 2019/5/7
+ * basado en: https://developpaper.com/java-implementation-of-avl-tree/
  */
 public class AVLTree<T extends Comparable<T>> {
 
@@ -10,23 +8,6 @@ public class AVLTree<T extends Comparable<T>> {
     private static final int MAX_HEIGHT_DIFFERENCE = 1;
 
     private Node<T> root;
-
-    class Node<KT> {
-
-        KT key;
-
-        Node<KT> left;
-
-        Node<KT> right;
-
-        int height = 1;
-
-        public Node(KT key, Node<KT> left, Node<KT> right) {
-            this.key = key;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     public AVLTree() {
         root = null;
@@ -36,7 +17,7 @@ public class AVLTree<T extends Comparable<T>> {
         if (key == null || root == null) {
             return null;
         }
-        return find(root, key, key.compareTo(root.key));
+        return find(root, key, key.compareTo(root.getData()));
     }
 
     private T find(Node<T> node, T key, int cmp) {
@@ -45,13 +26,13 @@ public class AVLTree<T extends Comparable<T>> {
         }
 
         if (cmp == 0) {
-            return node.key;
+            return node.getData();
         }
 
         return find(
-                (node = cmp > 0 ? node.right : node.left),
+                (node = cmp > 0 ? node.getRight() : node.getLeft()),
                 key,
-                node == null ? 0 : key.compareTo(node.key));
+                node == null ? 0 : key.compareTo(node.getData()));
     }
 
     public void addNode(T key) {
@@ -63,20 +44,20 @@ public class AVLTree<T extends Comparable<T>> {
 
     private Node<T> insert(Node<T> node, T key) {
         if (node == null) {
-            return new Node<>(key, null, null);
+            return new Node<>(key);
         }
 
-        int cmp = key.compareTo(node.key);
+        int cmp = key.compareTo(node.getData());
         if (cmp == 0) {
             return node;
         }
-        if (cmp < 0) {
-            node.left = insert(node.left, key);
+        if (cmp <= 0) {
+            node.setLeft(insert(node.getLeft(), key));
         } else {
-            node.right = insert(node.right, key);
+            node.setRight(insert(node.getRight(), key));
         }
 
-        if (Math.abs(height(node.left) - height(node.right)) > MAX_HEIGHT_DIFFERENCE) {
+        if (Math.abs(height(node.getLeft()) - height(node.getRight())) > MAX_HEIGHT_DIFFERENCE) {
             node = balance(node);
         }
         refreshHeight(node);
@@ -87,58 +68,60 @@ public class AVLTree<T extends Comparable<T>> {
         if (node == null) {
             return 0;
         }
-        return node.height;
+        return node.getH();
     }
 
     private void refreshHeight(Node<T> node) {
-        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        node.setH(Math.max(height(node.getLeft()), height(node.getRight())) + 1);
     }
 
     private Node<T> balance(Node<T> node) {
         Node<T> node1, node2;
         // ll & l
-        if (height(node.left) > height(node.right) &&
-                height(node.left.left) >= height(node.left.right)) {
-            node1 = node.left;
-            node.left = node1.right;
-            node1.right = node;
+        if (height(node.getLeft()) > height(node.getRight()) &&
+                height(node.getLeft().getLeft()) >= height(node.getLeft().getRight())) {
+            node1 = node.getLeft();
+            node.setLeft(node1.getRight()); 
+            node1.setRight(node); 
 
             refreshHeight(node);
             return node1;
         }
-        // lr
-        if (height(node.left) > height(node.right) &&
-                height(node.left.right) > height(node.left.left)) {
-            node1 = node.left;
-            node2 = node.left.right;
-            node.left = node2.right;
-            node1.right = node2.left;
-            node2.left = node1;
-            node2.right = node;
+        
+        if (height(node.getLeft()) > height(node.getRight()) &&
+                height(node.getLeft().getRight()) > height(node.getLeft().getLeft())) {
+            node1 = node.getLeft();
+            node2 = node.getLeft().getRight();
+            node.setLeft(node2.getRight());
+            node1.setRight(node2.getLeft());
+            node2.setLeft(node1);
+            node2.setRight(node);
 
             refreshHeight(node);
             refreshHeight(node1);
             return node2;
         }
         // rr & r
-        if (height(node.right) > height(node.left) &&
-                height(node.right.right) >= height(node.right.left)) {
-            node1 = node.right;
-            node.right = node1.left;
-            node1.left = node;
+        
+        
+        if (height(node.getRight()) > height(node.getLeft()) &&
+                height(node.getRight().getRight()) >= height(node.getRight().getLeft())) {
+            node1 = node.getRight();
+            node.setRight(node1.getLeft()); 
+            node1.setLeft(node);
 
             refreshHeight(node);
             return node1;
         }
         // rl
-        if (height(node.right) > height(node.left) &&
-                height(node.right.left) > height(node.right.right)) {
-            node1 = node.right;
-            node2 = node.right.left;
-            node.right = node2.left;
-            node1.left = node2.right;
-            node2.left = node;
-            node2.right = node1;
+        if (height(node.getRight()) > height(node.getLeft()) &&
+                height(node.getRight().getLeft()) > height(node.getRight().getRight())) {
+            node1 = node.getRight();
+            node2 = node.getRight().getLeft();
+            node.setRight(node2.getLeft());
+            node1.setLeft(node2.getRight()); 
+            node2.setLeft(node); 
+            node2.setRight(node1);
 
             refreshHeight(node);
             refreshHeight(node1);
@@ -159,23 +142,23 @@ public class AVLTree<T extends Comparable<T>> {
             return null;
         }
 
-        int cmp = key.compareTo(node.key);
+        int cmp = key.compareTo(node.getData());
         if (cmp < 0) {
-            node.left = remove(node.left, key);
+            node.setLeft( remove(node.getLeft(), key));
         }
         if (cmp > 0){
-            node.right = remove(node.right, key);
+            node.setRight( remove(node.getRight(), key));
         }
         if (cmp == 0) {
-            if (node.left == null || node.right == null) {
-                return node.left == null ? node.right : node.left;
+            if (node.getLeft() == null || node.getRight() == null) {
+                return node.getLeft() == null ? node.getRight() : node.getLeft();
             }
-            var successorKey = successorOf(node).key;
+            var successorKey = successorOf(node).getData();
             node = remove(node, successorKey);
-            node.key = successorKey;
+            node.setData( successorKey);
         }
 
-        if (Math.abs(height(node.left) - height(node.right)) > MAX_HEIGHT_DIFFERENCE) {
+        if (Math.abs(height(node.getLeft()) - height(node.getRight())) > MAX_HEIGHT_DIFFERENCE) {
             node = balance(node);
         }
         refreshHeight(node);
@@ -186,27 +169,42 @@ public class AVLTree<T extends Comparable<T>> {
         if (node == null) {
             throw new NullPointerException();
         }
-        if (node.left == null || node.right == null) {
-            return node.left == null ? node.right : node.left;
+        if (node.getLeft() == null || node.getRight() == null) {
+            return node.getLeft() == null ? node.getRight() : node.getLeft();
         }
 
-        return height(node.left) > height(node.right) ?
-                findMax(node.left, node.left.right, node.left.right == null) :
-                findMin(node.right, node.right.left, node.right.left == null);
+        return height(node.getLeft()) > height(node.getRight()) ?
+                findMax(node.getLeft(), node.getLeft().getRight(), node.getLeft().getRight() == null) :
+                findMin(node.getLeft(), node.getRight().getLeft(),  node.getRight().getLeft() == null);
     }
 
     private Node<T> findMax(Node<T> node, Node<T> right, boolean rightIsNull) {
         if (rightIsNull) {
             return node;
         }
-        return findMax((node = right), node.right, node.right == null);
+        return findMax((node = right), node.getRight(), node.getRight() == null);
     }
 
     private Node<T> findMin(Node<T> node, Node<T> left, boolean leftIsNull) {
         if (leftIsNull) {
             return node;
         }
-        return findMin((node = left), node.left, node.left == null);
+        return findMin((node = left), node.getLeft(), node.getLeft() == null);
+    }
+
+    public void print() {
+        BTreePrinter.printNode(root);
+    }
+
+    public int size(){
+        return size(root);
+    }
+
+    private int size(Node<T> root){
+
+        if(root==null || root.getData() == null)
+            return 0;
+        return 1 + size(root.left) + size(root.right);
     }
 
 }
