@@ -23,3 +23,4 @@ src/backend/code-generation/generator.c
 *.iml
 # Generated output
 Test.java
+target/

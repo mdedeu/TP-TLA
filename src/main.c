@@ -29,15 +29,28 @@ const int main(const int argumentCount, const char ** arguments) {
 		case 0:
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
-				out = fopen("Test.java", "w+");
+				out = fopen("./target/Program.java", "w+");
 				if (out == NULL)
 				{
 					perror("Error creating auxiliary file");
 					exit(EXIT_FAILURE);
 				}
-				fprintf(out, "public class Test { \n	public static void main(String[] args) { \n");
+				fprintf(out, "public class Program { \n	public static void main(String[] args) { \n");
 				GeneratorProgram(state.mainProgram, out);
+				char bytecode_command[512];
+				sprintf(bytecode_command, "javac ./src/backend/domain-specific/*.java -d target");
 
+				if( -1 == system(bytecode_command) ) {
+					LogError("Se produjo un error en la aplicacion.");
+					return -1;
+				}
+				sprintf(bytecode_command, "javac ./target/Program.java ./src/backend/domain-specific/*.java -d target");
+
+				if( -1 == system(bytecode_command) ) {
+					LogError("Se produjo un error en la aplicacion.");
+					return -1;
+				}
+				// ./target/Program.java
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");
