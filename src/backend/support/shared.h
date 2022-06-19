@@ -27,6 +27,7 @@ extern int yylex(void);
 extern int yyparse();
 
 //Tipos de nodos
+typedef struct Token Token;
 typedef struct Variable Variable;
 typedef struct ParameterList ParameterList;
 typedef struct Vector Vector;
@@ -123,7 +124,7 @@ struct Statement{
 typedef enum {
 	DECLARE_ASSIGN_EXPRESSION,
 	DECLARE_ASSIGN_PARAM_LIST,
-	DECLARE
+	ONLY_DECLARE
 } DeclareAndAssignType;
 
 struct DeclareAndAssign {
@@ -139,10 +140,10 @@ typedef enum{
 	TYPE_VECTOR
 } DeclareType;
 
-struct  Declare{
-	int type;
-	int type_token;
-	int treeType_token;
+struct  Declare {
+	DeclareType type;
+	Token * type_token;
+	Token * treeType_token;
 	Vector * vector;
 	char * variable;
 };
@@ -155,7 +156,6 @@ struct Assignation {
 typedef enum {
 	NO_PARAM_FUNCTIONS,
 	ONE_PARAM_FUNCTIONS,
-	MULTI_PARAM_FUNCTIONS,
 	FILTER_FUNCTION,
 	READ_FUNCTION,
 	WRITE_FUNCTION
@@ -164,10 +164,9 @@ typedef enum {
 struct Function {
 	FunctionType type;
 	char * variable;
-	int noParamFunctionToken;
-	int oneParamFunctionToken;
+	Token * noParamFunctionToken;
+	Token * oneParamFunctionToken;
 	Expression * expression;
-	int multiParamFunctionToken;
 	ParameterList * parameterList;
 	Read * read;
 	Write * write;
@@ -262,16 +261,10 @@ struct Constant {
 	int value;
 };
 
-typedef enum {
-	CONSTANT_VECTOR,
-	SYMBOL_VECTOR
-} VectorType;
 
 struct Vector {
-	VectorType type;
 	char * variable;
-	Constant * constant;
-	char * variable2;
+	Factor * factor;
 };
 
 typedef enum {
@@ -285,12 +278,8 @@ struct ParameterList {
 	ParameterList * parameterList;
 };
 
-/*
-struct Variable{
-	char * name;
-	void * value;
-	int type;
+struct Token {
+	int value;
 };
-*/
 
 #endif

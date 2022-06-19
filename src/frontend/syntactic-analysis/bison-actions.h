@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "../../backend/semantic-analysis/symbol-table.h"
+#include "bison-parser.h"
 #define TRUE 1
 #define FALSE 0
 
@@ -30,21 +31,18 @@ Statement * FunctionStatementGrammarAction(Function * function);
 DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression * expression);
 DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, ParameterList * parameterList);
 DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare);
-Declare * TypeSymbolDeclareGrammarAction(int t_type, char * variable);
-Declare * TreetypeTpyeSymbolDeclareGrammarAction(int t_tree_type, int t_type, char * variable);
-Declare * TypeVectorDeclareGrammarAction(int t_type, Vector * vector);
+Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable);
+Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_type, char * variable);
+Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector);
 Assignation * AssignationGrammarAction(char * variable, Expression * expression);
-Function * NoParamFunctionGrammarAction(char * variable, int t_noparamfunction);
-Function * OneParamFunctionGrammarAction(char * variable, int t_oneparamfunction, Expression * expression);
-Function * MultiParamFunctionGrammarAction(char * variable, int t_multiparamfunction, ParameterList * parameterList);
-Function * FilterFunctionGrammarAction(Expression * expression);
+Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfunction);
+Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunction, Expression * expression);
 Function * ReadFunctionGrammarAction(Read * read);
 Function * WriteFunctionGrammarAction(Write * write);
 Read * ReadGrammarAction(char * variable);
 Write * WriteGrammarAction(Expression * expression);
-int NoParamGrammarAction(int token);
-int OneParamGrammarAction(int token);
-int MultiParamGrammarAction(int token);
+Token *  NoParamGrammarAction(int token);
+Token *  OneParamGrammarAction(int token);
 
 //
 If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose);
@@ -93,15 +91,16 @@ Constant* IntegerConstantGrammarAction(const int value);
 
 
 //Vector
-Vector* VectorConstantGrammarAction(char * symbol, Constant* constant);
-Vector* VectorSymbolGrammarAction(char * symbol, char* symbol2);
+Vector* VectorGrammarAction(char * symbol, Factor* factor);
 
 
 ParameterList * ParameterListCommaExpressionGrammarAction(ParameterList * parameterList, Expression * expression);
 ParameterList * ParameterListGrammarAction(Expression * expression);
 //Types
-int TypeGrammarAction(int token);
-int TreeTypeGrammarAction(int token);
+Token * TypeGrammarAction(int token);
+Token * TreeTypeGrammarAction(int token);
+Token * SemiColonsGrammarAction(int token);
 
-int SemiColonsGrammarAction(int token);
+char * SymbolGrammarAction(char * varName);
+char * StringGrammarAction(char * string);
 #endif

@@ -8,6 +8,7 @@
     char * string;
     int integer;
 	int token;
+	Token * tokenNode;
 	Variable* variable;
     ParameterList * parameterList;
 	Vector* vector;
@@ -37,15 +38,17 @@
 %token <token> ASSIGN
 %token <token> POINT COMMA
 %token <token> INT_TYPE STRING_TYPE
-%token <token> NON_BINARY_TREE_TYPE BINARY_TREE_TYPE AVL_TREE_TYPE RED_BLACK_TREE_TYPE B_TREE_TYPE BST_TREE_TYPE NODE_TYPE
-%token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
+%token <token> AVL_TREE_TYPE RED_BLACK_TREE_TYPE BST_TREE_TYPE
+%token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE FILTER TREE_MULT
 %token <token> FOR WHILE IF ELSE
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE SEMI_COLON
 %token <integer> INTEGER
 %token <string> STRING SYMBOL
 
 // No terminales
-%type <token> type treeType semiColons
+%type <string> symbol;
+%type <string> string;
+%type <tokenNode> type treeType semiColons;
 %type <parameterList> parameterList;
 %type <vector> vector;
 %type <constant> constant;
@@ -55,7 +58,7 @@
 %type <_while> while;
 %type <ifClose> if_close;
 %type <_if> if;
-%type <token> multiParamFunctions oneParamFunctions noParamFunctions
+%type <tokenNode> oneParamFunctions noParamFunctions
 %type <write> write;
 %type <read> read;
 %type <function> function;
@@ -98,23 +101,21 @@ declareAndAssign:	declare ASSIGN expression  														{ $$ = DeclareAndAssi
 	| 	declare																						{ $$ = OnlyDeclareGrammarAction($1); }
 	;
 
-declare: type SYMBOL  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
-	| treeType type SYMBOL  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
+declare: type symbol  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
+	| treeType type symbol  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
 	| type vector  																					{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
 	;
 
-assignation: SYMBOL ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }
+assignation: symbol ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }
 	;
 
-function:	SYMBOL POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
-	| SYMBOL POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT multiParamFunctions OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS 			{ $$ = MultiParamFunctionGrammarAction($1,$3,$5); }
-	| SYMBOL POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
+function:	symbol POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
+	| symbol POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
 	| read																							{ $$ = ReadFunctionGrammarAction($1); }
 	| write																							{ $$ = WriteFunctionGrammarAction($1); }
 	;
 	
-read: READ OPEN_PARENTHESIS SYMBOL CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
+read: READ OPEN_PARENTHESIS symbol CLOSE_PARENTHESIS		 										{ $$ = ReadGrammarAction($3); }
 	;
 
 write: WRITE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS   										{ $$ = WriteGrammarAction($3); }
@@ -127,12 +128,10 @@ noParamFunctions: PRINT										 										{ $$ = NoParamGrammarAction($1); }
 	;
 	
 oneParamFunctions: DELETE_NODE																		{ $$ = OneParamGrammarAction($1); }
-	| MODIFY_NODE																					{ $$ = OneParamGrammarAction($1); }
-	| SEARCH																						{ $$ = OneParamGrammarAction($1); }
+	| NEW_NODE																						{ $$ = OneParamGrammarAction($1); }
+	| TREE_MULT																						{ $$ = OneParamGrammarAction($1); }
+	| FILTER																						{ $$ = OneParamGrammarAction($1); }
 	;
-	
-multiParamFunctions: NEW_NODE																		{ $$ = MultiParamGrammarAction($1); }
-	;	
 	
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 				{$$ = IfGrammarAction($3, $6, $7);};
 	;
@@ -167,16 +166,14 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
 	| constant													{ $$ = ConstantFactorGrammarAction($1); }
-	| STRING													{ $$ = StringFactorGrammarAction($1); }
-	| SYMBOL													{ $$ = SymbolFactorGrammarAction($1); }
+	| string													{ $$ = StringFactorGrammarAction($1); }
+	| symbol													{ $$ = SymbolFactorGrammarAction($1); }
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
-vector: 
-	SYMBOL OPEN_SQUARE_BRACKETS constant CLOSE_SQUARE_BRACKETS	 { $$ = VectorConstantGrammarAction($1, $3); }
-	| SYMBOL OPEN_SQUARE_BRACKETS SYMBOL CLOSE_SQUARE_BRACKETS	 { $$ = VectorSymbolGrammarAction($1, $3); }
+vector: symbol OPEN_SQUARE_BRACKETS factor CLOSE_SQUARE_BRACKETS	 { $$ = VectorGrammarAction($1, $3); }
 	;
 
 parameterList: expression 										{ $$ = ParameterListGrammarAction($1); }
@@ -187,18 +184,18 @@ type: INT_TYPE													{  $$ = TypeGrammarAction($1);  }
 	| STRING_TYPE 												{  $$ = TypeGrammarAction($1);  }
 	;
 
-treeType: NON_BINARY_TREE_TYPE 									{  $$ = TreeTypeGrammarAction($1);  }
-	| BINARY_TREE_TYPE 											{  $$ = TreeTypeGrammarAction($1);  }
+treeType: BST_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
 	| AVL_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
 	| RED_BLACK_TREE_TYPE 										{  $$ = TreeTypeGrammarAction($1);  }
-	| B_TREE_TYPE 												{  $$ = TreeTypeGrammarAction($1);  }
-	| BST_TREE_TYPE												{  $$ = TreeTypeGrammarAction($1);  }
-	| NODE_TYPE													{  $$ = TreeTypeGrammarAction($1);  }
 	;
 
 semiColons: SEMI_COLON											{  $$ = SemiColonsGrammarAction($1);  }
     | semiColons SEMI_COLON										{  $$ = SemiColonsGrammarAction($2);  }
     ;
 
+symbol: SYMBOL													{  $$ = SymbolGrammarAction($1);	  }
+	;
 
+string: STRING													{  $$ = StringGrammarAction($1);	  }
+	;		
 %%

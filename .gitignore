@@ -19,3 +19,7 @@ flex-scanner.c
 src/backend/code-generation/generator.c
 .idea/
 cmake-build-debug/
+*.iml
+# Generated output
+Test.java
+target/

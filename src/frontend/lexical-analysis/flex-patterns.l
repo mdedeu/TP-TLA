@@ -42,29 +42,24 @@ letter [a-zA-Z]
 "."                                         { return POINT; }
 ","                                         { return COMMA; }
 
-int                                         { return INT_TYPE; }
-string                                      { return STRING_TYPE; }
+int                                         { yylval.token = INT_TYPE; return INT_TYPE; }
+string                                      { yylval.token = STRING_TYPE; return STRING_TYPE; }
 
-tree                                        { return NON_BINARY_TREE_TYPE; }
-binaryTree                                  { return BINARY_TREE_TYPE; }
-avlTree                                     { return AVL_TREE_TYPE; }
-rbtree                                      { return RED_BLACK_TREE_TYPE; }
-bTree                                       { return B_TREE_TYPE; }
-bstTree                                     { return BST_TREE_TYPE; }
-node                                        { return NODE_TYPE; }
+avlTree                                     { yylval.token = AVL_TREE_TYPE; return AVL_TREE_TYPE; }
+rbtree                                      { yylval.token = RED_BLACK_TREE_TYPE; return RED_BLACK_TREE_TYPE; }
+bstTree                                     { yylval.token = BST_TREE_TYPE; return BST_TREE_TYPE; }
 
 main                                        { return MAIN;}
-print                                       { return PRINT; }
-read                                        { return READ; }
-write                                       { return WRITE; }
-createNode                                  { return NEW_NODE; }
-balanced                                    { return BALANCED; }
-size                                        { return SIZE; }
-length                                      { return LENGTH; }
-deleteNode                                  { return DELETE_NODE; }
-modifyNode                                  { return MODIFY_NODE; }
-search                                      { return SEARCH; }
-filter                                      { return FILTER; }
+print                                       { yylval.token = PRINT; return PRINT; }
+read                                        { yylval.token = READ; return READ; }
+write                                       { yylval.token = WRITE; return WRITE; }
+createNode                                  { yylval.token = NEW_NODE; return NEW_NODE; }
+balanced                                    { yylval.token = BALANCED; return BALANCED; }
+size                                        { yylval.token = SIZE; return SIZE; }
+length                                      { yylval.token = LENGTH; return LENGTH; }
+deleteNode                                  { yylval.token = DELETE_NODE; return DELETE_NODE; }
+filter                                      { yylval.token = FILTER; return FILTER; }
+mul                                         { yylval.token = TREE_MULT; return TREE_MULT; }
 
 
 
@@ -87,8 +82,8 @@ filter                                      { return FILTER; }
 {digit}+									{ return IntegerPatternAction(yytext); }
 {whitespace}								{ IgnoredPatternAction(yytext); }
 \/\/.*                                      { IgnoredPatternAction(yytext); }
-{letter}+                                   { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
+{letter}+                                   { return SymbolPatternAction(yytext); } //solo se pueden declarar vars con letras
 
 .											{ return UnknownPatternAction(yytext); }
 

@@ -1,19 +1,19 @@
 main {
     //Crear un árbol binario de 15 nodos. Siempre se crea primero el hijo izq y luego el derecho.
-    binaryTree int miArbol;
-    miArbol.createNode("n1",1);
-    miArbol.createNode("n2",2,"n1");
-    miArbol.createNode("n3",3,"n1");
-    miArbol.createNode("n4",4,"n2");
-    miArbol.createNode("n5",5,"n2");
-    miArbol.createNode("n6",6,"n3");
-    miArbol.createNode("n7",7,"n3");
-    miArbol.createNode("n8",8,"n4");
-    miArbol.createNode("n9",9,"n4");
-    miArbol.createNode("n10",10,"n5");
-    miArbol.createNode("n11",11,"n5");
-    miArbol.createNode("n12",12,"n6");
-    miArbol.createNode("n13",13,"n6");
-    miArbol.createNode("n14",14,"n7");
-    miArbol.createNode("n15",15,"n7");
+    bstTree int miArbol;
+    miArbol.createNode(1);
+    miArbol.createNode(2);
+    miArbol.createNode(3);
+    miArbol.createNode(4);
+    miArbol.createNode(5);
+    miArbol.createNode(6);
+    miArbol.createNode(7);
+    miArbol.createNode(8);
+    miArbol.createNode(9);
+    miArbol.createNode(10);
+    miArbol.createNode(11);
+    miArbol.createNode(12);
+    miArbol.createNode(13);
+    miArbol.createNode(14);
+    miArbol.createNode(15);
 }
