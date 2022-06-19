@@ -222,19 +222,6 @@ Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunc
 	return toReturn;
 }
 
-Function * FilterFunctionGrammarAction(Expression * expression) {
-	LogDebug("FilterFunctionGrammarAction ");
-	Function * toReturn = malloc(sizeof(Function));
-	toReturn->type = FILTER_FUNCTION;
-	toReturn->variable = NULL;
-	toReturn->noParamFunctionToken = NULL;
-	toReturn->oneParamFunctionToken = NULL;
-	toReturn->expression = expression;
-	toReturn->parameterList = NULL;
-	toReturn->read = NULL;
-	toReturn->write = NULL;
-	return toReturn;
-}
 
 Function * ReadFunctionGrammarAction(Read * read) {
 	LogDebug("ReadFunctionGrammarAction ");

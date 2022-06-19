@@ -6,7 +6,8 @@ main {
     arbol.createNode(3);
     arbol.createNode(4);
     
-    bstTree int arbolito = arbol.mul(3);
+    bstTree int arbolito;
+    arbolito = arbol.mul(3);
     arbolito.print();
    
 }

@@ -7,6 +7,7 @@
  */
 
 
+int scanner = 0;
 
 void GeneratorProgram(MainProgram* program, FILE * out) {
 	GeneratorBlock(program->block, out);
@@ -110,7 +111,7 @@ void GeneratorDeclare(Declare* declare, FILE * output){
 			LogDebug("Declare type symbol");
 			if(declare->type_token->value == INT_TYPE) {
 				LogDebug("Declare type symbol -> int");
-				fprintf(output,"%s", "int");
+				fprintf(output,"%s", "Integer");
 			}
 			else if(declare->type_token->value == STRING_TYPE) {
 				LogDebug("Declare type symbol -> String");
@@ -159,7 +160,7 @@ void GeneratorDeclare(Declare* declare, FILE * output){
 			LogDebug("Declare type vector");
 			if(declare->type_token->value == INT_TYPE) {
 				LogDebug("Declare type vector -> int");
-				fprintf(output,"%s", "int");
+				fprintf(output,"%s", "Integer");
 			}
 			else if(declare->type_token->value == STRING_TYPE) {
 				LogDebug("Declare type vector -> string");
@@ -183,7 +184,6 @@ void GeneratorAssignation(Assignation* assignation, FILE * output){
 }
 
 void GeneratorFunction(Function* function, FILE * output){
-	// TODO: Function generator
 	switch (function->type)
 	{
 		case NO_PARAM_FUNCTIONS:
@@ -211,13 +211,23 @@ void GeneratorFunction(Function* function, FILE * output){
 					GeneratorExpression(function->expression, output);
 					fprintf(output,")");
 					break;
+				case TREE_MULT:
+					fprintf(output,"%s.mul(",function->variable);
+					GeneratorExpression(function->expression, output);
+					fprintf(output,")");
+					break;
+				case FILTER:
+					fprintf(output,"%s.filter(",function->variable);
+					GeneratorExpression(function->expression, output);
+					fprintf(output,")");
+					break;
 			}
 			break;
-		case FILTER_FUNCTION:
-			break;
 		case READ_FUNCTION:
+			GeneratorRead(function->read, output);
 			break;
 		case WRITE_FUNCTION:
+			GeneratorWrite(function->write, output);
 			break;
 		default:
 			LogInfo("Function Type not found");
@@ -225,13 +235,19 @@ void GeneratorFunction(Function* function, FILE * output){
 	}
 }
 
-// TODO: functions
 void GeneratorRead(Read* read, FILE * output){
-
+	if(!scanner) {
+		scanner = 1;
+		fprintf(output,"Scanner sc= new Scanner(System.in)");
+	}
+	// TODO: revisar si es INT o STRING la variable
+	fprintf(output, "%s = sc.nextLine()", read->variable);
 }
 
 void GeneratorWrite(Write* write, FILE * output){
-	
+	fprintf(output,"System.out.println(");
+	GeneratorExpression(write->expression, output);
+	fprintf(output,")");
 }
 
 void GeneratorIfClose(IfClose* ifClose, FILE * output){

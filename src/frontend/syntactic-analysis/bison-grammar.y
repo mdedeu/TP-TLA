@@ -111,7 +111,6 @@ assignation: symbol ASSIGN expression  																{ $$ = AssignationGrammar
 
 function:	symbol POINT noParamFunctions OPEN_PARENTHESIS CLOSE_PARENTHESIS  						{ $$ = NoParamFunctionGrammarAction($1,$3); }
 	| symbol POINT oneParamFunctions OPEN_PARENTHESIS expression CLOSE_PARENTHESIS  				{ $$ = OneParamFunctionGrammarAction($1,$3,$5); }
-	| symbol POINT FILTER OPEN_PARENTHESIS expression CLOSE_PARENTHESIS								{ $$ = FilterFunctionGrammarAction($5); }
 	| read																							{ $$ = ReadFunctionGrammarAction($1); }
 	| write																							{ $$ = WriteFunctionGrammarAction($1); }
 	;
@@ -131,6 +130,7 @@ noParamFunctions: PRINT										 										{ $$ = NoParamGrammarAction($1); }
 oneParamFunctions: DELETE_NODE																		{ $$ = OneParamGrammarAction($1); }
 	| NEW_NODE																						{ $$ = OneParamGrammarAction($1); }
 	| TREE_MULT																						{ $$ = OneParamGrammarAction($1); }
+	| FILTER																						{ $$ = OneParamGrammarAction($1); }
 	;
 	
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 				{$$ = IfGrammarAction($3, $6, $7);};

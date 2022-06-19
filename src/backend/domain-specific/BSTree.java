@@ -128,6 +128,26 @@ public class BSTree<E extends Comparable<? super E>> {
         addForBalanced(root.getRight(), avl);
     }
 
-    
+    public BSTree<E> mul(int times) {
+        BSTree<E> toReturn = new BSTree<>();
+        recursiveMul(toReturn, root, times);
+        return toReturn;
+    }
+
+    //  Java does not have this feature. 
+    @SuppressWarnings("unchecked")
+    private void recursiveMul(BSTree<E> tree, Node<E> node, int times) {
+        if(node != null && node.getData() != null){
+            
+            if(node.getData() instanceof String) {
+                tree.addNode((E) ((String) node.getData()).repeat(times));
+            } else {
+                Integer a = ((Integer) node.getData())*times;
+                tree.addNode( (E) a );
+            }  
+            recursiveMul(tree, node.getLeft(), times);
+            recursiveMul(tree, node.getRight(), times);
+        }         
+    }
 
 }

@@ -450,4 +450,26 @@ public class RedBlackTree<T extends Comparable<? super T>> {
         addForBalanced(root.getRight(), avl);
     }
 
+	public RedBlackTree<T> mul(int times) {
+        RedBlackTree<T> toReturn = new RedBlackTree<>();
+        recursiveMul(toReturn, root, times);
+        return toReturn;
+    }
+
+    //  Java does not have this feature. 
+    @SuppressWarnings("unchecked")
+    private void recursiveMul(RedBlackTree<T> tree, Node<T> node, int times) {
+        if(node != null && node.getData() != null){
+            
+            if(node.getData() instanceof String) {
+                tree.addNode((T) ((String) node.getData()).repeat(times));
+            } else {
+                Integer a = ((Integer) node.getData())*times;
+                tree.addNode( (T) a );
+            }  
+            recursiveMul(tree, node.getLeft(), times);
+            recursiveMul(tree, node.getRight(), times);
+        }         
+    }
+
 }

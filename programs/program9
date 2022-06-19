@@ -6,6 +6,8 @@ main {
     arbol.createNode("NO");
     arbol.createNode("NO");
     arbol.createNode("Maginer");
-
-    rbtree string newTree = arbol.filter("Maginer");
+    arbol.print();
+    rbtree string newTree;
+    newTree = arbol.filter("Maginer");
+    newTree.print();
 }
