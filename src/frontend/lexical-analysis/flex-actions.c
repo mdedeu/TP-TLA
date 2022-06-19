@@ -26,7 +26,6 @@ yytoken_kind_t UnknownPatternAction(char * lexeme) {
 yytoken_kind_t SymbolPatternAction(char * lexeme) {
 	LogDebug("SymbolPatternAction: '%s'.", lexeme);
 	yylval.string = lexeme;
-	LogDebug("asi queda yylval %s" , yylval.string);
 	return SYMBOL;
 }
 

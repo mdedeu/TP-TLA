@@ -50,7 +50,8 @@ add_executable(Compiler
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c
-	src/frontend/syntactic-analysis/bison-parser.c)
+	src/frontend/syntactic-analysis/bison-parser.c
+	src/backend/semantic-analysis/symbol-table.c)
 
 # Linkear el proyecto y sus librerías:
 target_link_libraries(Compiler)

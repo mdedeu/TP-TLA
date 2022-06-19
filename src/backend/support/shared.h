@@ -282,12 +282,4 @@ struct Token {
 	int value;
 };
 
-/*
-struct Variable{
-	char * name;
-	void * value;
-	int type;
-};
-*/
-
 #endif

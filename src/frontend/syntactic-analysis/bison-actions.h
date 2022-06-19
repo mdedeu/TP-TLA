@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "../../backend/semantic-analysis/symbol-table.h"
+#include "bison-parser.h"
 #define TRUE 1
 #define FALSE 0
 

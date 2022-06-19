@@ -9,6 +9,8 @@
  * Implementación de "bison-grammar.h".
  */
 
+// TODO: error handler
+
 void yyerror(const char * string) {
 	LogError("Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
 	LogError("En ASCII es:");
@@ -125,6 +127,11 @@ Statement * FunctionStatementGrammarAction(Function * function) {
 
 DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression * expression) {
 	LogDebug("DeclareAndAssignGrammarAction ");
+	Variable * var = symbol_table_get(declare->variable);
+	if(var == NULL) {
+		printf("la variable no existe");
+		exit(1);
+	}
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_EXPRESSION;
 	toReturn->expression = expression;
@@ -155,6 +162,10 @@ DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
 
 Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
 	LogDebug("TypeSymbolDeclareGrammarAction %s ", variable);
+	if(symbol_table_put(variable,t_type) == NULL) {
+		printf("variable redeclarada");
+		exit(1);
+	}
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TYPE_SYMBOL;
 	toReturn->type_token = t_type;
@@ -166,6 +177,12 @@ Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
 
 Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_type, char * variable) {
 	LogDebug("TreetypeTpyeSymbolDeclareGrammarAction %s" , variable);
+	Variable * var = symbol_table_put(variable,t_type);
+	if( var == NULL) {
+		printf("variable redeclarada");
+		exit(1);
+	}
+	var->value.nodes = 0;
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
@@ -177,6 +194,10 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_
 
 Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
 	LogDebug("TypeVectorDeclareGrammarAction ");
+	if(symbol_table_put(vector->variable,t_type) == NULL) {
+		printf("variable redeclarada");
+		exit(1);
+	}
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
@@ -186,8 +207,14 @@ Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
 	return toReturn;
 }
 
+// TODO: chequear tipos?
 Assignation * AssignationGrammarAction(char * variable, Expression * expression) {
 	LogDebug("AssignationGrammarAction ");
+	Variable * var = symbol_table_get(variable);
+	if(var == NULL) {
+		printf("la variable no existe");
+		exit(1);
+	}
 	Assignation * toReturn = malloc(sizeof(Assignation));
 	toReturn->Expression = expression;
 	toReturn->variable = variable;
@@ -210,6 +237,11 @@ Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfuncti
 
 Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunction, Expression * expression) {
 	LogDebug("OneParamFunctionGrammarAction ");
+	Variable * var = symbol_table_get(variable);
+	if(var == NULL) {
+		printf("la variable no existe");
+		exit(1);
+	}
 	Function * toReturn = malloc(sizeof(Function));
 	toReturn->type = ONE_PARAM_FUNCTIONS;
 	toReturn->variable = variable;
@@ -253,6 +285,11 @@ Function * WriteFunctionGrammarAction(Write * write) {
 
 Read * ReadGrammarAction(char * variable) {
 	LogDebug("ReadGrammarAction %s ", variable);
+	Variable * var = symbol_table_get(variable);
+	if(var == NULL) {
+		printf("la variable no existe");
+		exit(1);
+	}
 	Read * toReturn = malloc(sizeof(Read));
 	toReturn->variable = variable;
 	return toReturn;
@@ -284,7 +321,6 @@ Token * MultiParamGrammarAction(int token) {
 	return toReturn;
 }
 
-//
 If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) {
 	LogDebug("IfGrammarAction");
 	If * toReturn = malloc(sizeof(If));
@@ -359,7 +395,6 @@ For* IncompleteForGrammarAction( Expression* expression, Statement* statement, B
 
 
 
-//Expresiones
 Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	LogDebug("AdditionExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -529,9 +564,6 @@ Expression* VectorExpressionGrammarAction(Vector* vector){
 	return toReturn;
 }
 
-
-
-//Factor 
 Factor* ExpressionFactorGrammarAction(Expression* expression){
 	LogDebug("ExpressionFactorGrammarAction");
 	Factor* toReturn =  malloc(sizeof(Factor));
@@ -556,6 +588,11 @@ Factor* ConstantFactorGrammarAction(Constant* constant){
 
 Factor* SymbolFactorGrammarAction(char* symbol) {
 	LogDebug("SymbolFactorGrammarAction %s", symbol);
+	Variable * var = symbol_table_get(symbol);
+	if(var == NULL) {
+		printf("la variable no existe");
+		exit(1);
+	}
 	Factor* toReturn =  malloc(sizeof(Factor));
 	toReturn->type = SYMBOL_FACTOR;
 	toReturn->string = NULL;
@@ -576,8 +613,6 @@ Factor* StringFactorGrammarAction(char* string){
 	return toReturn;
 }
 
-
-//Constant
 Constant* IntegerConstantGrammarAction(const int value){
 	LogDebug("IntegerConstantGrammarAction %d", value);
 	Constant* toReturn =  malloc(sizeof(Constant));
@@ -585,8 +620,6 @@ Constant* IntegerConstantGrammarAction(const int value){
 	return toReturn;
 }
 
-
-//Vector
 Vector* VectorGrammarAction(char * var, Factor* factor){
 	LogDebug("VectorGrammarAction %s", var);
 	Vector* toReturn =  malloc(sizeof(Vector));
@@ -613,8 +646,6 @@ ParameterList * ParameterListGrammarAction(Expression * expression){
 	toReturn->parameterList = NULL;
 	return toReturn;
 }
-
-//Types
 
 Token * TypeGrammarAction(int token){
 	LogDebug("TypeGrammarAction %i",token);
