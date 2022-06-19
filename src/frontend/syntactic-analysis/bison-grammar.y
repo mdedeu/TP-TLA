@@ -39,7 +39,7 @@
 %token <token> POINT COMMA
 %token <token> INT_TYPE STRING_TYPE
 %token <token> AVL_TREE_TYPE RED_BLACK_TREE_TYPE BST_TREE_TYPE
-%token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE MODIFY_NODE SEARCH FILTER
+%token <token> MAIN PRINT READ WRITE NEW_NODE DELETE_NODE BALANCED LENGTH SIZE FILTER TREE_MULT
 %token <token> FOR WHILE IF ELSE
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_CURL_BRACKETS CLOSE_CURL_BRACKETS OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS QUOTE SEMI_COLON
 %token <integer> INTEGER
@@ -129,9 +129,8 @@ noParamFunctions: PRINT										 										{ $$ = NoParamGrammarAction($1); }
 	;
 	
 oneParamFunctions: DELETE_NODE																		{ $$ = OneParamGrammarAction($1); }
-	| MODIFY_NODE																					{ $$ = OneParamGrammarAction($1); }
-	| SEARCH																						{ $$ = OneParamGrammarAction($1); }
 	| NEW_NODE																						{ $$ = OneParamGrammarAction($1); }
+	| TREE_MULT																						{ $$ = OneParamGrammarAction($1); }
 	;
 	
 if: IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS OPEN_CURL_BRACKETS block if_close 				{$$ = IfGrammarAction($3, $6, $7);};

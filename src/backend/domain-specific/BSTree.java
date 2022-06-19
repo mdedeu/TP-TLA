@@ -74,5 +74,60 @@ public class BSTree<E extends Comparable<? super E>> {
     public void print() {
         BTreePrinter.printNode(root);
     }
+    
+    public BSTree<E> filter(E data) {
+        BSTree<E> toReturn = new BSTree<E>();
+        recursiveFilter(toReturn, root, data);
+        return toReturn;
+    }
+
+    private void recursiveFilter(BSTree<E> tree, Node<E> node, E data) {
+        if(node != null && node.getData() != null){
+         if(node.getData().equals(data)) {
+            tree.addNode(data);
+         }
+            recursiveFilter(tree, node.getLeft(), data);
+            recursiveFilter(tree, node.getRight(), data);
+        }         
+    }
+
+    public Node<E> findNode(E key) {
+        if (key == null || root == null) {
+            return null;
+        }
+        return recursiveFind(root, key, key.compareTo(root.getData()));
+    }
+
+    private Node<E> recursiveFind(Node<E> node, E key, int cmp) {
+        if (node == null) {
+            return null;
+        }
+
+        if (cmp == 0) {
+            return node;
+        }
+
+        return recursiveFind(
+                (node = cmp > 0 ? node.getRight() : node.getLeft()),
+                key,
+                node == null ? 0 : key.compareTo(node.getData()));
+    }
+
+    public AVLTree<E> balanced() {
+        AVLTree<E> avl = new AVLTree<>();
+        addForBalanced(root, avl);
+        return avl;
+    }
+
+    
+    public void addForBalanced(Node<E> root, AVLTree<E> avl){
+        if(root==null || root.getData() == null)
+            return;
+        avl.addNode(root.getData());
+        addForBalanced(root.getLeft(), avl);
+        addForBalanced(root.getRight(), avl);
+    }
+
+    
 
 }

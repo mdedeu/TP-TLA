@@ -419,4 +419,35 @@ public class RedBlackTree<T extends Comparable<? super T>> {
         return 1 + size(root.left) + size(root.right);
     }
 
+	public RedBlackTree<T> filter(T data) {
+        RedBlackTree<T> toReturn = new RedBlackTree<T>();
+        recursiveFilter(toReturn, root, data);
+        return toReturn;
+    }
+
+    private void recursiveFilter(RedBlackTree<T> tree, Node<T> node, T data) {
+        if(node != null && node.getData() != null){
+         if(node.getData().equals(data)) {
+            tree.addNode(data);
+         }
+            recursiveFilter(tree, node.getLeft(), data);
+            recursiveFilter(tree, node.getRight(), data);
+        }         
+    }
+
+	public AVLTree<T> balanced() {
+        AVLTree<T> avl = new AVLTree<>();
+        addForBalanced(root, avl);
+        return avl;
+    }
+
+    
+    public void addForBalanced(Node<T> root, AVLTree<T> avl){
+        if(root==null || root.getData() == null)
+            return;
+        avl.addNode(root.getData());
+        addForBalanced(root.getLeft(), avl);
+        addForBalanced(root.getRight(), avl);
+    }
+
 }

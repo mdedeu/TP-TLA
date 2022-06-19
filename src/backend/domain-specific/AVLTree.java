@@ -2,9 +2,8 @@
  * AVL-Tree
  * basado en: https://developpaper.com/java-implementation-of-avl-tree/
  */
-public class AVLTree<T extends Comparable<T>> {
+public class AVLTree<T extends Comparable<? super T>> {
 
-    // TODO: HACER SIZE Y PRINT
     private static final int MAX_HEIGHT_DIFFERENCE = 1;
 
     private Node<T> root;
@@ -18,6 +17,28 @@ public class AVLTree<T extends Comparable<T>> {
             return null;
         }
         return find(root, key, key.compareTo(root.getData()));
+    }
+
+    public Node<T> findNode(T key) {
+        if (key == null || root == null) {
+            return null;
+        }
+        return recursiveFind(root, key, key.compareTo(root.getData()));
+    }
+
+    private Node<T> recursiveFind(Node<T> node, T key, int cmp) {
+        if (node == null) {
+            return null;
+        }
+
+        if (cmp == 0) {
+            return node;
+        }
+
+        return recursiveFind(
+                (node = cmp > 0 ? node.getRight() : node.getLeft()),
+                key,
+                node == null ? 0 : key.compareTo(node.getData()));
     }
 
     private T find(Node<T> node, T key, int cmp) {
@@ -205,6 +226,59 @@ public class AVLTree<T extends Comparable<T>> {
         if(root==null || root.getData() == null)
             return 0;
         return 1 + size(root.left) + size(root.right);
+    }
+
+    public AVLTree<T> filter(T data) {
+        AVLTree<T> toReturn = new AVLTree<>();
+        recursiveFilter(toReturn, root, data);
+        return toReturn;
+    }
+
+    private void recursiveFilter(AVLTree<T> tree, Node<T> node, T data) {
+        if(node != null && node.getData() != null){
+         if(node.getData().equals(data)) {
+            tree.addNode(data);
+         }
+            recursiveFilter(tree, node.getLeft(), data);
+            recursiveFilter(tree, node.getRight(), data);
+        }         
+    }
+
+    public AVLTree<T> balanced() {
+        AVLTree<T> avl = new AVLTree<>();
+        addForBalanced(root, avl);
+        return avl;
+    }
+
+    public void addForBalanced(Node<T> root, AVLTree<T> avl){
+        if(root==null || root.getData() == null)
+            return;
+        avl.addNode(root.getData());
+        addForBalanced(root.getLeft(), avl);
+        addForBalanced(root.getRight(), avl);
+    }
+    
+
+    public AVLTree<T> mul(int times) {
+        AVLTree<T> toReturn = new AVLTree<>();
+        recursiveMul(toReturn, root, times);
+        return toReturn;
+    }
+
+    //  Java does not have this feature. 
+    @SuppressWarnings("unchecked")
+    private void recursiveMul(AVLTree<T> tree, Node<T> node, int times) {
+        if(node != null && node.getData() != null){
+            
+            if(node.getData() instanceof String) {
+                tree.addNode((T) ((String) node.getData()).repeat(times));
+            } else {
+                Integer a = ((Integer) node.getData())*times;
+                tree.addNode( (T) a );
+            }  
+            recursiveMul(tree, node.getLeft(), times);
+            recursiveMul(tree, node.getRight(), times);
+        }         
     }
 
 }

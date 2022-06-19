@@ -58,9 +58,8 @@ balanced                                    { yylval.token = BALANCED; return BA
 size                                        { yylval.token = SIZE; return SIZE; }
 length                                      { yylval.token = LENGTH; return LENGTH; }
 deleteNode                                  { yylval.token = DELETE_NODE; return DELETE_NODE; }
-modifyNode                                  { yylval.token = MODIFY_NODE; return MODIFY_NODE; }
-search                                      { yylval.token = SEARCH; return SEARCH; }
 filter                                      { yylval.token = FILTER; return FILTER; }
+mul                                         { yylval.token = TREE_MULT; return TREE_MULT; }
 
 
 
