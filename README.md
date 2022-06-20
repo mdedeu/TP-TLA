@@ -1,5 +1,3 @@
-[![✗](https://img.shields.io/badge/Release-v0.1.0-ffb600.svg?style=for-the-badge)](https://github.com/agustin-golmar/Flex-Bison-Compiler/releases)
-
 # Compilador Flex/Bison
 
 Un compilador vacío construido con Flex y Bison.
@@ -30,11 +28,7 @@ En un entorno _Microsoft Windows_, en lugar de ejecutar el comando `make`, se de
 
 ## Ejecución
 
-Para compilar un programa, primero cree un archivo vacío denominado `program` con el siguiente contenido:
-
-```
-123123 + 123 - 2 * (454 + 890 / 89)
-```
+Para compilar un programa, primero cree un archivo vacío denominado `program` con el contenido deseado basandose en los ejemplos empleados en la carpeta 'program'.
 
 Luego, ejecute el compilador desde el directorio raíz del proyecto, inyectando el programa desde la entrada estándard:
 
@@ -42,13 +36,14 @@ Luego, ejecute el compilador desde el directorio raíz del proyecto, inyectando 
 user@machine:path/ $ cat program | bin/Compiler
 ```
 
-Deberia obtener el resultado correcto de evaluar el programa anterior: `122318`.
+Luego para probar los programas necesita Java, puede entrar a la carpeta target
+y ejecutar "java Program"
 
-Para compilar todos los programas de la carpeta programs automaticamente:
+Para probar que funcionen todos los programas de los casos de uso:
 
 ```bash
-user@machine:./test.sh accepted  --> corre todos los programas que deberian aceptar exitosamente
-user@machine:./test.sh notaccepted  --> corre todos los programas que no deberian aceptar
-user@machine:./test.sh  --> corre todos los programas
+user@machine:./test.sh accepted  --> compila los programas que deberian aceptar exitosamente
+user@machine:./test.sh notaccepted  --> intenta compilar todos los programas que no deberian compilar
+user@machine:./test.sh  --> ambos casos anteriores.
 
 ```
