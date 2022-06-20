@@ -245,6 +245,10 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
+	if(var->treeType_token != NULL || getExpressionType(expression) != var->type->value) {
+		printf("Asignacion de tipos incorrecta\n");
+		exit(1);
+	}
 	Assignation * toReturn = malloc(sizeof(Assignation));
 	toReturn->Expression = expression;
 	toReturn->variable = variable;
@@ -417,6 +421,18 @@ IfClose* IfCloseElseGrammarAction(Block* block) {
 
 While* WhileGrammarAction(Expression* expression, Block* block){
 	LogDebug("WhileGrammarAction");
+	switch(expression->type) {
+		case GE_EXPRESSION:
+		case GT_EXPRESSION:
+		case LE_EXPRESSION:
+		case LT_EXPRESSION:
+		case NE_EXPRESSION:
+		case EQ_EXPRESSION:
+			break;
+		default:
+			printf("La expresion debe ser evaluable\n");
+			exit(1);
+	}
 	While* toReturn =  malloc(sizeof(While));
 	toReturn->expression =  expression;
 	toReturn->block = block;
@@ -426,6 +442,18 @@ While* WhileGrammarAction(Expression* expression, Block* block){
 
 For* DeclareAndAssignForGrammarAction(DeclareAndAssign* declareAndAssign, Expression* expression, Statement* statement, Block* block){
 	LogDebug("DeclareAndAssignForGrammarAction");
+	switch(expression->type) {
+		case GE_EXPRESSION:
+		case GT_EXPRESSION:
+		case LE_EXPRESSION:
+		case LT_EXPRESSION:
+		case NE_EXPRESSION:
+		case EQ_EXPRESSION:
+			break;
+		default:
+			printf("La expresion debe ser evaluable\n");
+			exit(1);
+	}
 	For* toReturn =  malloc(sizeof(For));
 	toReturn->type = DECLARE_ASSIGN_FOR;
 	toReturn->declareAndAssign = declareAndAssign;
