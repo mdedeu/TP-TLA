@@ -239,7 +239,7 @@ void GeneratorFunction(Function* function, FILE * output){
 void GeneratorRead(Read* read, FILE * output){
 	if(!scanner) {
 		scanner = 1;
-		fprintf(output,"Scanner sc= new Scanner(System.in)");
+		fprintf(output,"Scanner sc= new Scanner(System.in);\n");
 	}
 	Variable * var = symbol_table_get(read->variable);
 	if(var->type->value == STRING_TYPE)
@@ -323,7 +323,9 @@ void GeneratorExpression(Expression* expression, FILE * output){
 	{
 		case ADD_EXPRESSION:
 			LogDebug("Expression -> ADD");
+			printf("hasta aca si\n");
 			GeneratorExpression(expression->left, output);
+			printf("hasta aca si\n");
 			fprintf(output," + ");
 			GeneratorExpression(expression->right, output);
 			break;
@@ -440,7 +442,7 @@ void GeneratorConstant(Constant* constant, FILE * output){
 
 void GeneratorVector(Vector* vector, FILE * output){
 	LogDebug("Generating vector...");
-	fprintf(output,"[");
+	fprintf(output,"%s[",vector->variable);
 	GeneratorFactor(vector->factor, output);
 	fprintf(output,"]");
 }

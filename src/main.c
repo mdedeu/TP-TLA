@@ -29,7 +29,6 @@ const int main(const int argumentCount, const char ** arguments) {
 	switch (result) {
 		case 0:
 			if (state.succeed) {
-				LogInfo("La compilacion fue exitosa.");
 				out = fopen("./target/Program.java", "w+");
 				
 				if (out == NULL)
@@ -37,7 +36,7 @@ const int main(const int argumentCount, const char ** arguments) {
 					perror("Error creating auxiliary file");
 					exit(EXIT_FAILURE);
 				}
-				fprintf(out, "public class Program { \n	public static void main(String[] args) { \n");
+				fprintf(out, "import java.util.*;\npublic class Program { \n	public static void main(String[] args) { \n");
 				GeneratorProgram(state.mainProgram, out);
 				fclose(out);
 				char bytecode_command[512];
@@ -56,6 +55,7 @@ const int main(const int argumentCount, const char ** arguments) {
 					free_symbol_table();
 					return -1;
 				}
+				LogInfo("La compilacion fue exitosa.");
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");

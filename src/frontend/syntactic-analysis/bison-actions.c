@@ -179,8 +179,9 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 }
 
 DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, ParameterList * parameterList) {
-	LogDebug("DeclareParameterListGrammarAction ");
+	LogDebug("DeclareParameterListGrammarActionn ");
 	Variable * var = symbol_table_get(declare->variable);
+	
 	if(var->isVector == 0) {
 		printf("La variable %s no es un vector\n", declare->variable);
 		exit(1);
@@ -244,9 +245,9 @@ Declare * TypeVectorDeclareGrammarAction(Token * t_type, char * symbol) {
 	}
 	var->isVector = true;
 	Declare * toReturn = malloc(sizeof(Declare));
-	toReturn->type = TREE_TYPE_SYMBOL;
+	toReturn->type = TYPE_VECTOR;
 	toReturn->type_token = t_type;
-	toReturn->variable = NULL;
+	toReturn->variable = symbol;
 	toReturn->treeType_token = NULL;
 	return toReturn;
 }
@@ -274,6 +275,17 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 				printf("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
+		}else if(expression->type == FUNCTION_EXPRESSION && expression->function->type  == ONE_PARAM_FUNCTIONS
+							&& expression->function->oneParamFunctionToken->value == FILTER ) {
+								printf("entre aca\n");
+			Variable * other = symbol_table_get(expression->function->variable);
+			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
+				printf("El tipo de la expresion no coincide con la variable\n");
+				exit(1);
+			}		
+		} else {
+			printf("El tipo de la expresion no coincide con la variable\n");
+				exit(1);
 		}
 	}else if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
 		Variable * aux;
@@ -326,6 +338,7 @@ Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunc
 			exit(1);
 		}
 	}else if(t_oneparamfunction->value == NEW_NODE) {
+		printf("hasta aca si\n");
 		if(getExpressionType(expression) != var->type->value) {
 			printf("El tipo del nodo es invalido\n");
 			exit(1);
@@ -753,7 +766,7 @@ Expression* FunctionExpressionGrammarAction(Function* function){
 Expression* VectorExpressionGrammarAction(Vector* vector){
 	LogDebug("VectorExpressionGrammarAction");
 	Expression* toReturn =  malloc(sizeof(Expression));
-	toReturn->type = ADD_EXPRESSION;
+	toReturn->type = VECTOR_EXPRESSION;
 	toReturn->left = NULL;
 	toReturn->right = NULL;
 	toReturn->factor = NULL;
@@ -950,19 +963,8 @@ static int getExpressionType(Expression * expression) {
 					return -1;
 			}
 		case VECTOR_EXPRESSION:
-			switch(expression->vector->factor->type) {
-				case CONSTANT_FACTOR:
-					return INT_TYPE;
-				case STRING_FACTOR:
-					return STRING_TYPE;
-				case SYMBOL_FACTOR:
-					var = symbol_table_get(expression->factor->variable);
-					return var->type->value;
-				case EXPRESSION_FACTOR:
-					return getExpressionType(expression);
-				default:
-					return -1;
-			}
+			var = symbol_table_get(expression->vector->variable);
+			return var->type->value;
 		default:
 			return -1;
 	}

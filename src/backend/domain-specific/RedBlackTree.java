@@ -400,7 +400,7 @@ public class RedBlackTree<T extends Comparable<? super T>> {
 	}
 
 	public void print() {
-        TreePrinter.printNode(root);
+        BTreePrinter.printNode(root);
     }
 	
 	// delete the node from the tree

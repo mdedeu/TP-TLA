@@ -1,0 +1,7 @@
+main {
+    string a;
+    write("escribe tu nombre");
+    read(a);
+    write("tu nombre es: ");
+    write(a);
+}

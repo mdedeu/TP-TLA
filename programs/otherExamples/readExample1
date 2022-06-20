@@ -1,0 +1,7 @@
+main {
+    int a;
+    write("escribe un numero");
+    read(a);
+    write("el numero es: ");
+    write(a);
+}

@@ -22,4 +22,4 @@ cmake-build-debug/
 *.iml
 # Generated output
 Test.java
-target/
+target/*

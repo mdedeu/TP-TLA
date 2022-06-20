@@ -1,0 +1,4 @@
+main {
+    bstTree string arbol;
+    write(arbol);
+}

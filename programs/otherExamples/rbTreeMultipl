@@ -1,0 +1,10 @@
+main {
+    rbtree string arbol;
+    arbol.createNode("a");
+    arbol.createNode("b");
+    arbol.createNode("c");
+    arbol.createNode("d");
+    arbol.createNode("d");
+    rbtree string newarbol = arbol.mul(3);
+    newarbol.print();
+}

@@ -1,7 +1,0 @@
-main {
-    bstTree int arbol;
-    bstTree int arbolito;
-    if(1 < "hola"){
-        int a = 1;
-    }
-}

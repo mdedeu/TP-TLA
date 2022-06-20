@@ -1,0 +1,8 @@
+main {
+    string a = "hola";
+    write(a);
+    int b = 3;
+    write(b);
+    write("asi tmb");
+    write(8);
+}
