@@ -6,6 +6,7 @@
 struct Variable{
 	Token * type;
     Token * treeType_token;
+    boolean isVector;
 	char * name;
     union {
         int nodes;

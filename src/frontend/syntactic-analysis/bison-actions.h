@@ -33,7 +33,7 @@ DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, Paramete
 DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare);
 Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable);
 Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_type, char * variable);
-Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector);
+Declare * TypeVectorDeclareGrammarAction(Token * t_type, char * vector);
 Assignation * AssignationGrammarAction(char * variable, Expression * expression);
 Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfunction);
 Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunction, Expression * expression);

@@ -103,7 +103,7 @@ declareAndAssign:	declare ASSIGN expression  														{ $$ = DeclareAndAssi
 
 declare: type symbol  																				{ $$ = TypeSymbolDeclareGrammarAction($1,$2); }
 	| treeType type symbol  																		{ $$ = TreetypeTpyeSymbolDeclareGrammarAction($1,$2,$3); }
-	| type vector  																					{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
+	| type symbol OPEN_SQUARE_BRACKETS CLOSE_SQUARE_BRACKETS										{ $$ = TypeVectorDeclareGrammarAction($1,$2); }
 	;
 
 assignation: symbol ASSIGN expression  																{ $$ = AssignationGrammarAction($1, $3); }

@@ -144,7 +144,6 @@ struct  Declare {
 	DeclareType type;
 	Token * type_token;
 	Token * treeType_token;
-	Vector * vector;
 	char * variable;
 };
 

@@ -150,6 +150,14 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 				exit(1);
 			}		
 		}
+		else if(expression->type == FUNCTION_EXPRESSION && expression->function->type  == ONE_PARAM_FUNCTIONS
+							&& expression->function->oneParamFunctionToken->value == TREE_MULT ) {
+			Variable * other = symbol_table_get(expression->function->variable);
+			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
+				printf("El tipo de la expresion no coincide con la variable\n");
+				exit(1);
+			}		
+		}
 		else {
 			printf("El tipo de la expresion no coincide con la variable\n");
 			exit(1);
@@ -172,6 +180,11 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 
 DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, ParameterList * parameterList) {
 	LogDebug("DeclareParameterListGrammarAction ");
+	Variable * var = symbol_table_get(declare->variable);
+	if(var->isVector == 0) {
+		printf("La variable %s no es un vector\n", declare->variable);
+		exit(1);
+	}
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
 	toReturn->type = DECLARE_ASSIGN_PARAM_LIST;
 	toReturn->expression = NULL;
@@ -201,7 +214,6 @@ Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
 	toReturn->type_token = t_type;
 	toReturn->variable = variable;
 	toReturn->treeType_token = NULL;
-	toReturn->vector = NULL;
 	return toReturn;
 }
 
@@ -219,22 +231,23 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_
 	toReturn->type_token = t_type;
 	toReturn->variable = variable;
 	toReturn->treeType_token = t_tree_type;
-	toReturn->vector = NULL;
 	return toReturn;
 }
 
-Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
+Declare * TypeVectorDeclareGrammarAction(Token * t_type, char * symbol) {
 	LogDebug("TypeVectorDeclareGrammarAction ");
-	if(symbol_table_put(vector->variable,t_type) == NULL) {
-		printf("la variable %s ya estaba declarada\n", vector->variable);
+	Variable * var;
+	var = symbol_table_put(symbol,t_type);
+	if( var == NULL) {
+		printf("la variable %s ya estaba declarada\n",symbol);
 		exit(1);
 	}
+	var->isVector = true;
 	Declare * toReturn = malloc(sizeof(Declare));
 	toReturn->type = TREE_TYPE_SYMBOL;
 	toReturn->type_token = t_type;
 	toReturn->variable = NULL;
 	toReturn->treeType_token = NULL;
-	toReturn->vector = vector;
 	return toReturn;
 }
 
@@ -245,7 +258,31 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
-	if(var->treeType_token != NULL || getExpressionType(expression) != var->type->value) {
+	if(var->treeType_token != NULL) {
+		if(expression->type == FUNCTION_EXPRESSION && expression->function->type  == NO_PARAM_FUNCTIONS
+							&& expression->function->noParamFunctionToken->value == BALANCED ) {
+			Variable * other = symbol_table_get(expression->function->variable);
+			if(var->type->value != other->type->value){
+				printf("El tipo de la expresion no coincide con la variable\n");
+				exit(1);
+			}		
+		}
+		else if(expression->type == FUNCTION_EXPRESSION && expression->function->type  == ONE_PARAM_FUNCTIONS
+							&& expression->function->oneParamFunctionToken->value == TREE_MULT ) {
+			Variable * other = symbol_table_get(expression->function->variable);
+			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
+				printf("El tipo de la expresion no coincide con la variable\n");
+				exit(1);
+			}		
+		}
+	}else if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
+		Variable * aux;
+		aux = symbol_table_get(expression->factor->variable);
+		if(aux->treeType_token != NULL) {
+			printf("Asignacion de tipos incorrecta\n");
+			exit(1);
+		}
+	} else if(getExpressionType(expression) != var->type->value){
 		printf("Asignacion de tipos incorrecta\n");
 		exit(1);
 	}
@@ -784,6 +821,10 @@ Constant* IntegerConstantGrammarAction(const int value){
 /* vector access */
 Vector* VectorGrammarAction(char * var, Factor* factor){
 	LogDebug("VectorGrammarAction %s", var);
+	if(!symbol_table_exists(var)) {
+		printf("la variable %s no existe\n", var);
+		exit(1);
+	}
 	if(factor->type == STRING_FACTOR) {
 		printf("Posicion del vector incorrecta\n");
 		exit(1);

@@ -168,8 +168,7 @@ void GeneratorDeclare(Declare* declare, FILE * output){
 				LogDebug("Declare type vector -> string");
 				fprintf(output,"%s", "String");
 			}	
-			fprintf(output," %s",declare->variable);
-			GeneratorVector(declare->vector, output);
+			fprintf(output," %s[]",declare->variable);
 			break;
 		default:
 			LogInfo("Declare Type not found");
