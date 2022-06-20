@@ -133,12 +133,12 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 	if(declare->type == TREE_TYPE_SYMBOL) {
 		if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
 			if(var->type->value != getExpressionType(expression)){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}
 			Variable * other = symbol_table_get(expression->factor->variable);
 			if(var->treeType_token->value != other->treeType_token->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}
 		}
@@ -146,7 +146,7 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 							&& expression->function->noParamFunctionToken->value == BALANCED ) {
 			Variable * other = symbol_table_get(expression->function->variable);
 			if(var->type->value != other->type->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
 		}
@@ -154,17 +154,17 @@ DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression *
 							&& expression->function->oneParamFunctionToken->value == TREE_MULT ) {
 			Variable * other = symbol_table_get(expression->function->variable);
 			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
 		}
 		else {
-			printf("El tipo de la expresion no coincide con la variable\n");
+			LogError("El tipo de la expresion no coincide con la variable\n");
 			exit(1);
 		}
 	} else {
 		if(var->type->value != getExpressionType(expression)) {
-			printf("El tipo de la expresion no coincide con la variable\n");
+			LogError("El tipo de la expresion no coincide con la variable\n");
 			exit(1);
 		}
 
@@ -183,7 +183,7 @@ DeclareAndAssign * DeclareParameterListGrammarAction(Declare * declare, Paramete
 	Variable * var = symbol_table_get(declare->variable);
 	
 	if(var->isVector == 0) {
-		printf("La variable %s no es un vector\n", declare->variable);
+		LogError("La variable %s no es un vector\n", declare->variable);
 		exit(1);
 	}
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
@@ -207,7 +207,7 @@ DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
 Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
 	LogDebug("TypeSymbolDeclareGrammarAction %s ", variable);
 	if(symbol_table_put(variable,t_type) == NULL) {
-		printf("la variable %s ya estaba declarada\n", variable);
+		LogError("La variable %s ya estaba declarada\n", variable);
 		exit(1);
 	}
 	Declare * toReturn = malloc(sizeof(Declare));
@@ -222,7 +222,7 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_
 	LogDebug("TreetypeTpyeSymbolDeclareGrammarAction %s" , variable);
 	Variable * var = symbol_table_put(variable,t_type);
 	if( var == NULL) {
-		printf("la variable %s ya estaba declarada\n", variable);
+		LogError("La variable %s ya estaba declarada\n", variable);
 		exit(1);
 	}
 	var->value.nodes = 0;
@@ -240,7 +240,7 @@ Declare * TypeVectorDeclareGrammarAction(Token * t_type, char * symbol) {
 	Variable * var;
 	var = symbol_table_put(symbol,t_type);
 	if( var == NULL) {
-		printf("la variable %s ya estaba declarada\n",symbol);
+		LogError("La variable %s ya estaba declarada\n",symbol);
 		exit(1);
 	}
 	var->isVector = true;
@@ -256,7 +256,7 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 	LogDebug("AssignationGrammarAction ");
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("la variable %s no existe\n", variable);
+		LogError("La variable %s no existe\n", variable);
 		exit(1);
 	}
 	if(var->treeType_token != NULL) {
@@ -264,7 +264,7 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 							&& expression->function->noParamFunctionToken->value == BALANCED ) {
 			Variable * other = symbol_table_get(expression->function->variable);
 			if(var->type->value != other->type->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
 		}
@@ -272,30 +272,29 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 							&& expression->function->oneParamFunctionToken->value == TREE_MULT ) {
 			Variable * other = symbol_table_get(expression->function->variable);
 			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
 		}else if(expression->type == FUNCTION_EXPRESSION && expression->function->type  == ONE_PARAM_FUNCTIONS
 							&& expression->function->oneParamFunctionToken->value == FILTER ) {
-								printf("entre aca\n");
 			Variable * other = symbol_table_get(expression->function->variable);
 			if(var->treeType_token->value != other->treeType_token->value || var->type->value != other->type->value){
-				printf("El tipo de la expresion no coincide con la variable\n");
+				LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 			}		
 		} else {
-			printf("El tipo de la expresion no coincide con la variable\n");
+			LogError("El tipo de la expresion no coincide con la variable\n");
 				exit(1);
 		}
 	}else if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
 		Variable * aux;
 		aux = symbol_table_get(expression->factor->variable);
 		if(aux->treeType_token != NULL) {
-			printf("Asignacion de tipos incorrecta\n");
+			LogError("Asignacion de tipos incorrecta\n");
 			exit(1);
 		}
 	} else if(getExpressionType(expression) != var->type->value){
-		printf("Asignacion de tipos incorrecta\n");
+		LogError("Asignacion de tipos incorrecta\n");
 		exit(1);
 	}
 	Assignation * toReturn = malloc(sizeof(Assignation));
@@ -309,7 +308,7 @@ Function * NoParamFunctionGrammarAction(char * variable, Token * t_noparamfuncti
 	if(t_noparamfunction->value == PRINT) {
 		Variable * var = symbol_table_get(variable);
 		if(var->treeType_token == NULL) {
-			printf("Print debe usarse en un arbol\n");
+			LogError("Print debe usarse en un arbol\n");
 			exit(1);
 		}
 	}
@@ -329,18 +328,17 @@ Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunc
 	LogDebug("OneParamFunctionGrammarAction ");
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("La variable %s no existe\n", variable);
+		LogError("La variable %s no existe\n", variable);
 		exit(1);
 	}
 	if(t_oneparamfunction->value == DELETE_NODE) {
 		if(var->value.nodes == 0) {
-			printf("No se puede eliminar un nodo de un arbol vacio\n");
+			LogError("No se puede eliminar un nodo de un arbol vacio\n");
 			exit(1);
 		}
 	}else if(t_oneparamfunction->value == NEW_NODE) {
-		printf("hasta aca si\n");
 		if(getExpressionType(expression) != var->type->value) {
-			printf("El tipo del nodo es invalido\n");
+			LogError("El tipo del nodo es invalido\n");
 			exit(1);
 		}
 		var->value.nodes++;
@@ -390,14 +388,14 @@ Read * ReadGrammarAction(char * variable) {
 	LogDebug("ReadGrammarAction %s ", variable);
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("la variable %s no existe\n", variable);
+		LogError("la variable %s no existe\n", variable);
 		exit(1);
 	}
 	if(var->treeType_token != NULL) {
-		printf("La variable debe ser del tipo int o string\n");
+		LogError("La variable debe ser del tipo int o string\n");
 		exit(1);
 	} else if(var->type->value != INT_TYPE && var->type->value != STRING_TYPE) {
-		printf("La variable debe ser del tipo int o string\n");
+		LogError("La variable debe ser del tipo int o string\n");
 		exit(1);
 	}
 	Read * toReturn = malloc(sizeof(Read));
@@ -410,7 +408,7 @@ Write * WriteGrammarAction(Expression * expression) {
 	if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
 		Variable * var = symbol_table_get(expression->factor->variable);
 		if(var->treeType_token != NULL) {
-			printf("Para arboles debe usar funcion print\n");
+			LogError("Para arboles debe usar funcion print\n");
 			exit(1);
 		}
 	}
@@ -443,7 +441,7 @@ If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) 
 		case EQ_EXPRESSION:
 			break;
 		default:
-			printf("La expresion debe ser evaluable\n");
+			LogError("La expresion debe ser evaluable\n");
 			exit(1);
 	}
 	If * toReturn = malloc(sizeof(If));
@@ -480,7 +478,7 @@ While* WhileGrammarAction(Expression* expression, Block* block){
 		case EQ_EXPRESSION:
 			break;
 		default:
-			printf("La expresion debe ser evaluable\n");
+			LogError("La expresion debe ser evaluable\n");
 			exit(1);
 	}
 	While* toReturn =  malloc(sizeof(While));
@@ -501,7 +499,7 @@ For* DeclareAndAssignForGrammarAction(DeclareAndAssign* declareAndAssign, Expres
 		case EQ_EXPRESSION:
 			break;
 		default:
-			printf("La expresion debe ser evaluable\n");
+			LogError("La expresion debe ser evaluable\n");
 			exit(1);
 	}
 	For* toReturn =  malloc(sizeof(For));
@@ -545,7 +543,7 @@ For* IncompleteForGrammarAction( Expression* expression, Statement* statement, B
 Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	LogDebug("AdditionExpressionGrammarAction");
 	if(getExpressionType(leftValue) != INT_TYPE || getExpressionType(rightValue) != INT_TYPE) {
-		printf("Suma entre tipos incompatibles\n");
+		LogError("Suma entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -561,7 +559,7 @@ Expression* AdditionExpressionGrammarAction(Expression* leftValue, Expression* r
 Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	LogDebug("SubstractionExpressionGrammarAction");
 	if(getExpressionType(leftValue) != INT_TYPE || getExpressionType(rightValue) != INT_TYPE) {
-		printf("Resta entre tipos incompatibles\n");
+		LogError("Resta entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -577,7 +575,7 @@ Expression* SubstractionExpressionGrammarAction(Expression* leftValue, Expressio
 Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	LogDebug("MultiplicationExpressionGrammarAction");
 	if(getExpressionType(leftValue) != INT_TYPE || getExpressionType(rightValue) != INT_TYPE) {
-		printf("Multiplicacion entre tipos incompatibles\n");
+		LogError("Multiplicacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -593,7 +591,7 @@ Expression* MultiplicationExpressionGrammarAction(Expression* leftValue, Express
 Expression* DivisionExpressionGrammarAction(Expression* leftValue, Expression* rightValue){
 	LogDebug("DivisionExpressionGrammarAction");
 	if(getExpressionType(leftValue) != INT_TYPE || getExpressionType(rightValue) != INT_TYPE) {
-		printf("Division entre tipos incompatibles\n");
+		LogError("Division entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -611,7 +609,7 @@ Expression* GreaterExpressionGrammarAction(Expression* leftValue, Expression* ri
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -629,7 +627,7 @@ Expression* GreaterOrEqualExpressionGrammarAction(Expression* leftValue, Express
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -647,7 +645,7 @@ Expression* LesserOrEqualExpressionGrammarAction(Expression* leftValue, Expressi
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -665,7 +663,7 @@ Expression* LesserExpressionGrammarAction(Expression* leftValue, Expression* rig
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -683,7 +681,7 @@ Expression* NotEqualExpressionGrammarAction(Expression* leftValue, Expression* r
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -701,7 +699,7 @@ Expression* EqualExpressionGrammarAction(Expression* leftValue, Expression* righ
 	comparableType(leftValue);
 	comparableType(rightValue);
 	if(getExpressionType(leftValue) !=  getExpressionType(rightValue)) {
-		printf("Comparacion entre tipos incompatibles\n");
+		LogError("Comparacion entre tipos incompatibles\n");
 		exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -726,7 +724,7 @@ Expression* NotExpressionGrammarAction(Expression* expression){
 		case EQ_EXPRESSION:
 			break;
 		default:
-			printf("Expresion no negable\n");
+			LogError("Expresion no negable\n");
 			exit(1);
 	}
 	Expression* toReturn =  malloc(sizeof(Expression));
@@ -801,7 +799,7 @@ Factor* SymbolFactorGrammarAction(char* symbol) {
 	LogDebug("SymbolFactorGrammarAction %s", symbol);
 	Variable * var = symbol_table_get(symbol);
 	if(var == NULL) {
-		printf("la variable %s no existe\n", symbol);
+		LogError("La variable %s no existe\n", symbol);
 		exit(1);
 	}
 	Factor* toReturn =  malloc(sizeof(Factor));
@@ -835,19 +833,19 @@ Constant* IntegerConstantGrammarAction(const int value){
 Vector* VectorGrammarAction(char * var, Factor* factor){
 	LogDebug("VectorGrammarAction %s", var);
 	if(!symbol_table_exists(var)) {
-		printf("la variable %s no existe\n", var);
+		LogError("La variable %s no existe\n", var);
 		exit(1);
 	}
 	if(factor->type == STRING_FACTOR) {
-		printf("Posicion del vector incorrecta\n");
+		LogError("Posicion del vector incorrecta\n");
 		exit(1);
 	} else if(factor->type == EXPRESSION_FACTOR && getExpressionType(factor->expression) != INT_TYPE) {
-		printf("Posicion del vector incorrecta\n");
+		LogError("Posicion del vector incorrecta\n");
 		exit(1);
 	} else if(factor->type == SYMBOL) {
 		Variable * var = symbol_table_get(factor->variable);
 		if(var->treeType_token != NULL || var->type->value != INT_TYPE) {
-			printf("Posicion del vector incorrecta\n");
+			LogError("Posicion del vector incorrecta\n");
 			exit(1);
 		}
 	} 
@@ -861,7 +859,7 @@ Vector* VectorGrammarAction(char * var, Factor* factor){
 ParameterList * ParameterListCommaExpressionGrammarAction(ParameterList * parameterList, Expression * expression){
 	LogDebug("ParameterListCommaExpressionGrammarAction");
 	if(getExpressionType(parameterList->expression) != getExpressionType(expression)) {
-		printf("Parametros invalidos\n");
+		LogError("Parametros invalidos\n");
 		exit(1);
 	}
 	ParameterList* toReturn = malloc(sizeof(ParameterList));
@@ -974,7 +972,7 @@ static void comparableType(Expression * expression) {
 	if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
 		Variable * var = symbol_table_get(expression->factor->variable);
 		if(var->treeType_token != NULL) {
-			printf("El tipo de dato no es comparable\n");
+			LogError("El tipo de dato no es comparable\n");
 			exit(1);
 		}
 	}
