@@ -3,5 +3,5 @@ main {
     avlTree int arbol;
     string a = "hola";
 
-    int vector[5] = {"hola", 3, "messi", arbol, 1};
+    int vector[] = {"hola", 3, "messi", arbol, 1};
 }

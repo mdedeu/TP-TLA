@@ -238,7 +238,6 @@ Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
 	return toReturn;
 }
 
-// TODO: chequear tipos?
 Assignation * AssignationGrammarAction(char * variable, Expression * expression) {
 	LogDebug("AssignationGrammarAction ");
 	Variable * var = symbol_table_get(variable);
@@ -340,6 +339,13 @@ Read * ReadGrammarAction(char * variable) {
 		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
+	if(var->treeType_token != NULL) {
+		printf("La variable debe ser del tipo int o string\n");
+		exit(1);
+	} else if(var->type->value != INT_TYPE && var->type->value != STRING_TYPE) {
+		printf("La variable debe ser del tipo int o string\n");
+		exit(1);
+	}
 	Read * toReturn = malloc(sizeof(Read));
 	toReturn->variable = variable;
 	return toReturn;
@@ -347,6 +353,13 @@ Read * ReadGrammarAction(char * variable) {
 
 Write * WriteGrammarAction(Expression * expression) {
 	LogDebug("WriteGrammarAction ");
+	if(expression->type == FACTOR_EXPRESSION && expression->factor->type == SYMBOL_FACTOR) {
+		Variable * var = symbol_table_get(expression->factor->variable);
+		if(var->treeType_token != NULL) {
+			printf("Para arboles debe usar funcion print\n");
+			exit(1);
+		}
+	}
 	Write * toReturn = malloc(sizeof(Write));
 	toReturn->expression = expression;
 	return toReturn;
@@ -364,15 +377,21 @@ Token * OneParamGrammarAction(int token) {
 	toReturn->value = token;
 	return toReturn;
 }
-Token * MultiParamGrammarAction(int token) {
-	LogDebug("MultiParamGrammarAction %d",token);
-	Token * toReturn = malloc(sizeof(Token));
-	toReturn->value = token;
-	return toReturn;
-}
 
 If * IfGrammarAction(Expression * expression, Block * block, IfClose * ifClose) {
 	LogDebug("IfGrammarAction");
+	switch(expression->type) {
+		case GE_EXPRESSION:
+		case GT_EXPRESSION:
+		case LE_EXPRESSION:
+		case LT_EXPRESSION:
+		case NE_EXPRESSION:
+		case EQ_EXPRESSION:
+			break;
+		default:
+			printf("La expresion debe ser evaluable\n");
+			exit(1);
+	}
 	If * toReturn = malloc(sizeof(If));
 	toReturn->block = block;
 	toReturn->expression = expression;
@@ -620,6 +639,18 @@ Expression* EqualExpressionGrammarAction(Expression* leftValue, Expression* righ
 
 Expression* NotExpressionGrammarAction(Expression* expression){
 	LogDebug("NotExpressionGrammarAction");
+	switch(expression->type) {
+		case GE_EXPRESSION:
+		case GT_EXPRESSION:
+		case LE_EXPRESSION:
+		case LT_EXPRESSION:
+		case NE_EXPRESSION:
+		case EQ_EXPRESSION:
+			break;
+		default:
+			printf("Expresion no negable\n");
+			exit(1);
+	}
 	Expression* toReturn =  malloc(sizeof(Expression));
 	toReturn->type = NOT_EXPRESSION;
 	toReturn->left = NULL;
@@ -722,8 +753,22 @@ Constant* IntegerConstantGrammarAction(const int value){
 	return toReturn;
 }
 
+/* vector access */
 Vector* VectorGrammarAction(char * var, Factor* factor){
 	LogDebug("VectorGrammarAction %s", var);
+	if(factor->type == STRING_FACTOR) {
+		printf("Posicion del vector incorrecta\n");
+		exit(1);
+	} else if(factor->type == EXPRESSION_FACTOR && getExpressionType(factor->expression) != INT_TYPE) {
+		printf("Posicion del vector incorrecta\n");
+		exit(1);
+	} else if(factor->type == SYMBOL) {
+		Variable * var = symbol_table_get(factor->variable);
+		if(var->treeType_token != NULL || var->type->value != INT_TYPE) {
+			printf("Posicion del vector incorrecta\n");
+			exit(1);
+		}
+	} 
 	Vector* toReturn =  malloc(sizeof(Vector));
 	toReturn->variable = var;
 	toReturn->factor = factor;
