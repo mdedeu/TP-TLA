@@ -1,6 +1,7 @@
 #include "backend/code-generation/generator.h"
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
+#include "backend/support/free_lib.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
 #include "frontend/syntactic-analysis/bison-actions.h"
 #include <stdio.h>
@@ -73,6 +74,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
 	free_symbol_table();
+	free_ast(state.mainProgram);
 	LogInfo("Fin.");
 	return result;
 }
