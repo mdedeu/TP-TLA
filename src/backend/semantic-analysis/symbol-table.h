@@ -5,8 +5,8 @@
 #include "../support/shared.h"
 struct Variable{
 	Token * type;
+    Token * treeType_token;
 	char * name;
-
     union {
         int nodes;
         int intValue;

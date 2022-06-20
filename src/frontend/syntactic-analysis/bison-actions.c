@@ -10,6 +10,7 @@
  */
 
 // TODO: error handler
+static int getExpressionType(Expression * expression);
 
 void yyerror(const char * string) {
 	LogError("Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
@@ -128,8 +129,8 @@ Statement * FunctionStatementGrammarAction(Function * function) {
 DeclareAndAssign * DeclareAndAssignGrammarAction(Declare * declare, Expression * expression) {
 	LogDebug("DeclareAndAssignGrammarAction ");
 	Variable * var = symbol_table_get(declare->variable);
-	if(var == NULL) {
-		printf("la variable no existe");
+	if(var->type->value != getExpressionType(expression)){
+		printf("El tipo de la expresion no coincide con la variable\n");
 		exit(1);
 	}
 	DeclareAndAssign * toReturn = malloc(sizeof(DeclareAndAssign));
@@ -163,7 +164,7 @@ DeclareAndAssign * OnlyDeclareGrammarAction(Declare * declare) {
 Declare * TypeSymbolDeclareGrammarAction(Token * t_type, char * variable) {
 	LogDebug("TypeSymbolDeclareGrammarAction %s ", variable);
 	if(symbol_table_put(variable,t_type) == NULL) {
-		printf("variable redeclarada");
+		printf("la variable %s ya estaba declarada\n", variable);
 		exit(1);
 	}
 	Declare * toReturn = malloc(sizeof(Declare));
@@ -179,7 +180,7 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_
 	LogDebug("TreetypeTpyeSymbolDeclareGrammarAction %s" , variable);
 	Variable * var = symbol_table_put(variable,t_type);
 	if( var == NULL) {
-		printf("variable redeclarada");
+		printf("la variable %s ya estaba declarada\n", variable);
 		exit(1);
 	}
 	var->value.nodes = 0;
@@ -195,7 +196,7 @@ Declare * TreetypeTpyeSymbolDeclareGrammarAction(Token * t_tree_type, Token * t_
 Declare * TypeVectorDeclareGrammarAction(Token * t_type, Vector * vector) {
 	LogDebug("TypeVectorDeclareGrammarAction ");
 	if(symbol_table_put(vector->variable,t_type) == NULL) {
-		printf("variable redeclarada");
+		printf("la variable %s ya estaba declarada\n", vector->variable);
 		exit(1);
 	}
 	Declare * toReturn = malloc(sizeof(Declare));
@@ -212,7 +213,7 @@ Assignation * AssignationGrammarAction(char * variable, Expression * expression)
 	LogDebug("AssignationGrammarAction ");
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("la variable no existe");
+		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
 	Assignation * toReturn = malloc(sizeof(Assignation));
@@ -239,7 +240,7 @@ Function * OneParamFunctionGrammarAction(char * variable, Token * t_oneparamfunc
 	LogDebug("OneParamFunctionGrammarAction ");
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("la variable no existe");
+		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
 	Function * toReturn = malloc(sizeof(Function));
@@ -287,7 +288,7 @@ Read * ReadGrammarAction(char * variable) {
 	LogDebug("ReadGrammarAction %s ", variable);
 	Variable * var = symbol_table_get(variable);
 	if(var == NULL) {
-		printf("la variable no existe");
+		printf("la variable %s no existe\n", variable);
 		exit(1);
 	}
 	Read * toReturn = malloc(sizeof(Read));
@@ -590,7 +591,7 @@ Factor* SymbolFactorGrammarAction(char* symbol) {
 	LogDebug("SymbolFactorGrammarAction %s", symbol);
 	Variable * var = symbol_table_get(symbol);
 	if(var == NULL) {
-		printf("la variable no existe");
+		printf("la variable %s no existe\n", symbol);
 		exit(1);
 	}
 	Factor* toReturn =  malloc(sizeof(Factor));
@@ -680,4 +681,70 @@ char * StringGrammarAction(char * string) {
 	char * toReturn = malloc(strlen(string)+1);
 	strcpy(toReturn, string);
 	return toReturn;
+}
+
+
+static int getExpressionType(Expression * expression) {
+	Variable * var;
+	switch(expression->type) {
+		case ADD_EXPRESSION:
+		case SUB_EXPRESSION:
+		case MUL_EXPRESSION:
+		case DIV_EXPRESSION:
+			return INT_TYPE;
+		case FACTOR_EXPRESSION:
+			switch(expression->factor->type) {
+				case CONSTANT_FACTOR:
+					return INT_TYPE;
+				case STRING_FACTOR:
+					return STRING_TYPE;
+				case SYMBOL_FACTOR:
+					var = symbol_table_get(expression->factor->variable);
+					return var->type->value;
+				case EXPRESSION_FACTOR:
+					return getExpressionType(expression);
+				default:
+					return -1;
+			}
+		case FUNCTION_EXPRESSION:
+			switch(expression->function->type) {
+				case NO_PARAM_FUNCTIONS:
+					switch(expression->function->noParamFunctionToken->value) {
+						case PRINT:
+							return -1;
+						case LENGTH:
+						case SIZE:
+							return INT_TYPE;
+						case BALANCED:
+							var = symbol_table_get(expression->function->variable);
+							return var->type->value;
+					}
+				case ONE_PARAM_FUNCTIONS:
+					return -1;
+				case FILTER_FUNCTION:
+					var = symbol_table_get(expression->function->variable);
+					return var->type->value;
+				case READ_FUNCTION:
+					var = symbol_table_get(expression->function->variable);
+					return var->type->value;
+				case WRITE_FUNCTION:
+					return -1;
+			}
+		case VECTOR_EXPRESSION:
+			switch(expression->vector->factor->type) {
+				case CONSTANT_FACTOR:
+					return INT_TYPE;
+				case STRING_FACTOR:
+					return STRING_TYPE;
+				case SYMBOL_FACTOR:
+					var = symbol_table_get(expression->factor->variable);
+					return var->type->value;
+				case EXPRESSION_FACTOR:
+					return getExpressionType(expression);
+				default:
+					return -1;
+			}
+		default:
+			return -1;
+	}
 }

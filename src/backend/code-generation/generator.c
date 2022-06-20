@@ -1,6 +1,6 @@
 #include "../support/logger.h"
 #include "generator.h"
-
+#include "../semantic-analysis/symbol-table.h"
 
 /**
  * Implementación de "generator.h".
@@ -240,8 +240,12 @@ void GeneratorRead(Read* read, FILE * output){
 		scanner = 1;
 		fprintf(output,"Scanner sc= new Scanner(System.in)");
 	}
-	// TODO: revisar si es INT o STRING la variable
-	fprintf(output, "%s = sc.nextLine()", read->variable);
+	Variable * var = symbol_table_get(read->variable);
+	if(var->type->value == STRING_TYPE)
+		fprintf(output, "%s = sc.nextLine()", read->variable);
+	else {
+		fprintf(output, "%s = sc.nextInt()", read->variable);
+	}
 }
 
 void GeneratorWrite(Write* write, FILE * output){
