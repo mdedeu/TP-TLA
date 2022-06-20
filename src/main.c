@@ -49,13 +49,13 @@ const int main(const int argumentCount, const char ** arguments) {
 					return -1;
 				}
 				
-				sprintf(bytecode_command, "rm -rf ./target/*.java");
+				// sprintf(bytecode_command, "rm -rf ./target/*.java");
 
-				if( -1 == system(bytecode_command) ) {
-					LogError("Se produjo un error en la aplicacion.");
-					free_symbol_table();
-					return -1;
-				}
+				// if( -1 == system(bytecode_command) ) {
+				// 	LogError("Se produjo un error en la aplicacion.");
+				// 	free_symbol_table();
+				// 	return -1;
+				// }
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");

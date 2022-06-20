@@ -94,8 +94,22 @@ void GeneratorDeclareAndAssign(DeclareAndAssign* declareAndAssign, FILE * output
 			fprintf(output," }");
 			break;
 		case ONLY_DECLARE:
-			LogDebug("DeclareAndAssign -> onlyDeclare");
-			break;
+			if(declareAndAssign->declare->type == TREE_TYPE_SYMBOL) {
+				fprintf(output," = new ");
+				switch (declareAndAssign->declare->treeType_token->value)
+				{
+					case AVL_TREE_TYPE:
+						fprintf(output,"%s", "AVLTree<>()");
+						break;
+					case RED_BLACK_TREE_TYPE:
+						fprintf(output,"%s", "RedBlackTree<>()");
+						break;
+					case BST_TREE_TYPE:
+						fprintf(output,"%s", "BSTree<>()");
+						break;
+				}
+				break;
+			}
 		default:
 			LogInfo("DeclareAndASsign Type not found");
 			break;
@@ -142,19 +156,7 @@ void GeneratorDeclare(Declare* declare, FILE * output){
 				LogDebug("Declare tree type symbol -> string");
 				fprintf(output,"String>");
 			}
-			fprintf(output," %s = new ",declare->variable);
-			switch (declare->treeType_token->value)
-			{
-				case AVL_TREE_TYPE:
-					fprintf(output,"%s", "AVLTree<>()");
-					break;
-				case RED_BLACK_TREE_TYPE:
-					fprintf(output,"%s", "RedBlackTree<>()");
-					break;
-				case BST_TREE_TYPE:
-					fprintf(output,"%s", "BSTree<>()");
-					break;
-			}
+			fprintf(output," %s",declare->variable);
 			break;
 		case TYPE_VECTOR:
 			LogDebug("Declare type vector");
