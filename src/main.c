@@ -30,22 +30,34 @@ const int main(const int argumentCount, const char ** arguments) {
 	switch (result) {
 		case 0:
 			if (state.succeed) {
+				char bytecode_command[512];
+				sprintf(bytecode_command, "mkdir -p target");
+
+				if( -1 == system(bytecode_command) ) {
+					LogError("Se produjo un error en la aplicacion.");
+					free_symbol_table();
+					return -1;
+				}
+
 				out = fopen("./target/Program.java", "w+");
 				
 				if (out == NULL)
 				{
-					perror("Error creating auxiliary file");
+					perror("Se produjo un error en la aplicacion.");
+					free_symbol_table();
 					exit(EXIT_FAILURE);
 				}
+
 				fprintf(out, "import java.util.*;\npublic class Program { \n	public static void main(String[] args) { \n");
 				GeneratorProgram(state.mainProgram, out);
 				fclose(out);
-				char bytecode_command[512];
+				
 				sprintf(bytecode_command, "javac ./target/Program.java ./src/backend/domain-specific/*.java -d target");
 
 				if( -1 == system(bytecode_command) ) {
 					LogError("Se produjo un error en la aplicacion.");
 					free_symbol_table();
+					free_ast(state.mainProgram);
 					return -1;
 				}
 				
@@ -54,6 +66,7 @@ const int main(const int argumentCount, const char ** arguments) {
 				if( -1 == system(bytecode_command) ) {
 					LogError("Se produjo un error en la aplicacion.");
 					free_symbol_table();
+					free_ast(state.mainProgram);
 					return -1;
 				}
 				LogInfo("La compilacion fue exitosa.");
